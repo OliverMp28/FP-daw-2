@@ -26,17 +26,24 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/otros.css">
-    <title>Socios</title>
+    <title>Testimonios</title>
 </head>
 <body>
     <?php
         $nivel = 1;
-        $titulo = "Socios";
+        $titulo = "Testimonios";
         require_once "../requires/cabecera.php"
     ?>
 
-
     <main>
+        <section class="container py-4 seccion_noticias">
+            <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva noticia</a>
+        </section>
+
     </main>
+
+    <?php
+        include('../requires/footer.php');
+    ?>
 </body>
 </html>

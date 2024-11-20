@@ -123,5 +123,8 @@
             
         </section>
     </main>
+    <?php
+        include('../requires/footer.php');
+    ?>
 </body>
 </html>

@@ -24,9 +24,9 @@ const validarTitulo = () => {
         return false;
     }
 
-    if (valor.length < 5) {
+    if (valor.length < 3) {
         span_error.style.display = "inline";
-        span_error.textContent = "El titulo debe tener al menos 5 caracteres";
+        span_error.textContent = "El titulo debe tener al menos 3 caracteres";
         return false;
     }
 
@@ -45,9 +45,9 @@ const validarContenido = () => {
         return false;
     }
 
-    if (valor.length < 30) {
+    if (valor.length < 3) {
         span_error.style.display = "inline";
-        span_error.textContent = "El contenido debe tener al menos 30 caracteres";
+        span_error.textContent = "El contenido debe tener al menos 3 caracteres";
         return false;
     }
 
@@ -58,21 +58,22 @@ const validarContenido = () => {
 const validarImagen = () => {
     let inputImagen = document.getElementById("imagenNoticia");
     let span_error = inputImagen.nextElementSibling;
-    let tipos_admitidos = ["image/png", "image/jpeg"];
-    let maxSize = 2000000; // 2 MB
+    //let tipos_admitidos = ["image/png", "image/jpeg"];
+    let tipos_admitidos = ["image/jpeg"];
+    let maxSize = 5000000; // 5 MB
 
     if (inputImagen.files.length > 0) {
         let fichero = inputImagen.files[0];
 
         if (!tipos_admitidos.includes(fichero.type)) {
             span_error.style.display = "inline";
-            span_error.textContent = "Solo se admiten imagenes PNG o JPEG";
+            span_error.textContent = "Solo se admiten imagenes JPEG";
             return false;
         }
 
         if (fichero.size > maxSize) {
             span_error.style.display = "inline";
-            span_error.textContent = "El tamaño del archivo no puede superar los 2MB";
+            span_error.textContent = "El tamaño del archivo no puede superar los 5MB";
             return false;
         }
 
@@ -99,9 +100,9 @@ const validarFecha = () => {
         return false;
     }
 
-    if (fechaSeleccionada < fechaActual) {
+    if (fechaSeleccionada <= fechaActual) {
         span_error.style.display = "inline";
-        span_error.textContent = "La fecha no puede ser anterior a hoy";
+        span_error.textContent = "La fecha debe ser posterior a hoy";
         return false;
     }
 

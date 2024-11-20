@@ -20,6 +20,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
     <link rel="stylesheet" href="../assets/css/otros.css">
     <title>Noticia Completa</title>
 </head>
@@ -30,22 +32,28 @@
         require_once "../requires/cabecera.php"
     ?>
     <main>
-        <section class="noticia_completa">
+        <section class="noticia_completa container py-5">
+            <a href="index.php" class="btn btn-secondary mt-4 mb-3">Volver a la página de noticias</a>
+
+
+            <div class="row">
             <?php
 
                 if($_GET['id']){
                     $id_noticia = $_GET['id'];
                     $noticia = obtenerNoticiaPorId($conexion, $id_noticia);
                     if($noticia){
-                        echo "<img src='../$noticia[imagen]' alt='Noticia'>";
+                        echo " <div class='col-12 mb-4'>";
+                        echo "<img src='../$noticia[imagen]' alt='Noticia' class='img-fluid rounded'>";
+                        echo "</div>";
 
-                        echo "<div>";
-                        echo "<h2>{$noticia['titulo']}</h2>";
-                        echo "<p>{$noticia['contenido']}</p>";
-                        echo "<div class='referencia_autor'>";
-                            echo "<p>Por Oliver</p>";
-                            echo "<p>Publicado el: " . date('d \d\e F \d\e Y', strtotime($noticia['fecha_publicacion'])). "</p>";
-                            echo "<p>Fuente: Depor</p>";
+                        echo "<div class='col-12'>";
+                        echo "<h2 class='mb-3'>{$noticia['titulo']}</h2>";
+                        echo "<p class='mb-4'> {$noticia['contenido']}</p>";
+                        echo "<div class='referencia_autor text-end'>";
+                            echo "<p class='mb-1'>Por Oliver</p>";
+                            echo "<p class='mb-1'>Publicado el: " . date('d \d\e F \d\e Y', strtotime($noticia['fecha_publicacion'])). "</p>";
+                            echo "<p class='mb-1'>Fuente: Depor</p>";
                         echo "</div>";
                         echo "</div>";
                     }
@@ -74,7 +82,11 @@
                     <p>Fuente: El Escritorio</p>
                 </div>
             </div> -->
+            </div>
         </section>
     </main>
+    <?php
+        include('../requires/footer.php');
+    ?>
 </body>
 </html>

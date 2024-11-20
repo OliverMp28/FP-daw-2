@@ -20,6 +20,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
     <link rel="stylesheet" href="../assets/css/otros.css">
     <title>Agregar noticia nueva</title>
 </head>
@@ -44,39 +46,25 @@
                 $nombreImagen = basename($imagen['name']);
                 $rutaImagen = $directorioDestino . time() . "_" . $nombreImagen;
             
-                // Validación de tipo de archivo y tamaño
-                $tipos_admitidos = ["image/png", "image/jpeg"];
-                if (!in_array($imagen['type'], $tipos_admitidos)) {
-                    die("Error: Solo se permiten archivos PNG o JPEG.");
-                }
-            
-                if ($imagen['size'] > 2000000) {
-                    die("Error: El archivo es demasiado grande Maximo 2MB");
-                }
-            
                 if (!move_uploaded_file($imagen['tmp_name'], "../".$rutaImagen)) {
                     die("Error: No se pudo mover la imagen a la carpeta img");
                 }
-                
-                // if(file_exists("../" . $rutaImagen)){
-                //     echo "Error: el archivo ya existe.";
-                // }else{
-                //     move_uploaded_file($imagen['tmp_name'], $rutaImagen);
-                // }
-
             
                 $resultado = crearNoticia($conexion, $titulo, $contenido, $rutaImagen, $fechaPublicacion);
             
                 echo "<p>{$resultado}</p>";
-                echo "<p>Redirigiendo a la pagina de noticias 3s</p>";
-                header("refresh:3;url=index.php");
+                echo "<p>Redirigiendo a la pagina de noticias 4s</p>";
+                header("refresh:4;url=index.php");
             } else {
-                echo "<p>Error: No se han enviado todos los campos de la noticia para crearla. REDIRIGIENTO EN 3s.</p>";
-                header("refresh:3;url=index.php");
+                echo "<p>Error: No se han enviado todos los campos de la noticia para crearla. REDIRIGIENTO EN 4s.</p>";
+                header("refresh:4;url=index.php");
             }
         ?>
 
     </main>
+    <?php
+        include('../requires/footer.php');
+    ?>
     
 </body>
 </html>
