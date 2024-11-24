@@ -15,15 +15,17 @@
     //aca llamo a los archivos para las funciones necesarias
     require_once "../funciones/funcionesNoticias.php";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/otros.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
-    <script src="../assets/js/validacionFormulario.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/otros.css">
     <title>Agregar testimonio nueva</title>
 </head>
 <body>
@@ -34,7 +36,7 @@
     ?>
     
     <main class="container mt-5 mb-5">
-        <a href="index.php" class="btn btn-secondary mb-3">Volver a la pagina de todos los Testimonios</a>
+        <a href="index.php" class="btn btn-primary mb-3">Volver a la pagina de todos los Testimonios</a>
         <form id="miFormulario"  action="procesar.php" method="post" class="shadow p-4 rounded bg-white mx-auto" style="max-width: 600px;">
             <h2 class="text-center mb-4">Danos tu Testimonio :D</h2>
 

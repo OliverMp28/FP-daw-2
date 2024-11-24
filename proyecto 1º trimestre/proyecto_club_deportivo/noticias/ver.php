@@ -67,21 +67,6 @@
                 }
             ?>
 
-
-            <!-- <img src="../img/ejemplo1.jpg" alt="Noticia">
-            <div>
-                <h2>Título de la noticia</h2>
-                <p>En un sorprendente giro de los acontecimientos, se ha descubierto que un fenómeno inesperado ha capturado la atención de la comunidad científica. Este hallazgo, que desafía las teorías actuales, ha sido objeto de numerosos debates y discusiones en conferencias internacionales. Los investigadores han estado trabajando incansablemente para desentrañar los misterios que rodean este descubrimiento, y los resultados preliminares son prometedores.</p>
-                <p>Además, se ha observado que las implicaciones de este hallazgo podrían extenderse más allá del ámbito científico. Las industrias están comenzando a tomar nota de las posibles aplicaciones prácticas, y algunas empresas ya están invirtiendo en investigaciones adicionales para explorar cómo pueden integrar este descubrimiento en sus productos y servicios. Esto podría dar lugar a una nueva ola de innovación y desarrollo en el sector privado.</p>
-                <p>Finalmente, se espera que en los próximos meses se realicen más estudios para confirmar los hallazgos iniciales y explorar nuevas áreas de investigación. Los científicos están optimistas sobre el futuro y creen que este descubrimiento podría marcar el comienzo de una nueva era en la ciencia. "Estamos solo en el comienzo de un viaje emocionante", concluyó el Dr. Pérez, invitando a la comunidad a unirse a este esfuerzo global.</p>
-                <p>Para más información, visite nuestro sitio web o siga nuestras redes sociales, donde estaremos compartiendo actualizaciones y análisis detallados sobre este fascinante descubrimiento. No se pierda la oportunidad de ser parte de esta emocionante aventura científica.</p>
-            
-                <div class="referencia_autor">
-                    <p>Autor: Dr. Pérez</p>
-                    <p>Fecha de publicación: 2022-01-25</p>
-                    <p>Fuente: El Escritorio</p>
-                </div>
-            </div> -->
             </div>
         </section>
     </main>

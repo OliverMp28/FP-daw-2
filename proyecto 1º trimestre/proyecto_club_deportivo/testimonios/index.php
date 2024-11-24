@@ -11,9 +11,9 @@
     // $consulta->close();
     // $conexion->close();
 
-
     //aca llamo a los archivos para las funciones necesarias
     require_once "../funciones/funcionesNoticias.php";
+    require_once "../funciones/funcionesTestimonios.php";
 ?>
 
 <!DOCTYPE html>
@@ -36,9 +36,76 @@
     ?>
 
     <main>
-        <section class="container py-4 seccion_noticias">
-            <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva noticia</a>
-        </section>
+    <section class="container py-4 seccion_testimonios">
+        <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva noticia</a>
+
+        <?php
+            //Determinar el orden para los testimonios
+            //aqui compruebo con isser si tengo  'orden' mediante GET o si es que vale 1
+            //dependiendo de ello le doy valor 1 o 0
+            $orden = isset($_GET['orden']) && $_GET['orden'] == '1' ? 1 : 0;
+            $testimonios = getTestimoniosOrdenados($conexion, $orden);
+        ?>
+
+        <div class="contenedor_testimonios_ordenados p-4 bg-white rounded shadow-sm">
+            <!-- Formulario para seleccionar el orden de los testimonios, se muestra como lista seleccionable -->
+            <form method="GET" action="" class="mb-4 d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+                <label for="orden" class="fw-bold">Ordenar testimonios por:</label>
+                <select name="orden" id="orden" class="form-select w-auto">
+                    <option value="0" <?= ($orden == 0) ? 'selected' : '' ?> >Más antiguo a más reciente</option>
+                    <option value="1" <?= ($orden == 1) ? 'selected' : '' ?> >Más reciente a más antiguo</option>
+                </select>
+                <button type="submit" class="btn btn-secondary">Ordenar</button>
+            </form>
+
+
+            <!-- Listado de testimonios -->
+            <div class="list-group">
+                <?php 
+                foreach ($testimonios as $testimonio) {
+                    echo '<div class="testimonio list-group-item flex-column align-items-start bg-light mb-3 p-3 rounded shadow-sm">';
+                    echo '<p class="mb-1"><strong>' . $testimonio['autor'] . ':</strong></p>';
+                    echo '<p class="mb-1">' . $testimonio['contenido'] . '</p>';
+                    echo '<p class="text-muted"><em>Publicado el: ' . $testimonio['fecha'] . '</em></p>';
+                    echo '</div>';
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="contenedor_testimonios_acordeon my-4">
+            <h2 class="text-center mb-4">Testimonios (Acordeón)</h2>
+            <div class="accordion accordion-flush mx-auto" id="accordionTestimonios">
+                <?php
+                //aqui por defecto obtengo los testimonios en orden 1 Orden descendente (de mas reciente a mas antiguo).
+                $testimoniosAcordeon = getTestimoniosOrdenados($conexion, 1);
+
+                foreach ($testimoniosAcordeon as $index => $testimonio) {
+                    /*Aqui genero un ID unico para cada elemento y encabezado, con heading y collapse
+                    * pues en bootstrap es necesario que sean diferentes para que el funcionamiento del acordeon no falle
+                    */
+                    $collapseId = 'collapse' . ($index + 1);
+                    $headingId = 'heading' . ($index + 1);  
+                    ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="<?php echo $headingId; ?>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo $collapseId; ?>" aria-expanded="false" aria-controls="<?php echo $collapseId; ?>">
+                                <?php echo htmlspecialchars($testimonio['autor']) . ' - Publicado el: ' . htmlspecialchars($testimonio['fecha']); ?>
+                            </button>
+                        </h2>
+                        <div id="<?php echo $collapseId; ?>" class="accordion-collapse collapse" aria-labelledby="<?php echo $headingId; ?>" data-bs-parent="#accordionTestimonios">
+                            <div class="accordion-body">
+                                <strong>Contenido:</strong> <?php echo htmlspecialchars($testimonio['contenido']); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+
+    </section>
 
     </main>
 

@@ -76,27 +76,28 @@
                 </div>
             </div> -->
 
-            <?php
-                $testimonioAleatorio = getTestimoniosAleatorios($conexion, 1);
+            <div class="container contenedor_testimonios">
+                <h2 class="text-center mb-4">Testimonios</h2>
+                <?php
+                    $testimonioAleatorio = getTestimoniosAleatorios($conexion, 1);
 
-                //como getTestimoniosAleatorios() me devuelve un array de array
-                // tomo el primer valor con [0], pues solo me da 1 testimonio aleatorio
-                echo '<div class="container contenedor_testimonios">';
+                    //como getTestimoniosAleatorios() me devuelve un array de array
+                    // tomo el primer valor con [0], pues solo me da 1 testimonio aleatorio
 
-                echo '<h2 class="text-center mb-4">Testimonios</h2>';
-                echo '<div class="contenedor_testimonio_aleatorio mx-auto p-4 bg-white shadow rounded">';
-                    echo '<div class="text-center mb-3">';
-                    echo '<i class="bi bi-chat-left-quote fs-1 text-primary"></i>';
+                    echo '<div class="contenedor_testimonio_aleatorio mx-auto p-4 bg-white shadow rounded">';
+                        echo '<div class="text-center mb-3">';
+                        echo '<i class="bi bi-chat-left-quote fs-1 text-primary"></i>';
+                        echo '</div>';
+                        
+                        echo '<div class="testimonio text-center">';
+                        //echo '<img src="'.$testimonioAleatorio[0]['imagen'].'" class="rounded-circle mx-auto d-block mb-3" style="width: 120px; height: 120px;">';
+                        echo '<h3 class="fs-4 fw-bold text-dark">'.$testimonioAleatorio[0]['autor'].'</h3>';
+                        echo '<p class="text-muted fs-5">'.$testimonioAleatorio[0]['contenido'].'</p>';
+                        echo '</div>';
                     echo '</div>';
-                    echo '<div class="testimonio text-center">';
-                    //echo '<img src="'.$testimonioAleatorio[0]['imagen'].'" class="rounded-circle mx-auto d-block mb-3" style="width: 120px; height: 120px;">';
-                    echo '<h3 class="fs-4 fw-bold text-dark">'.$testimonioAleatorio[0]['autor'].'</h3>';
-                    echo '<p class="text-muted fs-5">'.$testimonioAleatorio[0]['contenido'].'</p>';
-                    echo '</div>';
-                echo '</div>';
 
-                echo '</div>';
-            ?>
+                ?>
+            </div>
 
 <!-- 
 
@@ -134,31 +135,32 @@
 
             <div class="container contenedor_testimonios_carrusel mt-5">
                 <div id="testimoniosCarrusel" class="carousel slide" data-bs-ride="carousel">
-                    <!-- Indicadores -->
                     <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Testimonio 1"></button>
-                        <button type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide-to="1" aria-label="Testimonio 2"></button>
-                        <button type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide-to="2" aria-label="Testimonio 3"></button>
-                    </div>
-
-                    <!-- Contenido del carrusel -->
-
-                    <div class="carousel-inner"></div>
-                    <?php
+                        <?php
                         $listaTestimoniosAl = getTestimoniosAleatorios($conexion, 0);
 
-                        foreach ($listaTestimoniosAl as $testimonioAl) {
-                            echo '<div class="carousel-item">';  //PONER ACTIVE
+                        //este bucle es para los botones indicativos del carrusel, coloca "active" al primero
+                        foreach ($listaTestimoniosAl as $index => $testimonioAl) {
+                            $activeClass = ($index === 0) ? 'active' : ''; 
+                            echo '<button type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide-to="' . $index . '" class="' . $activeClass . '" aria-label="Testimonio ' . ($index + 1) . '"></button>';
+                        }
+                        ?>
+                    </div>
+
+                    <div class="carousel-inner">
+                        <?php
+                        foreach ($listaTestimoniosAl as $index => $testimonioAl) {
+                            $activeClass = ($index === 0) ? 'active' : ''; // La clase active solo para el primer item
+                            echo '<div class="carousel-item ' . $activeClass . '">';
                             echo '<div class="testimonio">';
                             echo '<i class="bi bi-chat-quote-fill"></i>';
-                            echo '<h3>'.$testimonioAl['autor'].'</h3>';
-                            echo '<p>'.$testimonioAl['contenido'].'</p>';
+                            echo '<h3>' . $testimonioAl['autor'] . '</h3>'; // Evita inyección de código
+                            echo '<p>' . $testimonioAl['contenido'] . '</p>'; // Evita inyección de código
                             echo '</div>';
                             echo '</div>';
                         }
-                    ?>
+                        ?>
                     </div>
-               
 
                     <!-- Controles de navegación -->
                     <button class="carousel-control-prev" type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide="prev">
@@ -171,6 +173,7 @@
                     </button>
                 </div>
             </div>
+
 
 
 
