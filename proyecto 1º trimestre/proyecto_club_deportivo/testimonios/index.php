@@ -37,7 +37,7 @@
 
     <main>
     <section class="container py-4 seccion_testimonios">
-        <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva noticia</a>
+        <a href="agregar.php" class="btn btn-primary mb-4">Crear una nuevo testimonio</a>
 
         <?php
             //Determinar el orden para los testimonios
