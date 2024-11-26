@@ -57,7 +57,7 @@
                 <div class="perfil shadow p-4 rounded bg-white mx-auto" style="max-width: 700px;">
                     <form id="formularioSocio" action="procesar.php" method="post" enctype="multipart/form-data">
                       
-                    <!--ID del socio oculto) -->
+                    <!--id del socio oculto) -->
                     <input type="hidden" name="idSocio" value="' . $socio['id'] . '">
                     
                     <!-- Foto-->

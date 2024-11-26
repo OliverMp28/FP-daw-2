@@ -30,7 +30,7 @@
 <body>
     <?php
         $nivel = 1;
-        $titulo = "Servicios";
+        $titulo = "Agregar servicios";
         require_once "../requires/cabecera.php"
     ?>
 
@@ -58,7 +58,7 @@
             <div class="mb-3">
                 <label for="duracionServicio" class="form-label">Duración (minutos):</label>
                 <input
-                    type="text"
+                    type="number"
                     class="form-control"
                     id="duracionServicio"
                     name="duracionServicio"
@@ -69,9 +69,9 @@
 
             <!-- Precio -->
             <div class="mb-3">
-                <label for="precioServicio" class="form-label">Precio ($):</label>
+                <label for="precioServicio" class="form-label">Precio (€):</label>
                 <input
-                    type="text"
+                    type="number"
                     class="form-control"
                     id="precioServicio"
                     name="precioServicio"

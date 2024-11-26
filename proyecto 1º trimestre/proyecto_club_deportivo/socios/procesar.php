@@ -97,7 +97,7 @@
             header("refresh:4;url=index.php");
         }
 
-        echo "<p>Redirigiendo a la página principal en 4 segundos...</p>";
+        echo "<p>Redirigiendo a la pagina principal en 4 segundos...</p>";
         header("refresh:4;url=index.php");
         ?>
     </main>

@@ -70,7 +70,7 @@
                 <?php
                 $terminoBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
      
-                 // Obtener la lista de servicios
+                 // Obtener la lista de servicios si es que se hizo una busqueda
                 if ($terminoBusqueda) {
                     $servicios = getServiciosConBusqueda($conexion, $terminoBusqueda);
                 } else {
@@ -92,8 +92,7 @@
                                     data-bs-toggle="collapse"
                                     data-bs-target="#collapse<?php echo $servicio['id']?>"
                                     aria-expanded="false"
-                                    aria-controls="collapse<?php echo $servicio['id']?>">
-                                    Servicio: <?php echo $servicio['descripcion']?>
+                                    aria-controls="collapse<?php echo $servicio['id']?>"> Servicio: <?php echo $servicio['descripcion']?>
                                 </button>
                             </h2>
                             <div id="collapse<?php echo $servicio['id']?>" class="accordion-collapse collapse" aria-labelledby="heading<?php echo $servicio['id']?>" data-bs-parent="#serviciosAccordion">
@@ -104,7 +103,7 @@
                                 
                                     <!-- Botón para ver más detalles del servicio -->
                                     <div class="text-end mt-3">
-                                        <a href="agregar.php?id=<?php echo $servicio['id']?>" class="btn btn-primary btn-sm">Ver más detalles</a>
+                                        <a href="editar.php?id=<?php echo $servicio['id']?>" class="btn btn-primary btn-sm">Ver más detalles</a>
                                     </div>
                                 </div>
                             </div>
@@ -114,8 +113,6 @@
                     echo "<p class='text-danger'>No se encontraron resultados.</p>";
                 }
 
-
-                
             ?>
             <!-- Servicio 1
             <div class="accordion-item">
@@ -140,6 +137,7 @@
             </div> -->
 
             </div>
+        </div>
     </section>
 
     </main>

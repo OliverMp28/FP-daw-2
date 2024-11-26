@@ -70,4 +70,85 @@
         return $socios;
     }
 
+
+    /**
+     * Esta funcion devuelve un servicio por su id
+     * @param $conexion: la conexion a la base de datos
+     * @param $id ide sel servicio a buscar
+     */
+    function getServicioPorId($conexion, $id) {
+        $sentencia = "SELECT id, descripcion, duracion, precio 
+                      FROM servicio 
+                      WHERE id = ?";
+    
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('i', $id);
+    
+        if ($consulta->execute() === false) {
+            die("Error en la ejecución de la consulta: " . $consulta->error);
+        }
+    
+        $id = $descripcion = $duracion = $precio = null;
+        $consulta->bind_result($id, $descripcion, $duracion, $precio);
+    
+        $servicio = null;
+        if ($consulta->fetch()) {
+            $servicio = array(
+                'id' => $id,
+                'descripcion' => $descripcion,
+                'duracion' => $duracion,
+                'precio' => $precio
+            );
+        }
+    
+        return $servicio;
+    }
+
+
+    /**
+     * Esta funcion crea un nuevo servici
+     * @param $conexion: la conexion a la base de datos
+     * @param $... Los demas datos a insertar
+     */
+    function crearServicio($conexion, $descripcion, $duracion, $precio) {
+        $sentencia = "INSERT INTO servicio (descripcion, duracion, precio) VALUES (?, ?, ?)";
+    
+        $consulta = $conexion->prepare($sentencia);
+    
+        if (!$consulta) {
+            die("Error al preparar la consulta: " . $conexion->error);
+        }
+    
+        $consulta->bind_param('sid', $descripcion, $duracion, $precio);
+    
+        if ($consulta->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Esta funcion modifica un  servicio por su id
+     * @param $conexion: la conexion a la base de datos
+     * @param $id id del servicio a modificar
+     * @param $... datos para insertar en el servicio a modiciar
+     */
+    function modificarServicioPorId($conexion, $id, $descripcion, $duracion, $precio) {
+        $sentencia = "UPDATE servicio 
+                      SET descripcion = ?, duracion = ?, precio = ? 
+                      WHERE id = ?";
+    
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('sidi', $descripcion, $duracion, $precio, $id);
+    
+        if ($consulta->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+
 ?>
