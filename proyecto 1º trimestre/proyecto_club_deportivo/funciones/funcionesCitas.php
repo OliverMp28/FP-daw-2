@@ -71,6 +71,8 @@
     }
     
 
+
+
     /**
     * Esta funcion devuelve las fechas y la cantidad de citas por dia.
     * @param $conexion: la conexion a la base de datos
@@ -95,9 +97,19 @@
         $total = 0;
         $consulta->bind_result($dia, $total);
         
+        // Almacenamos los resultados en un arreglo más descriptivo
         while ($consulta->fetch()) {
-            $resultados[$dia] = $total;
+            $resultados[] = [
+                'dia' => $dia,
+                'total' => $total,
+            ];
         }
+        /* esto es un ejemplo de como serviria
+        [
+           ['dia' => '2024-11-01', 'total' => 3],
+           ['dia' => '2024-11-04', 'total' => 2],
+        ]
+        */
     
         return $resultados;
     }
@@ -142,7 +154,7 @@
     * Esta funcion Consulta las citas de un dia y devuelve los detalles de las citas.
     * @param $conexion: la conexion a la base de datos
     */
-    function getCitasPorDia($conexion, $fecha) {
+    function getCitasPorDiaConDetalles($conexion, $fecha) {
         $sentencia = "SELECT c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
                       FROM citas c
                       JOIN socio s ON c.socio = s.id
@@ -178,6 +190,8 @@
     * @param $...
     */
     function calcularMesAnteriorSiguiente($mes, $anio) {
+        //aqui sumo o resto una unidad para saber el mes anterior y siguiente
+        //en el año solo sumo o resto despues de comprobar que los meses llegaron a su limite y se cambio de año
         $mesAnterior = $mes - 1;
         $anioAnterior = $anio;
         $mesSiguiente = $mes + 1;
@@ -233,4 +247,44 @@
 
     
     
+
+    /**
+     * Esta funcion busca citas basandose en un termino proporcionado.
+     * Se puede buscar por nombre del socio, fecha de la cita o servicio contratado.
+     * @param $conexion: la conexión a la base de datos
+     * @param $filtro: el termino o filtro de busqueda por el cual se buscará
+     */
+    function buscarCitasConDetalles($conexion, $filtro) {
+        $filtro = "%" . $filtro . "%"; //le añado los % para usarlo en el LIKE
+
+        $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+                    FROM citas c
+                    JOIN socio s ON c.socio = s.id
+                    JOIN servicio serv ON c.servicio = serv.id
+                    WHERE s.nombre LIKE ? OR DATE(c.fecha) LIKE ? OR serv.descripcion LIKE ?";
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('sss', $filtro, $filtro, $filtro);
+
+        if ($consulta->execute() === false) {
+            die("Error en la ejecución de la consulta: " . $consulta->error);
+        }
+
+        $citas = [];
+        $id = $fecha = $hora = $nombre = $telefono = $descripcion = null;
+        $consulta->bind_result($id, $fecha, $hora, $nombre, $telefono, $descripcion);
+
+        while ($consulta->fetch()) {
+            $citas[] = [
+                'id' => $id,
+                'fecha' => $fecha,
+                'hora' => $hora,
+                'nombre' => $nombre,
+                'telefono' => $telefono,
+                'descripcion' => $descripcion,
+            ];
+        }
+
+        return $citas;
+    }
+
 ?>
