@@ -115,6 +115,7 @@ td a.stretched-link:hover {
             $anio = isset($_GET['anio']) ? (int)$_GET['anio'] : (int)date('Y');
             $filtro = isset($_GET['buscar']) ? $_GET['buscar'] : null;
             $idCancelar = isset($_GET['cancelar']) ? $_GET['cancelar'] : null;
+            $idBorrar = isset($_GET['borrar']) ? $_GET['borrar'] : null;
 
 
             //obtengo citas del mes actual(digo mes actual al mes que se ve por pantalla o al mes que se seleccione en calendario, no al mes actual en la realidad)
@@ -133,13 +134,36 @@ td a.stretched-link:hover {
 
 
             $msgCancelacion = "";
+
             if($idCancelar){
                 $citaCancelada = cancelarCita($conexion, $idCancelar);
                 if($citaCancelada){
-                    $msgCancelacion = "<p class='text-muted'>cita con id:<strong>".$idCancelar."</strong> cancelada</p>";
+                    $msgCancelacion = '
+                                        <div class="alert alert-success d-flex align-items-center shadow-sm p-1 rounded" role="alert">
+                                            <i class="bi bi-exclamation-triangle-fill"></i> 
+                                            <span>Cita con ID: <strong>'.$idCancelar.'</strong> cancelada correctamente</span>
+                                        </div>';
+
                 }else{
-                    $msgCancelacion = "<p class='text-muted'>intentó cancelar cita con id:<strong>".$idCancelar."</strong> pero no se pudo. Recuerde que solo se puede cancelar la cita si es una fecha despues de hoy y este pendiente</p>";
+                    $msgCancelacion = '
+                                        <div class="alert alert-warning d-flex align-items-center shadow-sm p-1 rounded" role="alert">
+                                            <i class="bi bi-exclamation-triangle-fill"></i> 
+                                            <span>intentó cancelar cita con id:<strong>'.$idCancelar.'</strong> pero no se pudo. 
+                                            Recuerde que para cancelar una cita no debe ser una cita pasada ni para hoy debe estar en estado pendiente</span>
+                                        </div>';
                 }
+            }
+
+            if($idBorrar){
+                //en el caso de borrar, borrarCita() no devuelve un true o false, directamente devuelve una respuesta
+                //esto debido a que dentro tiene varias validaciones y en este caso me gustaria saber el mensaje exacto del error dentro del borrado
+                $respuestaBorrar = borrarCita($conexion, $idBorrar);
+                $msgCancelacion = '
+                                <div class="alert alert-warning d-flex align-items-center shadow-sm p-1 rounded" role="alert">
+                                    <i class="bi bi-exclamation-triangle-fill"></i> 
+                                    <span>'.$respuestaBorrar.'</span>
+                                </div>';
+
             }
 
             //doy prioridad si se usa el buscador
@@ -355,7 +379,11 @@ td a.stretched-link:hover {
                                         <?php
                                         $estadoCita = comprobarEstadoDeCita($conexion, $cita['id']);
                                         if($estadoCita == 0){
-                                            echo "<a href='editar.php?id=1' class='btn btn-primary btn-sm'>Cancelar</a>";
+                                            echo "<a href='index.php?mes=$mes&anio=$anio&cancelar={$cita['id']}' class='btn btn-warning btn-sm'>Cancelar Cita</a>";
+                                        }elseif($estadoCita == 1){
+                                            echo "<p class='text-muted'>La cita es hoy o ya paso, no se puede cancelar ni borrar</p>";
+                                        }else{//aqui es que estaria en estado = 2, que significa cita cancelada, se habilita el boton eliminar
+                                            echo "<a href='index.php?mes=$mes&anio=$anio&borrar={$cita['id']}' class='btn btn-danger btn-sm'>Eliminar Cita</a>";
                                         }
                                         ?>
                                     </div>

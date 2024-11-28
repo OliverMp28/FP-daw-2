@@ -39,50 +39,39 @@
 
         <?php
        
-       if (
-           isset($_POST['socioCita'], $_POST['servicioCita'], $_POST['fechaCita'], $_POST['horaCita'])
-       ) {
-           $socioId = intval($_POST['socioCita']);
-           $servicioId = intval($_POST['servicioCita']);
-           $fechaCita = trim($_POST['fechaCita']);
-           $horaCita = trim($_POST['horaCita']);
-       
-           // Validaciones iniciales
-           if ($socioId <= 0 || $servicioId <= 0) {
-               echo "<p>Error: Debes seleccionar un socio y un servicio válidos.</p>";
-               header("refresh:4;url=index.php");
-               exit;
-           }
-       
-           if (!validarFecha($fechaCita)) {
-               echo "<p>Error: La fecha ingresada no es válida.</p>";
-               header("refresh:4;url=index.php");
-               exit;
-           }
-       
-           if (!validarHora($horaCita)) {
-               echo "<p>Error: La hora ingresada no es válida.</p>";
-               header("refresh:4;url=index.php");
-               exit;
-           }
-       
-           // Crear la cita usando la función existente
-           $resultado = crearCita($conexion, $socioId, $servicioId, $fechaCita, $horaCita);
-       
-           if ($resultado === "Cita creada exitosamente.") {
-               echo "<p>$resultado</p>";
-           } else {
-               echo "<p>Error: $resultado</p>";
-           }
+        if (isset($_POST['socioCita'], $_POST['servicioCita'], $_POST['fechaCita'], $_POST['horaCita'])) {
+            $socioId = intval($_POST['socioCita']);
+            $servicioId = intval($_POST['servicioCita']);
+            $fechaCita = trim($_POST['fechaCita']);
+            $horaCita = trim($_POST['horaCita']);
+        
+            // Validaciones iniciales
+            if ($socioId <= 0 || $servicioId <= 0) {
+                echo "<p>Error: Debes seleccionar un socio y un servicio válidos.</p>";
+                header("refresh:4;url=index.php");
+                exit;
+            }
+        
+            if (!validarFecha($fechaCita)) {
+                echo "<p>Error: La fecha ingresada no es válida.</p>";
+                header("refresh:4;url=index.php");
+                exit;
+            }
+        
+            $resultado = crearCita($conexion, $socioId, $servicioId, $fechaCita, $horaCita);
+        
+            echo "<p>{$resultado}</p>";
+            echo "<p>Redirigiendo a la página principal en 4 segundos...</p>";
+            header("refresh:4;url=index.php");
        } else {
            echo "<p>Error: Faltan datos necesarios. Redirigiendo en 4 segundos...</p>";
            header("refresh:4;url=index.php");
            exit;
        }
        
-       // Redirección final
-       echo "<p>Redirigiendo a la página principal en 4 segundos...</p>";
-       header("refresh:4;url=index.php");
+
+
+
        
        // Validación de fecha
        function validarFecha($fecha) {
@@ -91,11 +80,6 @@
                return checkdate(intval($fechaArray[1]), intval($fechaArray[2]), intval($fechaArray[0]));
            }
            return false;
-       }
-       
-       // Validación de hora
-       function validarHora($hora) {
-           return preg_match("/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/", $hora);
        }
        
         ?>

@@ -332,7 +332,6 @@
             return "No se pueden crear citas en fechas pasadas o en la misma fecha de hoy";
         }
     
-        // Validar disponibilidad
         if (!validarDisponibilidadCita($conexion, $socio, $fecha, $hora)) {
             return "El socio ya tiene una cita en esa fecha y hora.";
         }
@@ -399,52 +398,55 @@
      * Elimina una cita si cumple con las condiciones (cancelada y en fecha futura).
      *  // estado = 2 es Cancelada
      * @param $conexion: conexión a la base de datos
-     * @param $id: ID de la cita a eliminar
+     * @param $id: ID de la cita a borrar
      */
-    function eliminarCita($conexion, $id) {
+    function borrarCita($conexion, $id) {
         // Comprobar estado de la cita
         $estado = comprobarEstadoDeCita($conexion, $id);
         if ($estado === null) {
-            return "La cita no existe.";
+            return "Error: La cita a querer borrar ya no existe";
         }
-
         if ($estado !== 2) {
-            return "Solo se pueden borrar citas que estén canceladas";
+            return "Error: Solo se pueden borrar citas que estén canceladas";
         }
-
-        // Verificar que la cita sea de una fecha futura
+    
+        //consulto la fecha para validar para que sea solo fechas futura
         $sql = "SELECT fecha FROM citas WHERE id = ?";
         $consultaFecha = $conexion->prepare($sql);
         $consultaFecha->bind_param('i', $id);
-
+    
         if ($consultaFecha->execute() === false) {
             return "Error al verificar la fecha de la cita: " . $consultaFecha->error;
         }
-
+    
         $fecha = null;
         $consultaFecha->bind_result($fecha);
         $consultaFecha->fetch();
-
+    
+        $consultaFecha->close();
+    
         $fechaActual = date('Y-m-d');
         if ($fecha <= $fechaActual) {
-            return "Solo se pueden borrar citas con fecha futura, apartir de mañana.";
+            return "Solo se pueden borrar citas con fecha futura, a partir de mañana.";
         }
+    
 
-        // Eliminar la cita
+        //el borrado
         $sentencia = "DELETE FROM citas WHERE id = ?";
         $consulta = $conexion->prepare($sentencia);
         $consulta->bind_param('i', $id);
-
+    
         if ($consulta->execute() === false) {
-            return "Error al eliminar la cita: " . $consulta->error;
+            return "Error al borrar la cita: " . $consulta->error;
         }
-
+    
         if ($consulta->affected_rows > 0) {
             return "Cita eliminada exitosamente.";
         } else {
-            return "No se pudo eliminar la cita.";
+            return "No se pudo borrar la cita.";
         }
     }
+    
 
 
     
