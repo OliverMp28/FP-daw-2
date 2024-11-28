@@ -120,7 +120,7 @@
     * @param $conexion: la conexion a la base de datos
     */
     function getCitasPorMesConDetalles($conexion, $fechaInicio, $fechaFin) {
-        $sentencia = "SELECT c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+        $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
                       FROM citas c
                       JOIN socio s ON c.socio = s.id
                       JOIN servicio serv ON c.servicio = serv.id
@@ -134,11 +134,12 @@
         }
     
         $citas = [];
-        $fecha = $hora = $nombre = $telefono = $descripcion = null;
-        $consulta->bind_result($fecha, $hora, $nombre, $telefono, $descripcion);
+        $id = $fecha = $hora = $nombre = $telefono = $descripcion = null;
+        $consulta->bind_result($id, $fecha, $hora, $nombre, $telefono, $descripcion);
     
         while ($consulta->fetch()) {
             $citas[] = [
+                'id' => $id,
                 'fecha' => $fecha,
                 'hora' => $hora,
                 'nombre' => $nombre,
@@ -155,7 +156,7 @@
     * @param $conexion: la conexion a la base de datos
     */
     function getCitasPorDiaConDetalles($conexion, $fecha) {
-        $sentencia = "SELECT c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+        $sentencia = "SELECT c. id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
                       FROM citas c
                       JOIN socio s ON c.socio = s.id
                       JOIN servicio serv ON c.servicio = serv.id
@@ -168,11 +169,12 @@
         }
     
         $citas = [];
-        $fecha = $hora = $nombre = $telefono = $descripcion = null;
-        $consulta->bind_result($fecha, $hora, $nombre, $telefono, $descripcion);
+        $id = $fecha = $hora = $nombre = $telefono = $descripcion = null;
+        $consulta->bind_result($id, $fecha, $hora, $nombre, $telefono, $descripcion);
     
         while ($consulta->fetch()) {
             $citas[] = [
+                'id' => $id,
                 'fecha' => $fecha,
                 'hora' => $hora,
                 'nombre' => $nombre,
@@ -309,8 +311,12 @@
         $cantidad = 0;
         $consulta->bind_result($cantidad);
         $consulta->fetch();
-    
-        return $cantidad === 0; // Retorna true si no hay conflictos
+
+        if($cantidad === 0){
+            return true;
+        }else{
+            return false; //retorna false si hay conflictos con otra cita, esto para evitar crear una cita en crearCita();
+        }
     }
 
 
@@ -322,8 +328,8 @@
     function crearCita($conexion, $socio, $servicio, $fecha, $hora) {
         // Validar que la fecha no sea pasada
         $fechaActual = date('Y-m-d');
-        if ($fecha < $fechaActual) {
-            return "No se pueden crear citas en fechas pasadas.";
+        if ($fecha <= $fechaActual) {
+            return "No se pueden crear citas en fechas pasadas o en la misma fecha de hoy";
         }
     
         // Validar disponibilidad
@@ -344,7 +350,102 @@
     }
     
 
-    
+
+    /**
+     * Cancela una cita cambiando su estado a "cancelada"(2)
+     * @param $conexion: conexión a la base de datos
+     * @param $id:id de la cita a cancelar
+     */
+    function cancelarCita($conexion, $id) {
+        $sentencia = "UPDATE citas SET estado = 2 WHERE id = ? AND estado = 0";
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('i', $id);
+
+        if ($consulta->execute() === false) {
+            return "Error al cancelar la cita: " . $consulta->error;
+        }
+
+        if ($consulta->affected_rows > 0) {
+            // return "Cita cancelada exitosamente.";
+            return true;
+        } else {
+            // return "No se pudo cancelar la cita. Verifica que esté pendiente.";
+            return false;
+        }
+    }
+
+    /**
+     * Verifica el estado actual de una cita
+     * @param $conexion: conexión a la base de datos
+     * @param $id: id de la cita a comprobar
+     */
+    function comprobarEstadoDeCita($conexion, $id) {
+        $sentencia = "SELECT estado FROM citas WHERE id = ?";
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('i', $id);
+
+        if ($consulta->execute() === false) {
+            die("Error al comprobar el estado de la cita: " . $consulta->error);
+        }
+
+        $estado = null;
+        $consulta->bind_result($estado);
+        $consulta->fetch();
+
+        return $estado;
+    }
+
+    /**
+     * Elimina una cita si cumple con las condiciones (cancelada y en fecha futura).
+     *  // estado = 2 es Cancelada
+     * @param $conexion: conexión a la base de datos
+     * @param $id: ID de la cita a eliminar
+     */
+    function eliminarCita($conexion, $id) {
+        // Comprobar estado de la cita
+        $estado = comprobarEstadoDeCita($conexion, $id);
+        if ($estado === null) {
+            return "La cita no existe.";
+        }
+
+        if ($estado !== 2) {
+            return "Solo se pueden borrar citas que estén canceladas";
+        }
+
+        // Verificar que la cita sea de una fecha futura
+        $sql = "SELECT fecha FROM citas WHERE id = ?";
+        $consultaFecha = $conexion->prepare($sql);
+        $consultaFecha->bind_param('i', $id);
+
+        if ($consultaFecha->execute() === false) {
+            return "Error al verificar la fecha de la cita: " . $consultaFecha->error;
+        }
+
+        $fecha = null;
+        $consultaFecha->bind_result($fecha);
+        $consultaFecha->fetch();
+
+        $fechaActual = date('Y-m-d');
+        if ($fecha <= $fechaActual) {
+            return "Solo se pueden borrar citas con fecha futura, apartir de mañana.";
+        }
+
+        // Eliminar la cita
+        $sentencia = "DELETE FROM citas WHERE id = ?";
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('i', $id);
+
+        if ($consulta->execute() === false) {
+            return "Error al eliminar la cita: " . $consulta->error;
+        }
+
+        if ($consulta->affected_rows > 0) {
+            return "Cita eliminada exitosamente.";
+        } else {
+            return "No se pudo eliminar la cita.";
+        }
+    }
+
 
     
     

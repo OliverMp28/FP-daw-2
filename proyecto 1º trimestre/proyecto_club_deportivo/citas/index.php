@@ -114,9 +114,10 @@ td a.stretched-link:hover {
             $mes = isset($_GET['mes']) ? (int)$_GET['mes'] : (int)date('n');
             $anio = isset($_GET['anio']) ? (int)$_GET['anio'] : (int)date('Y');
             $filtro = isset($_GET['buscar']) ? $_GET['buscar'] : null;
+            $idCancelar = isset($_GET['cancelar']) ? $_GET['cancelar'] : null;
 
 
-            //obtengo citas del mes actual(digo mes actual al mes que se ve por pantalla o al mes que se seleccione)
+            //obtengo citas del mes actual(digo mes actual al mes que se ve por pantalla o al mes que se seleccione en calendario, no al mes actual en la realidad)
             $citasPorMes = getCitasPorMes($conexion, $mes, $anio);
 
             //calcula mes anterior y siguiente
@@ -130,6 +131,16 @@ td a.stretched-link:hover {
             // por ejemplo el 1 de nov de 2024 empieza el dia viernes
             $primerDiaSemana = date('N', strtotime("$anio-$mes-01"));
 
+
+            $msgCancelacion = "";
+            if($idCancelar){
+                $citaCancelada = cancelarCita($conexion, $idCancelar);
+                if($citaCancelada){
+                    $msgCancelacion = "<p class='text-muted'>cita con id:<strong>".$idCancelar."</strong> cancelada</p>";
+                }else{
+                    $msgCancelacion = "<p class='text-muted'>intentó cancelar cita con id:<strong>".$idCancelar."</strong> pero no se pudo. Recuerde que solo se puede cancelar la cita si es una fecha despues de hoy y este pendiente</p>";
+                }
+            }
 
             //doy prioridad si se usa el buscador
             if ($filtro){
@@ -145,10 +156,12 @@ td a.stretched-link:hover {
             } else {
                 // Si no hay día, obtener citas del mes actual
                 $fechaInicio = "$anio-$mes-01";
-                $fechaFin = date("Y-m-t", strtotime($fechaInicio)); // Último día del mes
-                $citas = getCitasPorMesConDetalles($conexion, $fechaInicio, $fechaFin); // Nueva función
+                $fechaFin = date("Y-m-t", strtotime($fechaInicio)); //ultimo día del mes
+                $citas = getCitasPorMesConDetalles($conexion, $fechaInicio, $fechaFin);
                 $titulo = "Citas del mes: " . date('F \d\e Y', strtotime($fechaInicio));
             }
+
+
 
             //Ajustar navegación
             $mesAnteriorUrl = "index.php?mes={$navegacion['mesAnterior']}&anio={$navegacion['anioAnterior']}";
@@ -156,67 +169,6 @@ td a.stretched-link:hover {
             
             //Obtener nombre del mes y año
             $nombreMes = date('F', strtotime("$anio-$mes-01"));
-        ?>
-
-
-        <!-- <div class="container my-5">
-            <h1 class="text-center">Calendario de Citas</h1>
-            <div class="d-flex justify-content-between my-4">
-                <a href="?mes=<?= $navegacion['mesAnterior'] ?>&anio=<?= $navegacion['anioAnterior'] ?>" class="btn btn-primary">← Mes Anterior</a>
-                <h2><?= date('F Y', strtotime("$anio-$mes-01")) ?></h2>
-                <a href="?mes=<?= $navegacion['mesSiguiente'] ?>&anio=<?= $navegacion['anioSiguiente'] ?>" class="btn btn-primary">Mes Siguiente →</a>
-            </div>
-            <table class="table table-bordered text-center">
-                <thead>
-                <tr>
-                    <th>Lunesss</th>
-                    <th>Martes</th>
-                    <th>Miércoles</th>
-                    <th>Jueves</th>
-                    <th>Viernes</th>
-                    <th>Sábado</th>
-                    <th>Domingo</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                // 7. Imprimir filas del calendario
-                $dia = 1 - $primerDiaSemana; // Comienza con los días vacíos previos al 1
-                while ($dia <= $totalDias) {
-                    echo "<tr>";
-                    for ($columna = 0; $columna < 7; $columna++) {
-                        if ($dia > 0 && $dia <= $totalDias) {
-                            // Verificar si el día tiene citas
-                            $fechaActual = sprintf('%04d-%02d-%02d', $anio, $mes, $dia);
-                            $tieneCitas = isset($citasPorMes[$fechaActual]);
-                            $clase = $tieneCitas ? 'bg-info text-white' : '';
-                            $contenido = $tieneCitas ? "($citasPorMes[$fechaActual])" : '';
-                            
-                            echo "<td class='$clase'>";
-                            echo "<a href='?mes=$mes&anio=$anio&dia=$dia'>$dia $contenido</a>";
-                            echo "</td>";
-                        } else {
-                            echo "<td></td>"; // Celdas vacías
-                        }
-                        $dia++;
-                    }
-                    echo "</tr>";
-                }
-                ?>
-                </tbody>
-            </table>
-        </div> -->
-
-   
-
-        <?php
-            // if(count($citas) > 0){
-            //     //echo "·sss";
-                
-            // }else {
-            //     //echo "<p class='text-danger'>No se encontraron resultados.</p>";
-            // }
-
         ?>
 
 
@@ -379,6 +331,7 @@ td a.stretched-link:hover {
         <!-- este es el dinamico -->
         <div class="contenedor_lista_citas py-4">
             <h3 class="text-center mb-4"><?php echo $titulo ?></h3>
+            <?php echo $msgCancelacion ?>
             <?php 
                 if ($filtro){
                     echo ("<a href='?mes=$mes&anio=$anio' class='btn btn-secondary mb-4'>Volver a cargar la pagina</a>");
@@ -396,6 +349,17 @@ td a.stretched-link:hover {
                                     <p class="mb-2"><strong>Hora:</strong> <?php echo isset($cita['hora']) ? date('g:i A', strtotime($cita['hora'])) : 'fallo en la hora'; ?></p>
                                     <p class="mb-2"><strong>Socio:</strong> <?php echo $cita['nombre'] ?></p>
                                     <p class="mb-2"><strong>Teléfono:</strong> <?php echo $cita['telefono'] ?></p>
+
+
+                                    <div class="text-end mt-3">
+                                        <?php
+                                        $estadoCita = comprobarEstadoDeCita($conexion, $cita['id']);
+                                        if($estadoCita == 0){
+                                            echo "<a href='editar.php?id=1' class='btn btn-primary btn-sm'>Cancelar</a>";
+                                        }
+                                        ?>
+                                    </div>
+                            
                                 </div>
                             </div>
                         </div>
