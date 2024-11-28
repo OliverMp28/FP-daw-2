@@ -287,4 +287,67 @@
         return $citas;
     }
 
+
+
+    /**
+     * Esta funcion verifica si un socio ya tiene una cita en la misma fecha y hora, para evitar conflictos
+     * @param $conexion: la conexión a la base de datos
+     * @param $...: parametros para validar si hay alguna cita con esas caracteristicas
+     */
+    function validarDisponibilidadCita($conexion, $socio, $fecha, $hora) {
+        $sentencia = "SELECT COUNT(*) 
+                      FROM citas 
+                      WHERE socio = ? AND fecha = ? AND hora = ? AND estado = 0"; // 0 = Pendiente
+    
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('iss', $socio, $fecha, $hora);
+    
+        if ($consulta->execute() === false) {
+            die("Error en la ejecución de la consulta: " . $consulta->error);
+        }
+    
+        $cantidad = 0;
+        $consulta->bind_result($cantidad);
+        $consulta->fetch();
+    
+        return $cantidad === 0; // Retorna true si no hay conflictos
+    }
+
+
+    /**
+     * Esta funcion crea una nueva cita en la base de datos con estado "pendiente" (0)
+     * @param $conexion: la conexión a la base de datos
+     * @param $...: datos necesarios pasados por parametro
+     */
+    function crearCita($conexion, $socio, $servicio, $fecha, $hora) {
+        // Validar que la fecha no sea pasada
+        $fechaActual = date('Y-m-d');
+        if ($fecha < $fechaActual) {
+            return "No se pueden crear citas en fechas pasadas.";
+        }
+    
+        // Validar disponibilidad
+        if (!validarDisponibilidadCita($conexion, $socio, $fecha, $hora)) {
+            return "El socio ya tiene una cita en esa fecha y hora.";
+        }
+    
+        $sentencia = "INSERT INTO citas (socio, servicio, fecha, hora, estado) 
+                      VALUES (?, ?, ?, ?, 0)"; //0 = Pendiente, por defecto ya que se esta creando por primera vez
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('iiss', $socio, $servicio, $fecha, $hora);
+    
+        if ($consulta->execute() === false) {
+            return "Error al crear la cita: " . $consulta->error;
+        }
+    
+        return "Cita creada exitosamente.";
+    }
+    
+
+    
+
+    
+    
+    
+    
 ?>

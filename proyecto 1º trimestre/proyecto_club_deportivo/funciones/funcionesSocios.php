@@ -195,7 +195,32 @@
     }
     
     
+    /**
+     * Esta funcion devuelve solo la id y el nombre del socio, necesarios para los desplegables select q se usaran despues
+     * @param $conexion: la conexión a la base de datos
+     */
+    function getSociosDesplegable($conexion) {
+        $sentencia = "SELECT id, nombre FROM socio ORDER BY nombre ASC";
+        $consulta = $conexion->prepare($sentencia);
     
+        if ($consulta->execute() === false) {
+            die("Error en la ejecución de la consulta");
+        }
+    
+        $id = null;
+        $nombre = null;
+        $consulta->bind_result($id, $nombre);
+    
+        $socios = array();
+        while ($consulta->fetch()) {
+            $socios[] = array(
+                'id' => $id,
+                'nombre' => $nombre
+            );
+        }
+    
+        return $socios;
+    }
     
 
 ?>

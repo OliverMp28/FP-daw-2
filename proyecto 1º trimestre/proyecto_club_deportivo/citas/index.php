@@ -93,14 +93,14 @@ td a.stretched-link:hover {
         <form method="GET" action="" class="mb-4">
             <div class="row g-2 align-items-center">
                 <div class="col-12 col-md-8">
-                    <label for="buscar" class="form-label">Buscar el nombre del socio, por la fecha o por el servicio contratado</label>
+                    <label for="buscar" class="form-label">Buscar el nombre del socio, por la fecha(ejem: 2024-12-05) o por el servicio contratado</label>
                     <input 
                         type="text" 
                         name="buscar" 
                         id="buscar" 
                         class="form-control" 
                         placeholder="Buscar..." 
-                        value="<?php  isset($_GET['buscar']) ? $_GET['buscar'] : '' ?>"
+                        value="<?php echo isset($_GET['buscar']) ? $_GET['buscar'] : '' ?>"
                     />
                 </div>
                 <div class="col-12 col-md-4 mt-auto">
@@ -131,6 +131,7 @@ td a.stretched-link:hover {
             $primerDiaSemana = date('N', strtotime("$anio-$mes-01"));
 
 
+            //doy prioridad si se usa el buscador
             if ($filtro){
                 $citas = buscarCitasConDetalles($conexion, $filtro);
                 $titulo = "<p class='text-muted'>Resultados para: <strong>" . $filtro ."</strong></p>";
@@ -140,7 +141,7 @@ td a.stretched-link:hover {
                 // Si hay un dia, construir la fecha completa y obtener las citas de ese día
                 $fechaSeleccionada = "$anio-$mes-" . ($dia < 10 ? "0$dia" : $dia);
                 $citas = getCitasPorDiaConDetalles($conexion, $fechaSeleccionada);
-                $titulo = "Citas del día: " . date('j \d\e F \d\e Y', strtotime($fechaSeleccionada));
+                $titulo = "Citas del dia: " . date('j \d\e F \d\e Y', strtotime($fechaSeleccionada));
             } else {
                 // Si no hay día, obtener citas del mes actual
                 $fechaInicio = "$anio-$mes-01";
@@ -206,38 +207,15 @@ td a.stretched-link:hover {
             </table>
         </div> -->
 
-        <!-- <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Socio</th>
-                    <th>Teléfono</th>
-                    <th>Servicio</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php// foreach ($citas as $cita): ?>
-                    <tr>
-                        <td><?php //echo htmlspecialchars($cita['fecha']); ?></td>
-                        <td><?php //echo htmlspecialchars($cita['hora']); ?></td>
-                        <td><?php //echo htmlspecialchars($cita['socio_nombre']); ?></td>
-                        <td><?php //echo htmlspecialchars($cita['socio_telefono']); ?></td>
-                        <td><?php //echo htmlspecialchars($cita['servicio_descripcion']); ?></td>
-                    </tr>
-                <?php// endforeach; ?>
-            </tbody>
-        </table> -->
    
 
         <?php
-
-            if(count($citas) > 0){
-                //echo "·sss";
+            // if(count($citas) > 0){
+            //     //echo "·sss";
                 
-            }else {
-                //echo "<p class='text-danger'>No se encontraron resultados.</p>";
-            }
+            // }else {
+            //     //echo "<p class='text-danger'>No se encontraron resultados.</p>";
+            // }
 
         ?>
 
@@ -248,9 +226,9 @@ td a.stretched-link:hover {
             <div class="contenedor_calendario py-4">
                 <!-- Navegación de meses -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <a href="<?= $mesAnteriorUrl ?>" class="btn btn-primary">← Mes Anterior</a>
+                    <a href="<?= $mesAnteriorUrl ?>" class="btn btn-success">← Mes Anterior</a>
                     <h2 class="text-center mb-0" id="monthYear"><?= $nombreMes . " $anio" ?></h2>
-                    <a href="<?= $mesSiguienteUrl ?>" class="btn btn-primary">Mes Siguiente →</a>
+                    <a href="<?= $mesSiguienteUrl ?>" class="btn btn-success">Mes Siguiente →</a>
                 </div>
 
                 <!-- Calendario -->
@@ -400,7 +378,12 @@ td a.stretched-link:hover {
 
         <!-- este es el dinamico -->
         <div class="contenedor_lista_citas py-4">
-            <h3 class="text-center mb-4"><?= $titulo ?></h3>
+            <h3 class="text-center mb-4"><?php echo $titulo ?></h3>
+            <?php 
+                if ($filtro){
+                    echo ("<a href='?mes=$mes&anio=$anio' class='btn btn-secondary mb-4'>Volver a cargar la pagina</a>");
+                }
+            ?>
             <div class="row row-cols-1 g-3">
                 <?php 
                 if (count($citas) > 0): //verifico si hay citas
@@ -409,15 +392,15 @@ td a.stretched-link:hover {
                             <div class="card shadow-sm">
                                 <div class="card-body">
                                     <h5 class="card-title">Servicio: <?= $cita['descripcion'] ?></h5>
-                                    <p class="mb-2"><strong>Fecha:</strong> <?php echo date('j \d\e F \d\e Y', strtotime($cita['fecha'])); ?></p>
-                                    <p class="mb-2"><strong>Hora:</strong> <?php echo date('g:i A', strtotime($cita['hora'])) ?></p>
+                                    <p class="mb-2"><strong>Fecha:</strong> <?php echo isset($cita['fecha']) ? date('j \d\e F \d\e Y', strtotime($cita['fecha'])) : 'Fecha no disponible'; ?></p>
+                                    <p class="mb-2"><strong>Hora:</strong> <?php echo isset($cita['hora']) ? date('g:i A', strtotime($cita['hora'])) : 'fallo en la hora'; ?></p>
                                     <p class="mb-2"><strong>Socio:</strong> <?php echo $cita['nombre'] ?></p>
                                     <p class="mb-2"><strong>Teléfono:</strong> <?php echo $cita['telefono'] ?></p>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                <?php //verifico si se ha pasado un filtro, si se paso un filtro y no encontro nada manda el siguiente mensaje
+                <?php //verifico si se ha pasado un filtro por GET, si se paso un filtro 'buscar' y no encontro nada manda el siguiente mensaje
                     elseif($filtro): ?>
                     <div class="col">
                         <p class='text-danger'>No se encontraron resultados.</p>

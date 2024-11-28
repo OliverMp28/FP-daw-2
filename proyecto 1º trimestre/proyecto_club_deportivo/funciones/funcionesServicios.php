@@ -151,4 +151,31 @@
     }
     
 
+    /**
+     * Esta funcion devuelve solo la id y la descripcion del servicio, necesarios para los desplegables select q se usaran despues
+     * @param $conexion: la conexión a la base de datos
+     */
+    function getServiciosDesplegable($conexion) {
+        $sentencia = "SELECT id, descripcion FROM servicio ORDER BY descripcion ASC";
+        $consulta = $conexion->prepare($sentencia);
+    
+        if ($consulta->execute() === false) {
+            die("Error en la ejecución de la consulta");
+        }
+    
+        $id = null;
+        $descripcion = null;
+        $consulta->bind_result($id, $descripcion);
+    
+        $servicios = array();
+        while ($consulta->fetch()) {
+            $servicios[] = array(
+                'id' => $id,
+                'descripcion' => $descripcion
+            );
+        }
+    
+        return $servicios;
+    }
+
 ?>
