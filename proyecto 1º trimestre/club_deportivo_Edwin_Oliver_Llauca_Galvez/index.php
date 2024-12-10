@@ -41,28 +41,33 @@
 
     <main>
         <section class="seccion_ultimas_noticias">
-            <h2>Ultimas noticias</h2>
-            
+            <h2>Últimas noticias</h2>
+
             <a class="boton_estilizado" href="./noticias/index.php">Ver todas las noticias</a>
-            <div class="contenedor_noticias">
+            <div class="contenedor_noticias d-flex flex-column gap-4">
                 <?php
                     $ultimasNoticias = obtenerUltimasNoticias($conexion);
-                    if($ultimasNoticias){
-                        foreach($ultimasNoticias as $noticia){
-                            echo '<div class="noticia">';
-                            echo '<img src="'.$noticia['imagen'].'" alt="'.$noticia['titulo'].'">';
-                            echo '<h3>'.$noticia['titulo'].'</h3>';
-                            echo '<p>'.substr($noticia['contenido'], 0, 100).'...</p>';
-                            echo '<a href="noticias/ver.php?id=' . $noticia['id'] . '">Leer más...</a>';
+                    if ($ultimasNoticias) {
+                        foreach ($ultimasNoticias as $noticia) {
+                            echo '<div class="card h-100 shadow-sm d-flex flex-row align-items-center">';
+                            echo '    <img src="' . $noticia['imagen'] . '" class="card-img-left img-fluid" alt="' . $noticia['titulo'] . '" style="width: 350px; height: 200px; object-fit: cover;">';
+                            echo '    <div class="card-body">';
+                            echo '        <h5 class="card-title">' . $noticia['titulo'] . '</h5>';
+                            echo '        <p class="card-text">' . substr($noticia['contenido'], 0, 100) . '...</p>';
+                            echo '        <a href="noticias/ver.php?id=' . $noticia['id'] . '" class="btn btn-primary btn-sm">Leer más...</a>';
+                            echo '    </div>';
                             echo '</div>';
                         }
-                    }else{
-                        echo "No hay noticias disponibles";
+                    } else {
+                        echo "<p>No hay noticias disponibles</p>";
                     }
-
                 ?>
             </div>
         </section>
+
+
+
+
 
         <section class="seccion_testimonios  py-5 bg-light">
             <!-- <h2>Testimonios</h2>
@@ -235,13 +240,42 @@
                 <strong>Club deportivo "DEPOR"</strong><br>
                 Calle 123, 456, CABA<br>
                 Teléfono: 1234567890<br>
-                Email: <a href="mailto:contacto@clubdemesa.com" class="text-decoration-none">contacto@club.com</a><br>
+                Email: <a href="" class="text-decoration-none">contacto@club.com</a><br>
                 Horario de atención: Lunes a viernes de 10:00 a 22:00 hs.
             </p>
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-4 mb-5">
                 <a href="" class="btn btn-success">Enviar Correo</a>
             </div>
+            <hr>
+            <h3 class="text-center mb-4">Envíanos un Mensaje</h3>
+            <form class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="nombreContacto" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombreContacto" name="nombreContacto"  required>
+                    <div class="invalid-feedback">
+                        Por favor, ingresa tu nombre.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="emailContacto" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="emailContacto" name="emailContacto"  required>
+                    <div class="invalid-feedback">
+                        Por favor, ingresa un correo electrónico válido.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="mensajeContacto" class="form-label">Mensaje</label>
+                    <textarea class="form-control" id="mensajeContacto" name="mensajeContacto" rows="4"  required></textarea>
+                    <div class="invalid-feedback">
+                        Por favor, escribe un mensaje.
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                </div>
+            </form>
         </div>
+
 
 
 

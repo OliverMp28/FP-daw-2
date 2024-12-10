@@ -1,0 +1,73 @@
+CLUB DEPORTIVO Edwin Oliver Llauca Galvez
+-----------------------------------------------------------------------------
+
+detallare un poco la estructura y lo que hice en cada seccion funcionalmente hablando.
+
+
+------------------------- ESTRUCTURA DE CARPETAS: --------------------------
+
+La estructura de carpetas es descriptiva por cada seccion de la web, hay carpetas adicionales como:
+- assets: recursos adicionales de la web
+- config: para la conexion a bd
+- requires: donde van los archivos que se reutilizan, como la cabecera, el footer y el menu
+
+Cada seccion de la web tien 3 o 4 archivos, son parecidas entre ellas como index, agregar.php donde estaran 
+los formularios para crear una entidad y procesar.php que solo se usa para procesar lo que se envió por POST.
+
+
+
+------------------------- Partes reutilizables: --------------------------
+
+La cabecera y el footer se reutilizan en todas las secciones, para esto uso campos como:
+- $nivel: este campo es para indicar en que nivel de carpeta estamos, uso 0 para indicar que es el primer nivel
+        como la pagina principal, y uso 1 para indicar que estoy en una subcarpeta un nivel debajo.
+        Esto se usa para los elementos reutilizables como la cabecera ya que sino daria problemas con las rutas 
+        relativas pero con esto sé en que nivel de subcarpeta estoy.
+        
+        La cabecera y el menu las separé pero la cabecera llama al menú de todos modos.
+
+- $titulo = Este campo es adicional lo uso para poder algun titulo que luego usará la cabecera, por ejemplo
+        "Noticias" para la pagina de noticias o "citas" para la pagian de citas.
+
+
+
+------------------------- Funciones: --------------------------
+
+Las funciones las puse en la carpeta funciones y no en cada carpeta por seccion.
+
+Todas las funciones devuelven un string, array o true o false, ninguna genera un html.
+Tienen comentarios y uso @param para describir los parametros, en algunas funciones coloco puntos suspensivos ya que 
+son parametros muy obvios.
+
+En la mayoria de funciones que devuelven arrays despues de hacer un select las encuentras facilmente por que al inicio
+tienen la palabra "get" de obtener.
+
+Los archivos de las funciones las llamo con un require, en algunas paginas llamo a 3 de ellas por que usan funciones 
+comunes, como la pagina de citas, que usa funciones de socios y servicios para los desplegables.
+
+
+------------------------- Citas: --------------------------
+
+Calendario: El calendario se generan usando varias fuciones que calculan dias del mes, el dia en el que empieza en mes, etc
+            Obtengo el total de citas por cada dia con getCitasPorMes() que devuelve un array del dia junto con la cantidad 
+            de citas que tiene ese dia.
+            Todas las funciones que tienen un "...ConDetalles" en el nombre de la funcion, es por que devuelve la estructura
+            y los datos que pidió en los requisitos, lo de incluir el nombre de socio y servicio.
+
+
+En la base de datos en citas, el campo estado tiene 3 estados:
+- 0 = "pendiente"
+- 1 = "pasada"
+- 2 = "cancelada"
+
+cada que se actualiza la pagian de citas llama a la funcion actualizarEstadoCitas() para cambiar el estado de pendiente a 
+pasada comprobando la fecha del dia de hoy
+
+
+--------------------- COMO NOTA ADICIONAL-----
+olvide comentar algunos contenedores que puse  para la asignatura de interfaces asi que puede haber partes repetidas
+
+
+
+
+
