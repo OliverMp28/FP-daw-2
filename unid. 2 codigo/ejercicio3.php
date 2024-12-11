@@ -36,6 +36,10 @@
             <td>Posicion 4</td>
             <td><?php echo $operaciones[4]?></td>
         </tr>
+        <tr>
+            <td>Posicion 5</td>
+            <td><?php echo $operaciones[5]?></td>
+        </tr>
     </table>
 </body>
 </html>

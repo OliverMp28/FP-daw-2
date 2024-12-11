@@ -99,7 +99,39 @@
                 ?>
             </div>
 
+<!-- 
 
+            <div class="contenedor_testimonios_carrusel">
+
+            </div>
+
+
+            <div class="contenedor_testimonios">
+                <div class="testimonio">
+                    <img src="./assets/img/ejemplo1.jpg" alt="Testimonio 1">
+                    <h3>Nombre del cliente</h3>
+                    <div class="estrellas"> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ipsum vel dui scelerisque ultricies.</p>
+                </div>
+                <div class="testimonio">
+                    <img src="./assets/img/ejemplo1.jpg" alt="Testimonio 2">
+                    <h3>Nombre del cliente</h3>
+                    <div class="estrellas"> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                        <span class="estrella">&#9733;</span> 
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ipsum vel dui scelerisque ultricies.</p>
+                </div>
+            </div> -->
 
             <div class="container contenedor_testimonios_carrusel mt-5">
                 <div id="testimoniosCarrusel" class="carousel slide" data-bs-ride="carousel">
@@ -141,11 +173,14 @@
                     </button>
                 </div>
             </div>
+
+
+
+
+
         </section>
 
-
-
-        <!-- <section class="seccion_servicios">
+        <section class="seccion_servicios">
             <h2>Nuestros servicios</h2>
                 <div class="contenedor_servicios">
                     <div class="servicio">
@@ -172,8 +207,22 @@
                         <img src="./assets/img/ejemplo1.jpg" alt="Servicio 3">
                     </div>
                 </div>
-        </section> -->
-        <hr>
+        </section>
+
+        <section class="seccion_unirse">
+            <!--esta seccion sera como una llamada a la accion, no sera un formulario, 
+                será una llamada a la accion para que si no eres socio que te unas ya que tendras beneficios,
+                esto en el futuro tal vez va a redirigir a otra pagina apra registrarse como usuario, como mencioné antes, solo sera una llamada a la accion-->
+            <h2>Unirse al bar casino "La ruina"</h2>
+            <p>Si no eres socio, pero te gustaría participar de nuestro bar casino, te invitamos a unirte. Esto te permitirá obtener beneficios como:</p>
+            <ul>
+                <li>Acceso a juegos exclusivos</li>
+                <li>Descuentos en nuestros productos y servicios</li>
+                <li>Recibir noticias de nuestro bar casino</li>
+                <li>También podrás participar en nuestros eventos y actividades</li>
+            </ul>
+            <a href="#">Unirse al bar casino "La ruina"</a>
+        </section>
 
         <!-- <section class="seccion_testimonios">
             <h2>Testimonios</h2>
@@ -229,21 +278,16 @@
             </div>
         </section> -->
 
-        <div class="contenedor_contacto bg-light p-5 rounded shadow">
-            <h2 class="text-center mb-4">Contacto</h2>
-            <p class="text-center">
-                <strong>Club deportivo "DEPOR"</strong><br>
+        <section class="seccion_contacto">
+            <h2>Contacto</h2>
+            <p>
+                <strong>Casino "La Ruina"</strong><br>
                 Calle 123, 456, CABA<br>
                 Teléfono: 1234567890<br>
-                Email: <a href="mailto:contacto@clubdemesa.com" class="text-decoration-none">contacto@club.com</a><br>
+                Email:  <a href="mailto:contacto@clubdemesa.com">contacto@clubdemesa.com</a><br>
                 Horario de atención: Lunes a viernes de 10:00 a 22:00 hs.
             </p>
-            <div class="d-flex justify-content-center mt-4">
-                <a href="" class="btn btn-success">Enviar Correo</a>
-            </div>
-        </div>
-
-
+        </section>
 
         <!-- <aside>
             <h3>secciones</h3>

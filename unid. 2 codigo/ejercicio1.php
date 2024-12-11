@@ -12,7 +12,7 @@
 
         $consumo_medio=$combustible/$kilometros;
 
-        echo "Para $kilometros kilometros
+        echo "Para {$kilometros} kilometros
               Hemos necesitado $combustible litros de gasolina  
               Eso da $consumo_medio litros por kilometro";
 
