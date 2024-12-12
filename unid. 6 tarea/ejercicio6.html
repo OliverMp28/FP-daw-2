@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="ejercicio6.php" method="post" enctype="multipart/form-data">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <br><br>
+
+        <label for="apellido">Apellido: </label>
+        <input type="text" id="apellido" name="apellido" required>
+        <br><br>
+
+        <label for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" required>
+        <br><br>
+
+        <label for="cv">Sube tu CV , debe ser un pdf de maximo 2 MB:</label>
+        <input type="file" id="cv" name="cv" accept="application/pdf" required>
+        <br><br>
+
+        <input type="submit" value="subir datos">
+    </form>
+</body>
+</html>
