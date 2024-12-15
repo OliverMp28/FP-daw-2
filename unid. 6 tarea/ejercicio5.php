@@ -48,8 +48,8 @@
             echo "<h2>Imágenes ordenadas por tamaño:</h2>";
             foreach ($detallesImagenes as $imagen) {
                 echo "<p>{$imagen['nombre']}<br>";
-                echo "Tamaño: {$imagen['tamaño']} bytes</p>";
-                echo "<img src='{$imagen['ruta']}' alt='Imagen' style='max-width:300px;'><br><br>";
+                echo "Tamaño: {$imagen['tamaño']}</p>";
+                echo "<img src='{$imagen['ruta']}' style='max-width:300px;'><br><br>";
             }
         } else {
             echo "<p>No se subieron imagenes.</p>";

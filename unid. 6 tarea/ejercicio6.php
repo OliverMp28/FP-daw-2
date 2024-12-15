@@ -37,19 +37,19 @@
 
             $rutaDestino = $carpetaCVs . '/' . $dni .'.pdf';
             if (move_uploaded_file($rutaTemporal, $rutaDestino)) {
-                echo "Registro completado con exito. Tu CV ha sido guardado. <br>";
+                echo "Registro completado con exito Tu curriculum se guardo <br>";
                 echo "El nombre del CV es: ". $dni. '.pdf <br>';
                 echo "para " . $nombre . "  " . $apellido;
             } else {
                 echo "Error al guardar el archivo intenta nuevamente.";
             }
         } else {
-            echo "Error: No se subio ningún archivo";
+            echo "Error: No se subio ningun archivo";
             header("refresh:3; url=ejercicio6.html");
             exit;
         }
     } else {
-        echo "Error: Acceso no válido.";
+        echo "Error";
         header("refresh:3; url=ejercicio6.html");
         exit;
     }

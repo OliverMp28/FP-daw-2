@@ -8,7 +8,7 @@
 <body>
     <?php
     $tabla = isset($_POST['tabla']) ? intval($_POST['tabla']) : 1;
-    $color = isset($_POST['color']) ? htmlspecialchars($_POST['color']) : "white";
+    $color = isset($_POST['color']) ? $_POST['color'] : "white";
 
     echo "<h2 style='color: $color;'>Tabla del $tabla</h2>";
     echo "<table style='background-color: $color;'>";
