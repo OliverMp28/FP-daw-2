@@ -29,20 +29,51 @@ function menu_navegacion(){
                 <li><a href='nosotros.php'>Nosotros</a></li>
                 <li><a href='servicios.php'>Servicios</a></li>
                 <li><a href='contacto.php'>Contacto</a></li>
+                <li><a href='usuarios.php'>Usarios</a></li>
             </ul>
         </nav>";
 }
-function formulario_para_registro_usuario() {
+function formulario_para_registro(){
     return "<div class='register-container'>
                 <form class='register-form' action='registrar_usuario.php' method='POST'>
-                    <label for='username'>Usuario:</label>
-                    <input type='text' id='username' name='username' placeholder='Introduce tu usuario' required>
-                    <label for='fullname'>Nombre Completo:</label>
-                    <input type='text' id='fullname' name='fullname' placeholder='Introduce tu nombre completo' required>
+                    <label for='usuario'>Usuario:</label>
+                    <input type='text' id='usuario' name='usuario' placeholder='Introduce tu usuario' required>
+                    <label for='nombre_completo'>Nombre completo:</label>
+                    <input type='text' id='nombre_completo' name='nombre_completo' placeholder='Introduce tu nombre completo' required>
                     <label for='password'>Contraseña:</label>
                     <input type='password' id='password' name='password' placeholder='Introduce tu contraseña' required>
+                    <label for='confirm_password'>Confirma contraseña:</label>
+                    <input type='password' id='confirm_password' name='confirm_password' placeholder='Confirma tu contraseña' required>
                     <button type='submit'>Registrar</button>
                 </form>
             </div>";
 }
+
+
+function getUsuarioPorNombre($conexion, $usuario)
+{
+    $sentencia = "SELECT usuario, nombre_completo, password, tipo_usuario FROM usuarios WHERE usuario = ?";
+    $consulta = $conexion->prepare($sentencia);
+
+    $consulta->bind_param('s', $usuario);
+
+    $consulta->execute();
+
+    $usuario = $nombre_completo = $password = $tipo_usuario = '';
+    $consulta->bind_result($usuario, $nombre_completo, $password, $tipo_usuario);
+
+    $resultado = null;
+    if ($consulta->fetch()) {
+        $resultado = [
+            'usuario' => $usuario,
+            'nombre_completo' => $nombre_completo,
+            'password' => $password,
+            'tipo_usuario' => $tipo_usuario,
+        ];
+    }
+
+    $consulta->close();
+    return $resultado;
+}
+
 ?>

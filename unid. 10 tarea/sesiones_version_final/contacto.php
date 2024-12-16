@@ -9,6 +9,9 @@
 <body>
     <?php
         require_once "header.php";
+        if(!$privilegios){
+            die();
+        }
     ?>
     <main>
         <h2>Contacto</h2>

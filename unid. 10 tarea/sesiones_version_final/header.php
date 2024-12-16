@@ -33,7 +33,4 @@
 
 <?php
   echo menu_navegacion();
-  if(!$privilegios){
-        die();
-  }
 ?>

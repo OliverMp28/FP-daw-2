@@ -1,53 +1,46 @@
 <?php
-    session_start();
+    // session_start();
 
-    if($_POST["username"]=="admin" && $_POST["password"]=="admin"){
-        $_SESSION["nombre"]=$_POST["username"];
-        $_SESSION["tipo"]="admin";
-    }else{
-        $_SESSION["nombre"]=$_POST["username"];
-        $_SESSION["tipo"]="normal";
-    }
+    // if($_POST["username"]=="admin" && $_POST["password"]=="admin"){
+    //     $_SESSION["nombre"]=$_POST["username"];
+    //     $_SESSION["tipo"]="admin";
+    // }else{
+    //     $_SESSION["nombre"]=$_POST["username"];
+    //     $_SESSION["tipo"]="normal";
+    // }
     
 
-    header("Location:$_POST[origen]");
+    // header("Location:$_POST[origen]");
 ?> 
 
 <?php
-session_start();
-require_once "conexion.php";
+    session_start();
+    require_once "conexion.php";
 
-if (isset($_POST["username"], $_POST["password"])) {
-    $conexion = conectar();
+    if (isset($_POST["username"], $_POST["password"])) {
+        $conexion = conectar();
 
-    // Consulta preparada para buscar el usuario
-    $sentencia = "SELECT id, login, password, tipo FROM usuarios WHERE login = ?";
-    $consulta = $conexion->prepare($sentencia);
+        $usuario = $_POST['username'];
+        $password = $_POST['password'];
+        $pagina_origen = $_POST['origen'];
+        $mensaje = "";
 
-    $consulta->bind_param("s", $_POST["username"]);
-    $consulta->execute();
-    $consulta->bind_result($id, $login, $password, $tipo);
+        $datos = getUsuarioPorNombre($conexion, $usuario);
 
-    if ($consulta->fetch()) {
-        if (password_verify($_POST["password"], $password)) {
-            $_SESSION["nombre"] = $login;
-            $_SESSION["tipo"] = $tipo;
-            $_SESSION["id"] = $id;
+        if ($datos) {
+            if (password_verify($password, $datos['password'])) {
+                $_SESSION['nombre'] = $datos['nombre_completo'];
+                $_SESSION['tipo'] = $datos['tipo_usuario'];
+            } else {
+                $mensaje = "Contraseña incorrecta";
+            }
         } else {
-            echo "<p>Contraseña incorrecta.</p>";
-            die();
-        }
-    } else {
-        echo "<p>Usuario no encontrado.</p>";
-        die();
-    }
+            $mensaje = "Usuario no encontrado";
+            
+        } 
+        $_SESSION['mensaje'] = $mensaje;
+    } 
 
-    $consulta->close();
-    $conexion->close();
-
-    // Redirigir a la página de origen
-    header("Location: $_POST[origen]");
-} else {
-    echo "<p>Error: No se enviaron datos del formulario.</p>";
-}
+    header("Location: index.php");
+    die();
 ?>

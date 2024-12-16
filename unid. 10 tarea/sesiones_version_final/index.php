@@ -12,6 +12,9 @@
 
     <?php
         require_once "header.php";
+        if(!$privilegios){
+            die();
+        }
     ?>
 
     <main>
