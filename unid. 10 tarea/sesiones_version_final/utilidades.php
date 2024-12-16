@@ -32,4 +32,17 @@ function menu_navegacion(){
             </ul>
         </nav>";
 }
+function formulario_para_registro_usuario() {
+    return "<div class='register-container'>
+                <form class='register-form' action='registrar_usuario.php' method='POST'>
+                    <label for='username'>Usuario:</label>
+                    <input type='text' id='username' name='username' placeholder='Introduce tu usuario' required>
+                    <label for='fullname'>Nombre Completo:</label>
+                    <input type='text' id='fullname' name='fullname' placeholder='Introduce tu nombre completo' required>
+                    <label for='password'>Contraseña:</label>
+                    <input type='password' id='password' name='password' placeholder='Introduce tu contraseña' required>
+                    <button type='submit'>Registrar</button>
+                </form>
+            </div>";
+}
 ?>
