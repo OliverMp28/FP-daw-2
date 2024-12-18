@@ -76,4 +76,36 @@ function getUsuarioPorNombre($conexion, $usuario)
     return $resultado;
 }
 
+function registrarUsuario($conexion, $usuario, $nombre_completo, $password, $tipo_usuario = 'normal')
+{
+    $sentencia = "SELECT COUNT(*) FROM usuarios WHERE usuario = ?";
+    $consulta = $conexion->prepare($sentencia);
+    $consulta->bind_param('s', $usuario);
+    $consulta->execute();
+
+    $existe_usuario = '';
+    $consulta->bind_result($existe_usuario);
+    $consulta->fetch();
+    $consulta->close();
+
+    if ($existe_usuario > 0) {
+        return ['status' => false, 'mensaje' => 'El usuario ya existe.'];
+    }
+
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $sentencia = "INSERT INTO usuarios (usuario, nombre_completo, password, tipo_usuario) VALUES (?, ?, ?, ?)";
+    $consulta = $conexion->prepare($sentencia);
+    $consulta->bind_param('ssss', $usuario, $nombre_completo, $password_hash, $tipo_usuario);
+
+    if ($consulta->execute()) {
+        $consulta->close();
+        return ['status' => true, 'mensaje' => 'Usuario registrado correctamente.'];
+    } else {
+        $consulta->close();
+        return ['status' => false, 'mensaje' => 'Error al registrar el usuario.'];
+    }
+}
+
+
+
 ?>
