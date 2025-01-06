@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script type="module" defer src="./app.js"></script>
+    
+</head>
+<body>
+    <header>
+        <!-- aca ira un titulo o nombre para el musical -->
+        <h1>MusicAlt</h1>
+         <img src="./img/portada_hamilton.webp" alt="">
+         <div>
+            <p>Vea los asientos y compre sus entradas!</p> <br>
+            <a href="#seccion_asientos"> Ver entradas</a>
+         </div>
+    </header>
+
+    <section id="seccion_asientos">
+        <img src="./img/portada2.webp" alt="">
+        <div class="contenedor-asientos">
+            <div id="escenario">Escenario</div>
+            
+            <div class="fila-grupos-asientos">
+                <div class="columna-letras">
+                    <div class="letra-fila">A</div>
+                    <div class="letra-fila">B</div>
+                    <div class="letra-fila">C</div>
+                    <div class="letra-fila">D</div>
+                    <div class="letra-fila">E</div>
+                    <div class="letra-fila">F</div>
+                    <div class="letra-fila">G</div>
+                </div>
+
+                <!-- asientos laterales izquierdos -->
+                <div class="grupo-asientos lateral-izquierda">
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="AI01"></div>
+                        <div class="asiento" data-idAsiento="AI02"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="BI03"></div>
+                        <div class="asiento" data-idAsiento="BI04"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="CI05"></div>
+                        <div class="asiento" data-idAsiento="CI06"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="DI07"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="EI08"></div>
+                    </div>
+                </div>
+                
+                <!-- asientos centrales (premium, intermedia y economica) -->
+                <div class="asientos-centrales">
+                    <div class="grupo-asientos premium">
+                        <!-- Fila A -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="A01"></div>
+                            <div class="asiento" data-idAsiento="A02"></div>
+                            <div class="asiento" data-idAsiento="A03"></div>
+                            <div class="asiento" data-idAsiento="A04"></div>
+                            <div class="asiento" data-idAsiento="A05"></div>
+                            <div class="asiento" data-idAsiento="A06"></div>
+                        </div>
+                        <!-- Fila B -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="B01"></div>
+                            <div class="asiento" data-idAsiento="B02"></div>
+                            <div class="asiento" data-idAsiento="B03"></div>
+                            <div class="asiento" data-idAsiento="B04"></div>
+                            <div class="asiento" data-idAsiento="B05"></div>
+                            <div class="asiento" data-idAsiento="B06"></div>
+                        </div>
+                        <!-- Fila C -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="C01"></div>
+                            <div class="asiento" data-idAsiento="C02"></div>
+                            <div class="asiento" data-idAsiento="C03"></div>
+                            <div class="asiento" data-idAsiento="C04"></div>
+                            <div class="asiento" data-idAsiento="C05"></div>
+                            <div class="asiento" data-idAsiento="C06"></div>
+                        </div>                    
+                    </div>
+                    
+                    <div class="grupo-asientos intermedia">
+                        <!-- Fila D -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="D01"></div>
+                            <div class="asiento" data-idAsiento="D02"></div>
+                            <div class="asiento" data-idAsiento="D03"></div>
+                            <div class="asiento" data-idAsiento="D04"></div>
+                            <div class="asiento" data-idAsiento="D05"></div>
+                            <div class="asiento" data-idAsiento="D06"></div>
+                            <div class="asiento" data-idAsiento="D07"></div>
+                            <div class="asiento" data-idAsiento="D08"></div>
+                        </div>
+                        <!-- Fila E -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="E01"></div>
+                            <div class="asiento" data-idAsiento="E02"></div>
+                            <div class="asiento" data-idAsiento="E03"></div>
+                            <div class="asiento" data-idAsiento="E04"></div>
+                            <div class="asiento" data-idAsiento="E05"></div>
+                            <div class="asiento" data-idAsiento="E06"></div>
+                            <div class="asiento" data-idAsiento="E07"></div>
+                            <div class="asiento" data-idAsiento="E08"></div>
+                        </div>                    
+                    </div>
+                    
+                    <div class="grupo-asientos economica">
+                        <!-- Fila F -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="F01"></div>
+                            <div class="asiento" data-idAsiento="F02"></div>
+                            <div class="asiento" data-idAsiento="F03"></div>
+                            <div class="asiento" data-idAsiento="F04"></div>
+                            <div class="asiento" data-idAsiento="F05"></div>
+                            <div class="asiento" data-idAsiento="F06"></div>
+                            <div class="asiento" data-idAsiento="F07"></div>
+                            <div class="asiento" data-idAsiento="F08"></div>
+                            <div class="asiento" data-idAsiento="F09"></div>
+                        </div>
+                        <!-- Fila G -->
+                        <div class="fila">
+                            <div class="asiento" data-idAsiento="G01"></div>
+                            <div class="asiento" data-idAsiento="G02"></div>
+                            <div class="asiento" data-idAsiento="G03"></div>
+                            <div class="asiento" data-idAsiento="G04"></div>
+                            <div class="asiento" data-idAsiento="G05"></div>
+                            <div class="asiento" data-idAsiento="G06"></div>
+                            <div class="asiento" data-idAsiento="G07"></div>
+                            <div class="asiento" data-idAsiento="G08"></div>
+                            <div class="asiento" data-idAsiento="G09"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Asientos laterales derechos -->
+                <div class="grupo-asientos lateral-derecha">
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="AD01"></div>
+                        <div class="asiento" data-idAsiento="AD02"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="BD03"></div>
+                        <div class="asiento" data-idAsiento="BD04"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="CD05"></div>
+                        <div class="asiento" data-idAsiento="CD06"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="DD07"></div>
+                    </div>
+                    <div class="fila">
+                        <div class="asiento" data-idAsiento="ED08"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="indicaciones">
+                <ul>
+                    <li><div class="asiento_premium"></div> Asientos Premium/Vip 120€</li>
+                    <li><div class="asiento_intermedio"></div> Asientos Intermedios 90€</li>
+                    <li><div class="asiento_economico"></div> Asientos Economicos 50€</li>
+                    <li><div class="asiento_laterales"></div> Asientos Laterales 60€</li>
+                    <br>
+                    <li><div class="asiento_seleccionado"></div> Asientos Seleccionados por ti</li>
+                    <li><div class="asiento_reservado"></div> Asientos Reservados</li>
+                </ul>
+            </div>
+        </div>
+        
+
+        <div class="contenedor-resultados">
+            <div class="resultados">
+                
+            </div>
+            <button id="boton-reservar" >Reservar Asientos Seleccionados</button>
+        </div>
+
+    </section>
+
+    <section class="seccion_resumen">
+        <div class="historial-reservas">
+            <h3>Historial de Reservas</h3>
+            <div class="resumen-reservas">
+                
+            </div>
+        </div>
+        <div class="anuncio">
+            <!-- esto va a servir comoanuncio "quieres la experiencia completa, visita nuestra tienda y ve a Hamilton con el outfit" -->
+            <img src="./img/ropa.webp" alt="">
+            <p>Quieres la experiencia completa, visita nuestra tienda y ve a Hamilton con el outfit</p>
+            <a href="https://westendmerchandiseshop.com/collections/hamilton">Visitar la tienda</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>MUSICAL HAMILTON 2024. Todos los derechos reservados</p>
+    </footer>
+
+</body>
+</html>

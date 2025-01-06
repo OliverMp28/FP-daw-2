@@ -1,0 +1,333 @@
+/* Estilo general de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    background-color: #000000;
+    color: white;
+    width: 100%;
+    height: 100vh;
+}
+
+h1 {
+    font-size: 28px;
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 20px;
+    font-style: italic;
+}
+header img{
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(153, 112, 1, 0.767);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+header div{
+    padding: 50px;
+    height: 50px;
+}
+header p{
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    font-style: italic;
+}
+a {
+    background-color: #ca9b00; 
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    color: black;
+    text-decoration: none;
+}
+
+
+a:hover {
+    background-color: #e4c200; 
+    transform: scale(1.05);
+}
+
+
+
+/* Contenedor principal */
+#seccion_asientos {
+    display: flex; 
+    width: 100%;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 45px;
+    padding-bottom: 45px;
+    background-color: #181818;
+    color: white;
+}
+#seccion_asientos img{
+    box-shadow: 0 2px 10px rgba(153, 112, 1, 0.767);
+    display: block;
+    /* margin-left: auto;
+    margin-right: auto; */
+    height: 620px;
+}
+/* Contenedores hijos de <section> */
+.contenedor-asientos, .contenedor-resultados {
+    padding: 10px;
+    box-sizing: border-box; /*al quitar esto, hace que el contenedor se adapte al ancho del contenido pero que el minimo ancho siempre es el 50%*/
+}
+ /* .contenedor-asientos{
+    width: 60%;
+}
+.contenedor-resultados{
+    width: 40%;
+}  */
+
+/* Contenedor de los asientos */
+.contenedor-asientos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #000000;
+}
+
+/* Escenario */
+#escenario {
+    width: 50%;
+    background-color: #252525;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-left: 24px;
+    border-radius: 8px;
+}
+
+/* Columna de letras de fila */
+.columna-letras {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+.letra-fila {
+    font-size: 18px;
+    font-weight: bold;
+    height: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    /*aqui centro horizontalmente*/
+    line-height: 30px;
+}
+
+/* Contenedor para agrupar laterales y centrales en una fila */
+.fila-grupos-asientos {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* Asientos centrales en columna */
+.asientos-centrales {
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+}
+
+ .fila {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 10px;
+} 
+
+/* Asiento individual */
+.asiento {
+    width: 30px;
+    height: 30px;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Estilos por zonas */
+.premium .asiento {
+    background-color: #fde876; /* dorado */
+}
+
+.intermedia .asiento {
+    background-color: #f1c97d; /* naranja */
+}
+
+.economica .asiento {
+    background-color: #b0c4de; /* gris azulado */
+}
+
+/* Estado de asientos */
+.asiento.seleccionado {
+    background-color: #1596dc !important;
+}
+.asiento.resaltado { background-color: rgba(201, 198, 111, 0.64) !important; }
+.asiento.reservado { background-color: red; cursor: not-allowed !important; }
+
+
+.asiento.ocupado {
+    background-color: #ff4d4d !important;
+    cursor: not-allowed;
+}
+
+/* Zona de los asientos laterales */
+.lateral-izquierda, .lateral-derecha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 8px; */
+}
+
+/* Limita el ancho de los asientos laterales */
+.lateral-izquierda .fila, .lateral-derecha .fila {
+    width: 60px;
+}
+
+.indicaciones{
+    padding: 5px;
+}
+.indicaciones ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.indicaciones ul li{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.indicaciones ul div{
+    width: 20px;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 2px;
+}
+.indicaciones .asiento_premium{
+    background-color: #fde876;
+}
+
+.indicaciones .asiento_intermedio{
+    background-color: #f1c97d;
+}
+
+.indicaciones .asiento_economico{
+    background-color: #b0c4de;
+}
+.indicaciones .asiento_seleccionado{
+    background-color: #1596dc;
+}
+.indicaciones .asiento_reservado{
+    background-color: red;
+}
+
+button{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #a78903;
+    color: white;
+    cursor: pointer;
+}
+
+
+/*estilos de los resultados*/
+.seccion_resumen{
+    display: flex; 
+    width: 100%;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 45px;
+    padding-bottom: 45px;
+    background-color: #181818;
+    color: white;
+}
+.historial-reservas {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+.anuncio{
+    width: 300px;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    align-items: center;
+}
+.anuncio img{
+    box-shadow: 0 2px 10px rgba(153, 112, 1, 0.767);
+    display: block;
+    /* margin-left: auto;
+    margin-right: auto; */
+    width: 200px;
+    margin: 0 auto;
+}
+
+.historial-reservas h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.resumen-reservas p {
+    font-size: 0.9em;
+    color: #666;
+    margin: 5px 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+footer{
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+    color: white;
+}
+
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 768px) {
+    section {
+        flex-direction: column;
+    }
+
+    .contenedor-asientos, .contenedor-resultados {
+        width: 100%;
+    }
+
+    .fila {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
