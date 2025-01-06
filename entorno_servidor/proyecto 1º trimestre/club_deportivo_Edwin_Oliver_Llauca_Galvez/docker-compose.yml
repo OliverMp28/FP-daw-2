@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html 
+    depends_on:
+      - db 
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    ports:
+      - "3306:3306" # Puerto para conectarse desde tu máquina (opcional)
+    environment:
+      MYSQL_ROOT_PASSWORD: root # Contraseña para el usuario root
+      MYSQL_DATABASE: club_deportivo # Nombre de tu base de datos
+      MYSQL_USER: usuario # Usuario para tu aplicación
+      MYSQL_PASSWORD: "1234" # Contraseña para tu aplicación
+    volumes:
+      - ./mysql_data:/var/lib/mysql # Persistencia de datos
+
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html 
+    depends_on:
+      - db 
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    ports:
+      - "3306:3306" # Puerto para conectarse desde tu máquina (opcional)
+    environment:
+      MYSQL_ROOT_PASSWORD: root # Contraseña para el usuario root
+      MYSQL_DATABASE: club_deportivo # Nombre de tu base de datos
+      MYSQL_USER: usuario # Usuario para tu aplicación
+      MYSQL_PASSWORD: "1234" # Contraseña para tu aplicación
+    volumes:
+      - ./mysql_data:/var/lib/mysql # Persistencia de datos

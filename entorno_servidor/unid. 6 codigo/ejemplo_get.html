@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./estilos.css">
+
+    <title>Document</title>
+  </head>
+  <body>
+    Opcion 1:
+    <a href="colores.php?color=rgb(0,255,0)&nombre=Verde">Fondo verde</a><br />
+    Opcion 2:
+    <a href="colores.php?color=rgb(200,200,200)&nombre=Gris">Fondo gris</a><br />
+    Opcion 3:
+    <a href="colores.php?color=rgb(0,0,255)&nombre=Azul">Fondo azul</a><br />
+
+    <form action="./colores.php" method="post">
+      <input type="radio" name="color" value="rgb(0,255,0)" checked>Verde <br>
+      <input type="radio" name="color" value="rgb(200,200,200)">Gris <br>
+      <input type="radio" name="color" value="rgb(0,0,255)">Azul <br>
+      <input type="submit" value="enviar">
+    </form>
+  </body>
+</html>

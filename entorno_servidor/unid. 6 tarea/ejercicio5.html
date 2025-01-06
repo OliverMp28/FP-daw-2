@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>sube 2 foto/imagenes</h1>
+    <form action="ejercicio5.php" method="post" enctype="multipart/form-data">
+		<label for="imagen1">Imagen 1:</label>
+		<input type="file" name="imagenes[]" id="imagen1" accept="image/*" required>
+		<br><br>
+		<label for="imagen2">Imagen 2:</label>
+		<input type="file" name="imagenes[]" id="imagen2" accept="image/*" required>
+		<br><br>
+		<input type="submit" value="Subir Imágenes">
+	</form>
+</body>
+</html>

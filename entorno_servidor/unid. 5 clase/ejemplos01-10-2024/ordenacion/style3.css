@@ -1,0 +1,27 @@
+table{
+    font-family: Arial, Helvetica, sans-serif;
+    border-bottom: 3px solid black;
+    border-collapse: collapse;
+}
+
+table th, td{
+    padding: 7px;
+    width: 100px;
+}
+
+tr.valor:nth-child(odd){
+    background-color: lightgrey;
+}
+
+table thead{
+    background-color: rgb(230, 179, 84);
+    color: white;
+    border-bottom: 3px solid black;
+    border-top: 3px solid black;
+}
+
+th.fila, td.fila{
+    background-color: rgb(66, 145, 66);
+    color: white;
+    font-weight: bold;
+}
