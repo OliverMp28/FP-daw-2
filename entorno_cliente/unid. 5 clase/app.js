@@ -11,7 +11,7 @@ formulario.addEventListener("submit",
         if(!textoValido || !checkboxValido || !validarSelect() || !validarNumero() || !validarFichero()) {
             evento.preventDefault();
         }
-    }
+    } 
 );
 
 const validarTexto = () => {
