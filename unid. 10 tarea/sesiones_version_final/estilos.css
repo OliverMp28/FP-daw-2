@@ -123,3 +123,55 @@ footer {
     text-align: center;
     padding: 1rem 0;
 }
+
+
+
+
+.contenedor-registro, .contenedor-modificar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+table{
+    background-color: white;
+}
+tr, td, th{
+    border: #333 1px solid;
+}
+
+form {
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+form input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+

@@ -16,6 +16,7 @@
 <?php
     session_start();
     require_once "conexion.php";
+    require_once "utilidades.php";
 
     if (isset($_POST["username"], $_POST["password"])) {
         $conexion = conectar();
@@ -30,16 +31,17 @@
         if ($datos) {
             if (password_verify($password, $datos['password'])) {
                 $_SESSION['nombre'] = $datos['nombre_completo'];
+                $_SESSION['usuario'] = $datos['usuario'];
                 $_SESSION['tipo'] = $datos['tipo_usuario'];
             } else {
                 $mensaje = "Contraseña incorrecta";
             }
         } else {
             $mensaje = "Usuario no encontrado";
-            
+
         } 
         $_SESSION['mensaje'] = $mensaje;
-    } 
+    }
 
     header("Location: index.php");
     die();

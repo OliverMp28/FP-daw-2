@@ -33,9 +33,15 @@ function menu_navegacion(){
             </ul>
         </nav>";
 }
-function formulario_para_registro(){
-    return "<div class='register-container'>
-                <form class='register-form' action='registrar_usuario.php' method='POST'>
+function formulario_para_registro()
+{
+    $mensaje = isset($_SESSION['mensaje']) ? "<p class='error'>{$_SESSION['mensaje']}</p>" : '';
+    if (isset($_SESSION['mensaje'])) {
+        $_SESSION['mensaje'] = '';
+    }
+    return "<div class='contenedor-registro'>
+                <form class='formulario' action='registrar_usuario.php' method='POST'>
+                    $mensaje
                     <label for='usuario'>Usuario:</label>
                     <input type='text' id='usuario' name='usuario' placeholder='Introduce tu usuario' required>
                     <label for='nombre_completo'>Nombre completo:</label>
@@ -44,7 +50,37 @@ function formulario_para_registro(){
                     <input type='password' id='password' name='password' placeholder='Introduce tu contraseña' required>
                     <label for='confirm_password'>Confirma contraseña:</label>
                     <input type='password' id='confirm_password' name='confirm_password' placeholder='Confirma tu contraseña' required>
+                    <label for='tipo_usuario'>Tipo de usuario:</label>
+                    <select id='tipo_usuario' name='tipo_usuario' required>
+                        <option value='0' disabled selected>Selecciona un tipo de usuario</option>
+                        <option value='normal'>Normal</option>
+                        <option value='socio'>Socio</option>
+                    </select>
                     <button type='submit'>Registrar</button>
+                </form>
+            </div>";
+}
+
+function formulario_para_modificar($usuario, $nombre_completo)
+{
+    $mensaje = isset($_SESSION['mensaje']) ? "<p class='error'>{$_SESSION['mensaje']}</p>" : '';
+    if (isset($_SESSION['mensaje'])) {
+        $_SESSION['mensaje'] = '';
+    }
+    return "<div class='contenedor-modificar'>
+                <form action='registrar_usuario.php' method='POST'>
+                    $mensaje
+                    <h2>Modificar tus datos</h2>
+                    <input type='hidden' name='is_modificacion' value='1'>
+                    <label for='usuario'>Usuario:</label>
+                    <input type='text' id='usuario' name='usuario' value='$usuario' required readonly>
+                    <label for='nombre_completo'>Nombre completo:</label>
+                    <input type='text' id='nombre_completo' name='nombre_completo' value='$nombre_completo' required>
+                    <label for='password'>Nueva contraseña :</label>
+                    <input type='password' id='password' name='password'>
+                    <label for='confirm_password'>Confirma nueva contraseña:</label>
+                    <input type='password' id='confirm_password' name='confirm_password'>
+                    <button type='submit'>Actualizar</button>
                 </form>
             </div>";
 }
@@ -83,28 +119,64 @@ function registrarUsuario($conexion, $usuario, $nombre_completo, $password, $tip
     $consulta->bind_param('s', $usuario);
     $consulta->execute();
 
-    $existe_usuario = '';
+    $existe_usuario = 0;
     $consulta->bind_result($existe_usuario);
+
     $consulta->fetch();
     $consulta->close();
 
     if ($existe_usuario > 0) {
-        return ['status' => false, 'mensaje' => 'El usuario ya existe.'];
+        return false; 
+        //aca si existe ususarios entonces no registrar y retornar false
     }
 
-    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $password_hasheado = password_hash($password, PASSWORD_DEFAULT);
     $sentencia = "INSERT INTO usuarios (usuario, nombre_completo, password, tipo_usuario) VALUES (?, ?, ?, ?)";
     $consulta = $conexion->prepare($sentencia);
-    $consulta->bind_param('ssss', $usuario, $nombre_completo, $password_hash, $tipo_usuario);
+    $consulta->bind_param('ssss', $usuario, $nombre_completo, $password_hasheado, $tipo_usuario);
 
-    if ($consulta->execute()) {
-        $consulta->close();
-        return ['status' => true, 'mensaje' => 'Usuario registrado correctamente.'];
-    } else {
-        $consulta->close();
-        return ['status' => false, 'mensaje' => 'Error al registrar el usuario.'];
-    }
+   // die("llego aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    $resultado = $consulta->execute();
+    $consulta->close();
+
+    return $resultado;
 }
+
+function actualizarUsuario($conexion, $usuario, $nombre_completo, $password = null)
+{
+    if ($password) {
+        $password_hasheado = password_hash($password, PASSWORD_DEFAULT);
+        $sentencia = "UPDATE usuarios SET nombre_completo = ?, password = ? WHERE usuario = ?";
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('sss', $nombre_completo, $password_hasheado, $usuario);
+    } else {
+        $sentencia = "UPDATE usuarios SET nombre_completo = ? WHERE usuario = ?";
+        $consulta = $conexion->prepare($sentencia);
+        $consulta->bind_param('ss', $nombre_completo, $usuario);
+    }
+
+    $resultado = $consulta->execute();
+    $consulta->close();
+
+    return $resultado;
+}
+
+function getTodosUsuarios($conexion)
+{
+    $sentencia = "SELECT id, usuario, nombre_completo, tipo_usuario FROM usuarios";
+    $consulta = $conexion->prepare($sentencia);
+    $consulta->execute();
+
+    $resultado = $consulta->get_result();
+    $usuarios = [];
+    while ($fila = $resultado->fetch_assoc()) {
+        $usuarios[] = $fila;
+    }
+
+    $consulta->close();
+    return $usuarios;
+}
+
 
 
 
