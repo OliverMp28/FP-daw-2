@@ -33,8 +33,6 @@ boton.addEventListener("click", async ()=>{
     cargando.style.display = "none";
   }
 
-  
-
 });
 
 
