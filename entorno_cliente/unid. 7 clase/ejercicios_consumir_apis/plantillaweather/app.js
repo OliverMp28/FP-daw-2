@@ -17,6 +17,7 @@ boton.addEventListener("click", async ()=>{
     const respuesta = await fetch(url);
     const datos = await respuesta.json();
 
+    //la api devuelve un mensaje al insertar algo que no tiene esperado, por lo que uso la clase error para generar un error
     if (datos.error) {
       throw new Error(datos.error.message);
     }
@@ -28,7 +29,7 @@ boton.addEventListener("click", async ()=>{
     const fila = crearFila(humedad, temperatura, icono);
     tabla.appendChild(fila);
   } catch (error) {
-    alert("error: " + error.message);
+    alert("error en tu busqueda: " + error.message);
   } finally {
     cargando.style.display = "none";
   }
