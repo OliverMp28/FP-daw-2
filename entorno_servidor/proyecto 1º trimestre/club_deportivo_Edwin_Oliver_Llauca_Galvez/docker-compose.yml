@@ -19,7 +19,7 @@ services:
       MYSQL_ROOT_PASSWORD: root # Contraseña para el usuario root
       MYSQL_DATABASE: club_deportivo # Nombre de tu base de datos
       MYSQL_USER: usuario # Usuario para tu aplicación
-      MYSQL_PASSWORD: "1234" # Contraseña para tu aplicación
+      MYSQL_PASSWORD: "" # Contraseña para tu aplicación
     volumes:
       - ./mysql_data:/var/lib/mysql # Persistencia de datos
 
