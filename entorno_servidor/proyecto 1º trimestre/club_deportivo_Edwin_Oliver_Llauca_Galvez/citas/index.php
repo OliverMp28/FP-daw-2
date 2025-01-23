@@ -27,9 +27,8 @@
     <link rel="stylesheet" href="../assets/css/otros.css">
     <title>Citas</title>
     <style>
-    /* Celdas con citas destacadas */
     .has-citas {
-        background-color: #6c757d; /* Color secundario de Bootstrap */
+        background-color: #6c757d; 
         color: #fff;
         cursor: pointer;
     }
@@ -38,12 +37,10 @@
         background-color: #5a6268;
     }
 
-    /* Títulos del calendario */
     #monthYear {
         font-weight: bold;
     }
 
-    /* Tarjetas de citas */
     .card {
         border: 1px solid #ddd;
     }
@@ -52,27 +49,21 @@
         line-height: 1.5;
     }
 
+    td.has-citas {
+        position: relative;
+    }
 
+    td a.stretched-link {
+        display: block;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
 
-
-
-/* Mantén la celda como posición relativa para limitar el alcance */
-td.has-citas {
-    position: relative;
-}
-
-/* El enlace ahora solo afecta a su contenedor inmediato */
-td a.stretched-link {
-    display: block;
-    height: 100%;
-    width: 100%;
-    text-align: center;
-}
-
-/* Soluciona cualquier interferencia adicional */
-td a.stretched-link:hover {
-    text-decoration: none;
-}
+    /* Soluciona cualquier interferencia adicional */
+    td a.stretched-link:hover {
+        text-decoration: none;
+    }
 
 
 </style>

@@ -11,8 +11,9 @@
     // $consulta->close();
     // $conexion->close();
 
+
     //aca llamo a los archivos para las funciones necesarias
-    require_once "../funciones/funcionesCitas.php";
+    require_once "../funciones/funcionesSocios.php";
 ?>
 
 <!DOCTYPE html>
@@ -25,42 +26,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/otros.css">
-    <title>Citas</title>
+    <title>Fitness</title>
 </head>
 <body>
     <?php
         $nivel = 1;
-        $titulo = "Citas";
+        $titulo = "Fitness";
         require_once "../requires/cabecera.php"
     ?>
 
     <main>
-    <section class="container py-4 seccion_citas">
-
-        <?php
+    <section class="container py-4 seccion_fitness">
        
-        if (isset($_POST['socioCita'], $_POST['servicioCita'], $_POST['fechaCita'], $_POST['horaCita'])) {
-            $socioId = intval($_POST['socioCita']);
-            $servicioId = intval($_POST['servicioCita']);
-            $fechaCita = trim($_POST['fechaCita']);
-            $horaCita = trim($_POST['horaCita']);
-
-        
-            $resultado = crearCita($conexion, $socioId, $servicioId, $fechaCita, $horaCita);
-        
-            echo "<p>{$resultado}</p>";
-            echo "<p>Redirigiendo a la página principal en 4 segundos...</p>";
-            header("refresh:4;url=index.php");
-       } else {
-           echo "<p>Error: Faltan datos necesarios. Redirigiendo en 4 segundos...</p>";
-           header("refresh:4;url=index.php");
-           exit;
-       }
-       
-       
-        ?>
     </section>
-
     </main>
 
     <?php

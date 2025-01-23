@@ -14,6 +14,7 @@
                 <?php if ($nivel === 0) { ?>
                     <li class="nav-item"><a href="index.php" class="nav-link">Inicio</a></li>
                     <li class="nav-item"><a href="./socios/" class="nav-link">Socios</a></li>
+                    <li class="nav-item"><a href="./fitness/" class="nav-link">Fitness</a></li>
                     <li class="nav-item"><a href="./servicios/" class="nav-link">Servicios</a></li>
                     <li class="nav-item"><a href="./testimonios/" class="nav-link">Testimonios</a></li>
                     <li class="nav-item"><a href="./noticias/" class="nav-link">Noticias</a></li>
@@ -23,6 +24,7 @@
                 else if ($nivel === 1) { ?>
                     <li class="nav-item"><a href="../index.php" class="nav-link">Inicio</a></li>
                     <li class="nav-item"><a href="../socios/" class="nav-link">Socios</a></li>
+                    <li class="nav-item"><a href="../fitness/" class="nav-link">Fitness</a></li>
                     <li class="nav-item"><a href="../servicios/" class="nav-link">Servicios</a></li>
                     <li class="nav-item"><a href="../testimonios/" class="nav-link">Testimonios</a></li>
                     <li class="nav-item"><a href="../noticias/" class="nav-link">Noticias</a></li>

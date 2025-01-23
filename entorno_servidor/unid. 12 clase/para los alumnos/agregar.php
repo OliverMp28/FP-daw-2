@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         curl_close($ch);
 
-        if(true){
+        // if(true){
 
-        }
+        // }
     } else {
         $error = "Todos los campos son requeridos.";
     }
