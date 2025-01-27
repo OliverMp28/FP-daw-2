@@ -28,90 +28,12 @@
     <script defer src="../assets/js/app.js"></script>
     <title>Fitness</title>
     <style>
-/* 💡 Mejoras en Estilo para la Sección de Ejercicios */
-.seccion_fitness_ejercicios {
-    background-color: #f8f9fa; /* Fondo suave */
-    padding: 40px 0;
-}
-
-/* 🎨 Estilo de la Tarjeta de Filtros */
-.filtros-card {
-    background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #dee2e6;
-}
-
-/* 📌 Input y Selects Mejorados */
-.filtro-input {
-    border-radius: 10px;
-    border: 1px solid #ced4da;
-    transition: all 0.3s ease-in-out;
-}
-
-.filtro-input:focus {
-    border-color: #007bff;
-    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.4);
-}
-
-/* 🔎 Botón de Búsqueda */
-.filtro-btn {
-    background: #007bff;
-    border-radius: 10px;
-    padding: 12px 30px;
-    font-size: 18px;
-    transition: 0.3s;
-}
-
-.filtro-btn:hover {
-    background: #0056b3;
-}
-
-/* 🏆 Tarjetas de Ejercicios */
-.card-ejercicio {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
-}
-
-.card-ejercicio:hover {
-    transform: translateY(-5px);
-}
-
-/* 🎯 Badge de Dificultad */
-.badge-dificultad {
-    font-size: 0.9rem;
-    padding: 6px 12px;
-    border-radius: 10px;
-}
-
-/* 🟢 Colores según Dificultad */
-.badge-beginner {
-    background-color: #28a745;
-    color: white;
-}
-
-.badge-intermediate {
-    background-color: #ffc107;
-    color: black;
-}
-
-.badge-expert {
-    background-color: #dc3545;
-    color: white;
-}
-
-.ver-mas {
-    color: #0d6efd; /* Color azul de Bootstrap */
-    text-decoration: none; /* Quitar subrayado */
-    font-size: 0.9em;
-    margin-left: 5px;
-}
-
-.ver-mas:hover {
-    text-decoration: underline; /* Subrayar al pasar el mouse */
-}
+    .sticky-calorias{
+        top: 80px; 
+        z-index: 100; 
+        max-height: 90vh; 
+        overflow-y: auto;
+    }
 
     </style>
    
@@ -123,90 +45,127 @@
         require_once "../requires/cabecera.php"
     ?>
 
-    <main>
-    <section class="container py-4 seccion_fitness_ejercicios">
-    <!-- Título de la Sección -->
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-primary">💪 Encuentra tu Ejercicio Ideal</h2>
-        <p class="text-muted fs-5">Filtra por tipo, músculo o dificultad y obtén los mejores ejercicios</p>
-    </div>
+    <main class="container py-4 seccion_fitness">
+        <div class="row">
+            <section class="col-lg-8 col-12 py-4 seccion_fitness_ejercicios">
+                <!-- Título de la Sección -->
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold text-primary">Busca los ejercicios que necesites</h2>
+                    <p class="text-muted fs-5">Filtra por tipo, musculo o dificultad y obten los mejores ejercicios en nuestro club deportivo</p>
+                </div>
 
-    <!-- Tarjeta de Filtros -->
-    <div class="card filtros-card p-4 mb-5 shadow-lg">
-        <form id="form-filtros" class="row g-4 align-items-end">
-            <!-- Búsqueda por Nombre -->
-            <div class="col-md-4">
-                <label for="buscar-nombre" class="form-label fw-semibold text-secondary">🔍 Buscar Ejercicio</label>
-                <input type="text" id="buscar-nombre" class="form-control filtro-input" placeholder="Ejemplo: Squat">
-            </div>
+                <!-- Tarjeta de Filtros -->
+                <div class="card filtros-card p-4 mb-5 shadow-lg">
+                    <form id="form-filtros" class="row g-4 align-items-end">
+                        <!-- Búsqueda por Nombre -->
+                        <div class="col-md-4">
+                            <label for="buscar-nombre" class="form-label fw-semibold text-secondary">Buscar Ejercicio</label>
+                            <input type="text" id="buscar-nombre" class="form-control filtro-input" placeholder="Ejemplo: Squat">
+                        </div>
 
-            <!-- Filtro por Tipo -->
-            <div class="col-md-3">
-                <label for="filtro-tipo" class="form-label fw-semibold text-secondary">📌 Tipo de Ejercicio</label>
-                <select id="filtro-tipo" class="form-select filtro-input">
-                    <option value="">Todos</option>
-                    <option value="cardio">Cardio</option>
-                    <option value="olympic_weightlifting">Levantamiento Olímpico</option>
-                    <option value="plyometrics">Pliométricos</option>
-                    <option value="powerlifting">Powerlifting</option>
-                    <option value="strength">Fuerza</option>
-                    <option value="stretching">Estiramiento</option>
-                    <option value="strongman">Strongman</option>
-                </select>
-            </div>
+                        <!-- Filtro por Tipo -->
+                        <div class="col-md-3">
+                            <label for="filtro-tipo" class="form-label fw-semibold text-secondary">Tipo de Ejercicio</label>
+                            <select id="filtro-tipo" class="form-select filtro-input">
+                                <option value="">Todos</option>
+                                <option value="cardio">Cardio</option>
+                                <option value="olympic_weightlifting">Levantamiento Olímpico</option>
+                                <option value="plyometrics">Pliométricos</option>
+                                <option value="powerlifting">Powerlifting</option>
+                                <option value="strength">Fuerza</option>
+                                <option value="stretching">Estiramiento</option>
+                                <option value="strongman">Strongman</option>
+                            </select>
+                        </div>
 
-            <!-- Filtro por Grupo Muscular -->
-            <div class="col-md-3">
-                <label for="filtro-musculo" class="form-label fw-semibold text-secondary">🏋️ Grupo Muscular</label>
-                <select id="filtro-musculo" class="form-select filtro-input">
-                    <option value="">Todos</option>
-                    <option value="abdominals">Abdominales</option>
-                    <option value="abductors">Abductores</option>
-                    <option value="adductors">Aductores</option>
-                    <option value="biceps">Bíceps</option>
-                    <option value="calves">Pantorrillas</option>
-                    <option value="chest">Pecho</option>
-                    <option value="forearms">Antebrazos</option>
-                    <option value="glutes">Glúteos</option>
-                    <option value="hamstrings">Isquiotibiales</option>
-                    <option value="lats">Dorsales</option>
-                    <option value="lower_back">Zona Lumbar</option>
-                    <option value="middle_back">Espalda Media</option>
-                    <option value="neck">Cuello</option>
-                    <option value="quadriceps">Cuádriceps</option>
-                    <option value="traps">Trapecios</option>
-                    <option value="triceps">Tríceps</option>
-                </select>
-            </div>
+                        <!-- Filtro por Grupo Muscular -->
+                        <div class="col-md-3">
+                            <label for="filtro-musculo" class="form-label fw-semibold text-secondary">Grupo Muscular</label>
+                            <select id="filtro-musculo" class="form-select filtro-input">
+                                <option value="">Todos</option>
+                                <option value="abdominals">Abdominales</option>
+                                <option value="abductors">Abductores</option>
+                                <option value="adductors">Aductores</option>
+                                <option value="biceps">Bíceps</option>
+                                <option value="calves">Pantorrillas</option>
+                                <option value="chest">Pecho</option>
+                                <option value="forearms">Antebrazos</option>
+                                <option value="glutes">Glúteos</option>
+                                <option value="hamstrings">Isquiotibiales</option>
+                                <option value="lats">Dorsales</option>
+                                <option value="lower_back">Zona Lumbar</option>
+                                <option value="middle_back">Espalda Media</option>
+                                <option value="neck">Cuello</option>
+                                <option value="quadriceps">Cuádriceps</option>
+                                <option value="traps">Trapecios</option>
+                                <option value="triceps">Tríceps</option>
+                            </select>
+                        </div>
 
-            <!-- Filtro por Dificultad -->
-            <div class="col-md-2">
-                <label for="filtro-dificultad" class="form-label fw-semibold text-secondary">🎯 Dificultad</label>
-                <select id="filtro-dificultad" class="form-select filtro-input">
-                    <option value="">Todas</option>
-                    <option value="beginner">Principiante</option>
-                    <option value="intermediate">Intermedio</option>
-                    <option value="expert">Experto</option>
-                </select>
-            </div>
+                        <!-- Filtro por Dificultad -->
+                        <div class="col-md-2">
+                            <label for="filtro-dificultad" class="form-label fw-semibold text-secondary">Dificultad</label>
+                            <select id="filtro-dificultad" class="form-select filtro-input">
+                                <option value="">Todas</option>
+                                <option value="beginner">Principiante</option>
+                                <option value="intermediate">Intermedio</option>
+                                <option value="expert">Experto</option>
+                            </select>
+                        </div>
 
-            <!-- Botón de Búsqueda -->
-            <div class="col-12 text-center">
-                <button type="submit" class="btn btn-lg btn-primary filtro-btn">🔎 Buscar Ejercicios</button>
-            </div>
-        </form>
-    </div>
+                        <!-- Botón de Búsqueda -->
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-lg btn-primary filtro-btn">Buscar Ejercicios</button>
+                        </div>
+                    </form>
+                </div>
 
-    <!-- Resultados -->
-    <div class="row g-4" id="resultados-ejercicios">
-        <!-- Aquí se mostrarán los ejercicios dinámicamente -->
-        <div class="col-12 text-center text-muted">
-            <p>⚡ Usa los filtros para encontrar ejercicios rápidamente.</p>
+                <!-- Resultados -->
+                <div class="row g-4" id="resultados-ejercicios">
+                    <!-- Aquí se mostrarán los ejercicios dinámicamente -->
+                    <div class="col-12 text-center text-muted">
+                        <p>Usa los filtros para encontrar ejercicios rápidamente.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!--Barra lateral para la Calculadora de Calorias -->
+            <aside class="col-lg-4 col-12 seccion_fitness_calorias mt-lg-4">
+                <div class="card shadow-sm p-3 sticky-top sticky-calorias">
+                    <h3 class="text-center mb-3">🔥 Calculadora de Calorías</h3>
+
+                    <!-- Input de Actividad con Autocompletado -->
+                    <div class="mb-3">
+                        <label for="inputActividad" class="form-label">Actividad:</label>
+                        <input type="text" id="inputActividad" class="form-control" placeholder="Ejemplo: correr, natación..." autocomplete="off">
+                        <ul class="list-group mt-1 d-none" id="sugerenciasLista"></ul>
+                    </div>
+
+                    <!-- Peso del Usuario -->
+                    <div class="mb-3">
+                        <label for="inputPeso" class="form-label">Tu peso (lbs):</label>
+                        <input type="number" id="inputPeso" class="form-control" min="50" max="500" placeholder="Ejemplo: 160">
+                    </div>
+
+                    <!-- Duración del Ejercicio -->
+                    <div class="mb-3">
+                        <label for="inputDuracion" class="form-label">Duración (min):</label>
+                        <input type="number" id="inputDuracion" class="form-control" min="1" placeholder="Ejemplo: 60">
+                    </div>
+
+                    <!-- Botón para Calcular -->
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="btnCalcular">Calcular</button>
+                    </div>
+
+                    <!-- Resultado de Calorías -->
+                    <div class="mt-4" id="resultadoCalorias">
+                        <h5 class="text-center">Resultados</h5>
+                        <ul class="list-group" id="listaResultados"></ul>
+                    </div>
+                </div>
+            </aside>
         </div>
-    </div>
-</section>
-
-
 
     </main>
 
