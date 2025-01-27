@@ -25,7 +25,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <link rel="stylesheet" href="../assets/css/otros.css">
-    <script defer src="../assets/js/app.js"></script>
+    <script defer type="module" src="../assets/js/app.js"></script>
     <title>Fitness</title>
     <style>
     .sticky-calorias{
@@ -48,22 +48,20 @@
     <main class="container py-4 seccion_fitness">
         <div class="row">
             <section class="col-lg-8 col-12 py-4 seccion_fitness_ejercicios">
-                <!-- Título de la Sección -->
+                <!-- titulo -->
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold text-primary">Busca los ejercicios que necesites</h2>
+                    <h2 class="fw-bold">Busca los ejercicios que necesites</h2>
                     <p class="text-muted fs-5">Filtra por tipo, musculo o dificultad y obten los mejores ejercicios en nuestro club deportivo</p>
                 </div>
 
                 <!-- Tarjeta de Filtros -->
                 <div class="card filtros-card p-4 mb-5 shadow-lg">
                     <form id="form-filtros" class="row g-4 align-items-end">
-                        <!-- Búsqueda por Nombre -->
                         <div class="col-md-4">
                             <label for="buscar-nombre" class="form-label fw-semibold text-secondary">Buscar Ejercicio</label>
                             <input type="text" id="buscar-nombre" class="form-control filtro-input" placeholder="Ejemplo: Squat">
                         </div>
 
-                        <!-- Filtro por Tipo -->
                         <div class="col-md-3">
                             <label for="filtro-tipo" class="form-label fw-semibold text-secondary">Tipo de Ejercicio</label>
                             <select id="filtro-tipo" class="form-select filtro-input">
@@ -78,7 +76,6 @@
                             </select>
                         </div>
 
-                        <!-- Filtro por Grupo Muscular -->
                         <div class="col-md-3">
                             <label for="filtro-musculo" class="form-label fw-semibold text-secondary">Grupo Muscular</label>
                             <select id="filtro-musculo" class="form-select filtro-input">
@@ -102,7 +99,6 @@
                             </select>
                         </div>
 
-                        <!-- Filtro por Dificultad -->
                         <div class="col-md-2">
                             <label for="filtro-dificultad" class="form-label fw-semibold text-secondary">Dificultad</label>
                             <select id="filtro-dificultad" class="form-select filtro-input">
@@ -113,7 +109,6 @@
                             </select>
                         </div>
 
-                        <!-- Botón de Búsqueda -->
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-lg btn-primary filtro-btn">Buscar Ejercicios</button>
                         </div>
@@ -122,7 +117,6 @@
 
                 <!-- Resultados -->
                 <div class="row g-4" id="resultados-ejercicios">
-                    <!-- Aquí se mostrarán los ejercicios dinámicamente -->
                     <div class="col-12 text-center text-muted">
                         <p>Usa los filtros para encontrar ejercicios rápidamente.</p>
                     </div>
@@ -134,31 +128,26 @@
                 <div class="card shadow-sm p-3 sticky-top sticky-calorias">
                     <h3 class="text-center mb-3">🔥 Calculadora de Calorías</h3>
 
-                    <!-- Input de Actividad con Autocompletado -->
                     <div class="mb-3">
-                        <label for="inputActividad" class="form-label">Actividad:</label>
+                        <label for="inputActividad" class="form-label">Actividad(obligatorio):</label>
                         <input type="text" id="inputActividad" class="form-control" placeholder="Ejemplo: correr, natación..." autocomplete="off">
                         <ul class="list-group mt-1 d-none" id="sugerenciasLista"></ul>
                     </div>
 
-                    <!-- Peso del Usuario -->
                     <div class="mb-3">
                         <label for="inputPeso" class="form-label">Tu peso (lbs):</label>
                         <input type="number" id="inputPeso" class="form-control" min="50" max="500" placeholder="Ejemplo: 160">
                     </div>
 
-                    <!-- Duración del Ejercicio -->
                     <div class="mb-3">
                         <label for="inputDuracion" class="form-label">Duración (min):</label>
                         <input type="number" id="inputDuracion" class="form-control" min="1" placeholder="Ejemplo: 60">
                     </div>
 
-                    <!-- Botón para Calcular -->
                     <div class="d-grid">
                         <button class="btn btn-primary" id="btnCalcular">Calcular</button>
                     </div>
 
-                    <!-- Resultado de Calorías -->
                     <div class="mt-4" id="resultadoCalorias">
                         <h5 class="text-center">Resultados</h5>
                         <ul class="list-group" id="listaResultados"></ul>
