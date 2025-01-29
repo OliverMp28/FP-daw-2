@@ -8,7 +8,7 @@
 	}
 
 
-	function XobtenerAsignatura($conexion,$id_asignatura){
+	function obtenerAsignatura($conexion,$id_asignatura){
 		global $tabla_asignaturas;
 
 		$consulta="SELECT * FROM $tabla_asignaturas WHERE id_asignatura=?";
@@ -25,12 +25,12 @@
 			$salida["respuesta"]=["error"=>"No se encuentra la asignatura"];
 		}
 
-		$sentecia->close();
+		$sentencia->close();
 
 		return $salida;
 	}
 
-	function XobtenerAsignaturasPag($conexion,$pagina,$limite){
+	function obtenerAsignaturasPag($conexion,$pagina,$limite){
 		global $tabla_asignaturas;
 
 		$offset=($pagina-1)*$limite;

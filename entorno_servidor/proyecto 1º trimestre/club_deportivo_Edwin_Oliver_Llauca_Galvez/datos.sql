@@ -185,6 +185,32 @@ INSERT INTO `citas` (`id`, `socio`, `servicio`, `fecha`, `hora`, `estado`) VALUE
 (9, 5, 7, '2024-12-07', '18:45:00', 0),
 (10, 6, 8, '2024-12-08', '14:00:00', 0);
 
+
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `productos`
+-- --
+
+CREATE TABLE `productos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(255) NOT NULL UNIQUE,
+  `descripcion` TEXT NULL,
+  `precio` DECIMAL(10,2) NOT NULL,
+  `stock` INT(11) NOT NULL DEFAULT 0,
+  `categoria` VARCHAR(100) NULL,
+  `imagen` VARCHAR(255) NULL, -- Ruta de la imagen almacenada en el servidor
+  `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `productos` (`nombre`, `descripcion`, `precio`, `stock`, `categoria`, `imagen`) VALUES
+('Camiseta Deportiva', 'Camiseta transpirable para entrenamiento', 19.99, 50, 'Ropa', 'uploads/productos/camiseta1.jpg'),
+('Mancuernas 10kg', 'Par de mancuernas recubiertas de neopreno', 35.99, 30, 'Equipamiento', 'uploads/productos/mancuernas10kg.jpg'),
+('Esterilla de Yoga', 'Esterilla antideslizante para yoga y pilates', 25.50, 20, 'Accesorios', 'uploads/productos/esterilla.jpg'),
+('Zapatillas Running', 'Zapatillas ligeras para correr', 59.99, 40, 'Calzado', 'uploads/productos/zapatillas.jpg'),
+('Botella de Agua 1L', 'Botella reutilizable libre de BPA', 12.99, 100, 'Accesorios', 'uploads/productos/botella1l.jpg');
+
+
 -- --------------------------------------------------------
 
 --
