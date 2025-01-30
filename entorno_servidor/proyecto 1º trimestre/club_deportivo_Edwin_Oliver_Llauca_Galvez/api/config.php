@@ -4,4 +4,6 @@
     $password_db='';
     $nombre_db="club_deportivo";
     $tabla_productos='productos';
+
+
 ?>
