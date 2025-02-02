@@ -9,7 +9,7 @@ const formFiltros = document.querySelector("#form-filtros");
 const resultadosContainer = document.querySelector("#resultados-ejercicios");
 const cargando = document.createElement("div");
 
-// Configurar el loader
+// Configurar el loader 
 cargando.className = "text-center my-4";
 cargando.innerHTML = `
     <div class="spinner-border text-primary" role="status">
