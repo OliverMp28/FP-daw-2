@@ -409,7 +409,7 @@
 
 	function eliminarProducto($conexion, $id) {
 		global $tabla_productos;
-		global $RUTA_API;
+		global $RUTA_API; 
 	
 		// Verificar si el producto existe
 		$productoExistente = obtenerProducto($conexion, $id);
