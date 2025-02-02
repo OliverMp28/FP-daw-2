@@ -4,9 +4,35 @@
 
     // empezar a hacer la funciones
 
+	/**
+	 * Validar una apikey
+	 */
+	function validarApiKey($apiKeysValidos) {
+		//estos son los headers que envia el cliente y la usamos para verificar la apikey
+		$headers = getallheaders();
+
+		if (!isset($headers['X-API-KEY'])) {
+			http_response_code(403);
+			echo json_encode(["error" => "Acceso no autorizado: No hay API Key "]);
+			die();
+		}
+
+		$apiKeyEnviada = $headers['X-API-KEY'];
+		
+		if (!in_array($apiKeyEnviada, $apiKeysValidos)) {
+			http_response_code(403);
+			echo json_encode(["error" => "Acceso no autorizado: API Key invalida"]);
+			die();
+		}
+	}
 	
+
+	//---------------------------------------------------------------
+	//--------------------Funciones de GET --------------------------
+	//---------------------------------------------------------------
 	function obtenerProducto($conexion, $id_producto){
 		global $tabla_productos;
+		global $RUTA_API;
 
 		$consulta = "SELECT * FROM {$tabla_productos} WHERE id = ?";
 		$sentencia=$conexion->prepare($consulta);
@@ -15,9 +41,22 @@
 
 		$resultado=$sentencia->get_result();
 		if($resultado->num_rows==1){
-			$producto=$resultado->fetch_assoc();
+			$datos=[];
+			while($fila=$resultado->fetch_assoc()){
+				$datos=[
+                    "id"=>$fila["id"],
+                    "nombre"=>$fila["nombre"],
+                    "descripcion"=>$fila["descripcion"],
+                    "precio"=>$fila["precio"],
+					"stock"=>$fila["stock"],
+					"categoria"=>$fila["categoria"],
+					"imagen"=>$RUTA_API . $fila["imagen"],
+					"fecha_creacion"=>$fila["fecha_creacion"]
+                ];
+			}
+
 			$salida["http"]=200;
-			$salida["respuesta"]=["datos"=>$producto];
+			$salida["respuesta"]=["datos"=>$datos];
 		}else{
 			$salida["http"]=404;
 			$salida["respuesta"]=["error"=>"No se encuentra el producto"];
@@ -27,8 +66,17 @@
 		return $salida;
 	}
 	
+
+	/**
+	 * Esta funcion me obtiene los productos paginados, 
+	 * tiene parametros adicionales como nombre, categoria y precios minimos y maximos
+	 * estos parametros por defecto son null pero si se le pasan estos datos
+	 * entonces la funcion filtra por el concepto que pusiste, por ejemplo filtrado por nombre
+	 *
+	 */
 	function obtenerProductosPag($conexion, $pagina, $limite, $nombre=null, $precioMin=null, $precioMax=null, $categoria=null){
 		global $tabla_productos;
+		global $RUTA_API;
 
 		$offset=($pagina-1)*$limite;
 
@@ -92,36 +140,36 @@
                     "precio"=>$fila["precio"],
 					"stock"=>$fila["stock"],
 					"categoria"=>$fila["categoria"],
-					"imagen"=>$fila["imagen"],
+					"imagen"=>$RUTA_API . $fila["imagen"],
 					"fecha_creacion"=>$fila["fecha_creacion"]
                 ];
 			}
 
 			// Calcular total con filtros
-        $sentenciaTotal = $conexion->prepare($consultaTotal);
-        if (!empty($params)) {
-			//se quitan los 2 ultimos parametros antes de consultar, en este caso se estarian quitando el limit y el offset ya que solo quiero contar no paginar
-			
-			array_pop($params);
-            array_pop($params);
-			
-			if(!empty($types)){
-				$sentenciaTotal->bind_param($types, ...$params);
+			$sentenciaTotal = $conexion->prepare($consultaTotal);
+			if (!empty($params)) {
+				//se quitan los 2 ultimos parametros antes de consultar, en este caso se estarian quitando el limit y el offset ya que solo quiero contar no paginar
+				
+				array_pop($params);
+				array_pop($params);
+				
+				if(!empty($types)){
+					$sentenciaTotal->bind_param($types, ...$params);
+				}
 			}
-        }
-        $sentenciaTotal->execute();
-        $total = $sentenciaTotal->get_result()->fetch_row()[0];
+			$sentenciaTotal->execute();
+			$total = $sentenciaTotal->get_result()->fetch_row()[0];
 
-        $salida["http"] = 200;
-        $salida["respuesta"] = [
-								"datos" => $datos,
-								"paginacion" => [
-									"actual" => $pagina,
-									"limite" => $limite,
-									"total" => $total,
-									"paginas" => ceil($total / $limite)
-								]
-							];
+			$salida["http"] = 200;
+			$salida["respuesta"] = [
+									"datos" => $datos,
+									"paginacion" => [
+										"actual" => $pagina,
+										"limite" => $limite,
+										"total" => $total,
+										"paginas" => ceil($total / $limite)
+									]
+								];
 		}else{
 			$salida["http"]=404;
             $salida["respuesta"]=["error"=>"No hay productos encontrados"];
@@ -140,6 +188,7 @@
 	 */
 	function crearProducto($conexion, $datos, $imagen = null) {
 		global $tabla_productos;
+		global $RUTA_API;
 	
 		// Procesar imagen
 		$rutaImagen = null;
@@ -161,7 +210,7 @@
 				];
 			}
 	
-			$rutaImagen = 'img/' . $nombreArchivo;
+			$rutaImagen = '/img/' . $nombreArchivo;
 		}
 	
 		// Antes de bind_param(), define las variables
@@ -170,11 +219,7 @@
 		$precio = $datos['precio'];
 		$stock = $datos['stock'];
 		$categoria = $datos['categoria'] ?? null;
-		if($rutaImagen != null){
-			$urlImagen = "http://localhost/FP%20daw%202/entorno_servidor/proyecto%201%c2%ba%20trimestre/club_deportivo_Edwin_Oliver_Llauca_Galvez/api/" . $rutaImagen;
-		}else{
-			$urlImagen = $rutaImagen;
-		}
+		$urlImagen = $rutaImagen;
 		
 		
 		// Insertar en BD
@@ -213,7 +258,7 @@
 			];
 		}
 	
-		// Obtener el ID del nuevo producto
+		//con "->insert_id" obtengo la nueva id generada para el nuevo producto creado
 		$nuevoId = $conexion->insert_id;
 	
 		return [
@@ -221,83 +266,193 @@
 			"respuesta" => [
 				"mensaje" => "Producto creado exitosamente",
 				"id" => $nuevoId,
-				"imagen_url" => $rutaImagen ? "http://localhost/FP%20daw%202/entorno_servidor/proyecto%201%c2%ba%20trimestre/club_deportivo_Edwin_Oliver_Llauca_Galvez/api/" . $rutaImagen : null
+				"imagen_url" => $rutaImagen ? $RUTA_API . $rutaImagen : null
 			]
 		];
 	}
 
 
 	/**
-	 * SComprueba si existe o no un producto con el nombre seleccionado, devuelve true o false
+	 * Comprueba si existe o no un producto con el nombre seleccionado, devuelve true o false.
+	 * Si se le pasa una id, es por que queremos que en la comprobacion de nombre se compruebe todo
+	 * excepto el producto con esa id, esto lo uso para actualizar un producto
+	 * ya que al actualizar un producto compruebo que el nombre no exita pero no compruebo el nombre del producto
+	 * que se esta actualizando ya que ese nuevo nombre ira en ese producto.
 	 */
-	function existeProductoConEsteNombre($conexion, $nombre) {
+	function existeProductoConEsteNombre($conexion, $nombre, $idExcluir = null) {
 		global $tabla_productos;
 	
-		$sql = "SELECT COUNT(*) FROM $tabla_productos WHERE nombre = ?";
-		$sentencia = $conexion->prepare($sql);
-		
-		$count = 0;
-		if ($sentencia) {
-			$sentencia->bind_param("s", $nombre);
-			$sentencia->execute();
-			$sentencia->bind_result($count);
-			$sentencia->fetch();
-			$sentencia->close();
+		$sentencia = "SELECT COUNT(*) FROM $tabla_productos WHERE nombre = ?";
+		if ($idExcluir !== null) {
+			$sentencia .= " AND id != ?";
+		}
 	
-			return $count > 0;
-		} else {
+		$sentencia = $conexion->prepare($sentencia);
+		if (!$sentencia) {
 			return false;
 		}
+	
+		if ($idExcluir !== null) {
+			$sentencia->bind_param("si", $nombre, $idExcluir);
+		} else {
+			$sentencia->bind_param("s", $nombre);
+		}
+	
+		$count = 0;
+		$sentencia->execute();
+		$sentencia->bind_result($count);
+		$sentencia->fetch();
+		$sentencia->close();
+	
+		return $count > 0;
 	}
 	
 
 
-
-
-
-	function obtenerAsignaturasPag($conexion,$pagina,$limite){
-		global $tabla_asignaturas;
-
-		$offset=($pagina-1)*$limite;
-		$consulta="SELECT * FROM $tabla_asignaturas 
-		           LIMIT ? OFFSET ?";
-		$sentencia=$conexion->prepare($consulta);
-		$sentencia->bind_param("ii",$limite,$offset);
-		$sentencia->execute();
-		$resultado=$sentencia->get_result();
-		if($resultado->num_rows>0){
-			$datos=[];
-			while($fila=$resultado->fetch_assoc()){
-				$datos[]=[
-					"id_asignatura"=>$fila["id_asignatura"],
-					"nombre_asignatura"=>$fila["nombre_asignatura"],
-					"creditos"=>$fila["creditos"]
+	//---------------------------------------------------------------
+	//--------------------Funciones de PUT--------------------------
+	//---------------------------------------------------------------
+	
+	function actualizarProducto($conexion, $id, $campos) {
+		global $tabla_productos;
+	
+		//verifico si el producto existe
+		$productoExistente = obtenerProducto($conexion, $id);
+		if ($productoExistente["http"] !== 200) {
+			return [
+				"http" => 404,
+				"respuesta" => ["error" => "Producto no encontrado"]
+			];
+		}
+	
+		//Valido la unicidad del nombre(si se actualiza)
+		if (isset($campos['nombre'])) {
+			if (existeProductoConEsteNombre($conexion, $campos['nombre'], $id)) {
+				return [
+					"http" => 409,
+					"respuesta" => ["error" => "Ya existe un producto con este nombre"]
 				];
 			}
-
-			$consulta="SELECT count(*) FROM $tabla_asignaturas";
-			$resultado=$conexion->query($consulta);
-			$fila=$resultado->fetch_row();
-			$total=$fila[0];
-
-			$salida["http"]=200;
-			$salida["respuesta"]=["datos"=>$datos,
-								  "paginacion"=>[
-									"actual"=>$pagina,
-									"limite"=>$limite,
-									"total"=>$total,
-									"paginas"=>ceil($total/$limite)
-									// "anterior"=>null
-									// "siguiente"=>"http://...api.php?page=3&limit=$limit"
-
-								  ]	
-								];
-			$sentencia->close();
-		}else{
-			$salida["http"]=404;
-			$salida["respuesta"]=["error"=>"No hay resultados"];
 		}
-		
-		return $salida;
+	
+		//empiezo la consulta
+		$set = [];
+		$tipos = '';
+		$valores = [];
+	
+		foreach ($campos as $campo => $valor) {
+			$set[] = "$campo = ?";
+			$tipos .= obtenerTipoDato($campo, $valor);
+			$valores[] = $valor;
+		}
+	
+		$consulta = "UPDATE $tabla_productos SET " . implode(', ', $set) . " WHERE id = ?";
+		$tipos .= 'i';
+		$valores[] = $id;
+	
+		// 4. Ejecutar la actualización
+		$sentencia = $conexion->prepare($consulta);
+		$sentencia->bind_param($tipos, ...$valores);
+	
+		if (!$sentencia->execute()) {
+			return [
+				"http" => 500,
+				"respuesta" => ["error" => "Error al actualizar el producto: " . $conexion->error]
+			];
+		}
+	
+		// 5. Obtener el producto actualizado
+		$productoActualizado = obtenerProducto($conexion, $id);
+		return [
+			"http" => 200,
+			"respuesta" => [
+				"mensaje" => "Producto actualizado exitosamente",
+				"datos" => $productoActualizado["respuesta"]["datos"]
+			]
+		];
 	}
-?>
+
+	
+	/**
+	 * Esto lo uso para comprobar los tipos de datos
+	 */
+	function obtenerTipoDato($campo, $valor) {
+		switch ($campo) {
+			case 'precio':
+				return 'd';
+			case 'stock':
+				return 'i';
+			default:
+				return 's';
+		}
+	}
+
+	/**
+	 * recorre la entrada y devuelve un arreglo con los campos permitidos para actualizar.
+	 *
+	 * @return array  con los campos a actualizar.
+	 */
+	function obtenerCamposActualizar($entrada, $camposPermitidos) {
+		$camposActualizar = [];
+		foreach ($camposPermitidos as $campo) {
+			if (isset($entrada[$campo])) {
+				$camposActualizar[$campo] = $entrada[$campo];
+			}
+		}
+		return $camposActualizar;
+	}
+
+
+	//---------------------------------------------------------------
+	//--------------------Funciones de DELETE------------------------
+	//---------------------------------------------------------------
+
+	function eliminarProducto($conexion, $id) {
+		global $tabla_productos;
+		global $RUTA_API;
+	
+		// Verificar si el producto existe
+		$productoExistente = obtenerProducto($conexion, $id);
+		if ($productoExistente["http"] !== 200) {
+			return [
+				"http" => 404,
+				"respuesta" => ["error" => "Producto no encontrado"]
+			];
+		}
+	
+		// (Opcional) Eliminar la imagen del servidor si existe
+		if (!empty($productoExistente["respuesta"]["datos"]["imagen"])) {
+			$rutaImagen = $productoExistente["respuesta"]["datos"]["imagen"];
+			// Eliminar la parte de la URL base para obtener la ruta relativa
+			$rutaRelativa = str_replace($RUTA_API, '', $rutaImagen);
+			// Quitar la(s) barra(s) inicial(es) para que quede "img/1738456846_pixel1.png"
+			$rutaRelativa = ltrim($rutaRelativa, '/');
+			
+			// Verificar y eliminar el archivo utilizando la ruta relativa
+			if (file_exists($rutaRelativa)) {
+				unlink($rutaRelativa);
+			} else {
+				error_log("No se encontró el archivo para eliminar: " . $rutaRelativa);
+			}
+		}
+	
+		// Preparar y ejecutar la consulta DELETE en la base de datos
+		$consulta = "DELETE FROM $tabla_productos WHERE id = ?";
+		$sentencia = $conexion->prepare($consulta);
+		$sentencia->bind_param("i", $id);
+	
+		if (!$sentencia->execute()) {
+			return [
+				"http" => 500,
+				"respuesta" => ["error" => "Error al eliminar el producto: " . $conexion->error]
+			];
+		}
+	
+		return [
+			"http" => 200,
+			"respuesta" => ["mensaje" => "Producto eliminado exitosamente"]
+		];
+	}
+	
+	
+	

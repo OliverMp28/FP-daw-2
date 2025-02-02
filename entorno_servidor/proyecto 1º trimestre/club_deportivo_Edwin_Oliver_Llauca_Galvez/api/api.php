@@ -16,11 +16,22 @@ try {
     die();
 }
 
+$API_KEYS = [
+    "gR0WVlcNgkLLcveUs45txlxxbfiPKSwun2VIGmE9gXNiEaqAtgAhdOuo2ehy1xyR",
+    "Q7Oti0xIa6XV3dzkAyNr7VLnjK2KbuiDQurbmH4b0PSvprXfeMLLVXDcTiVPWzbN",
+];
+
 // Determinar el método HTTP
 $metodo = $_SERVER['REQUEST_METHOD'];
 
-if( $metodo=="POST" || $metodo=="PUT"){
+//uso esto solo para el put ya que esto no admite el envio de archivos y necesito poder pasar
+//datos de tipo archivo para que el post pueda admitir la subida de imagenes
+if($metodo=="PUT" || $metodo=="DELETE"){
     $entrada=json_decode(file_get_contents("php://input"),true);
+}
+
+if (in_array($metodo, ['POST', 'PUT', 'DELETE'])) {
+    validarApiKey($API_KEYS);
 }
 
 switch ($metodo) {
@@ -124,12 +135,49 @@ switch ($metodo) {
         break;
 
     case 'PUT':
+        if (!isset($entrada['id']) || !is_numeric($entrada['id'])) {
+            http_response_code(400);
+            echo json_encode(["error" => "Se requiere un ID de producto válido"]);
+            die();
+        }
+
+        // Definir los campos permitidos para actualizar
+        $camposPermitidos = ['nombre', 'descripcion', 'precio', 'stock', 'categoria'];
         
+        $camposActualizar = obtenerCamposActualizar($entrada, $camposPermitidos);
+        
+        if (empty($camposActualizar)) {
+            http_response_code(400);
+            echo json_encode(["error" => "Se requiere al menos un campo para actualizar"]);
+            die();
+        }
+        
+        // Llamar a la función de actualización del producto
+        $resultado = actualizarProducto(
+            $conn,
+            $entrada['id'],
+            $camposActualizar
+        );
+        
+        http_response_code($resultado["http"]);
+        echo json_encode($resultado["respuesta"]);
         break;
 
     case 'DELETE':
-        
+        // Validar que se envíe el campo id y que sea numérico
+        if (!isset($entrada['id']) || !is_numeric($entrada['id'])) {
+            http_response_code(400);
+            echo json_encode(["error" => "Se requiere un ID de producto válido"]);
+            die();
+        }
+
+        // Llamar a la función para eliminar el producto
+        $resultado = eliminarProducto($conn, $entrada['id']);
+
+        http_response_code($resultado["http"]);
+        echo json_encode($resultado["respuesta"]);
         break;
+
 
     default:
         http_response_code(405);
