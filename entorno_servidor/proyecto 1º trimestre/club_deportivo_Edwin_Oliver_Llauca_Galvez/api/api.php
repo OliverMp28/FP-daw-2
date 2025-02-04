@@ -55,7 +55,7 @@ switch ($metodo) {
             if ($page < 1 || $limit < 1) {
                 http_response_code(400); // Bad Request
                 echo json_encode([
-                    "error" => "Parámetros de paginación inválidos, el numero de pagina y el limite no pueden ser menor que 1"
+                    "error" => "Parametros de paginación invalidos, el numero de pagina y el limite no pueden ser menor que 1"
                 ]);
                 die();
             }
@@ -83,7 +83,7 @@ switch ($metodo) {
         break;
     
     case 'POST':  
-        // Cambiamos a multipart/form-data para manejar archivos
+        // Cambiamos a multipart/form-data para manejar archivos asi que tomo los datos directamente de $_POST
         $datosProducto = $_POST;
         $imagen = $_FILES['imagen'] ?? null;
 
@@ -114,7 +114,7 @@ switch ($metodo) {
                 die();
             }
 
-            // Validar tamaño (ej: máximo 5MB)
+            // Validar tamaño maximo 5MB)
             if ($imagen['size'] > 5 * 1024 * 1024) {
                 http_response_code(413);
                 echo json_encode(["error" => "La imagen supera el tamaño máximo de 5MB"]);
@@ -152,7 +152,6 @@ switch ($metodo) {
             die();
         }
         
-        // Llamar a la función de actualización del producto
         $resultado = actualizarProducto(
             $conn,
             $entrada['id'],
@@ -167,11 +166,10 @@ switch ($metodo) {
         // Validar que se envíe el campo id y que sea numérico
         if (!isset($entrada['id']) || !is_numeric($entrada['id'])) {
             http_response_code(400);
-            echo json_encode(["error" => "Se requiere un ID de producto válido"]);
+            echo json_encode(["error" => "Se requiere un ID de producto valido"]);
             die();
         }
 
-        // Llamar a la función para eliminar el producto
         $resultado = eliminarProducto($conn, $entrada['id']);
 
         http_response_code($resultado["http"]);

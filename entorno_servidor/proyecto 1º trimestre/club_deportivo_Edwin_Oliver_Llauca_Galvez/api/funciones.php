@@ -200,7 +200,7 @@
 			}
 	
 			// Generar nombre único seguro
-			$nombreArchivo = time() . "_" . $imagen['name'];
+			$nombreArchivo = time() . "_" . str_replace(' ', '_', $imagen['name']);
 			$rutaGuardado = $directorioImagenes . $nombreArchivo;
 	
 			if (!move_uploaded_file($imagen['tmp_name'], $rutaGuardado)) {
@@ -420,12 +420,11 @@
 			];
 		}
 	
-		// (Opcional) Eliminar la imagen del servidor si existe
+		// quita la imagen del servidor si existe
 		if (!empty($productoExistente["respuesta"]["datos"]["imagen"])) {
 			$rutaImagen = $productoExistente["respuesta"]["datos"]["imagen"];
 			// Eliminar la parte de la URL base para obtener la ruta relativa
 			$rutaRelativa = str_replace($RUTA_API, '', $rutaImagen);
-			// Quitar la(s) barra(s) inicial(es) para que quede "img/1738456846_pixel1.png"
 			$rutaRelativa = ltrim($rutaRelativa, '/');
 			
 			// Verificar y eliminar el archivo utilizando la ruta relativa
