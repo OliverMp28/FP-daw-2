@@ -140,14 +140,15 @@
 
                         <!-- Contraseña -->
                         <div class="mt-4">
-                            <label for="passwordSocio" class="form-label text-muted"><strong>Contraseña:</strong></label>
+                            <label for="passwordSocio" class="form-label text-muted"><strong>Nueva Contraseña:</strong></label>
                             <input 
-                                type="text" 
+                                type="password" 
                                 class="form-control border-0 bg-light rounded" 
                                 id="passwordSocio" 
                                 name="passwordSocio" 
-                                value="' . $password . '" />
-                        </div>    
+                                placeholder="Dejar en blanco para mantener la actual" />
+                        </div>
+  
 
                         
                         <div class="text-center mt-4">

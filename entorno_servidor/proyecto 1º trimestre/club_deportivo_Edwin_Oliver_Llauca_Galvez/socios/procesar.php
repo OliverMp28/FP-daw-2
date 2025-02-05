@@ -40,10 +40,20 @@
             $nombre = trim($_POST['nombreSocio']);
             $edad = intval($_POST['edadSocio']);
             $usuario = trim($_POST['usuarioSocio']);
-            $password = trim($_POST['passwordSocio']);
             $telefono = trim($_POST['telefonoSocio']);
-
-
+            $password = trim($_POST['passwordSocio']); // Puede venir vacío
+        
+            // Si se ingresa una nueva contraseña, se hashea.
+            if (!empty($password)) {
+                $password = password_hash($password, PASSWORD_DEFAULT);
+            } else {
+                // Si está vacío, se mantiene la contraseña actual.
+                // Puedes obtenerla consultando la BD o tenerla disponible de otra forma.
+                // Por ejemplo, llamando a una función que la recupere:
+                $password = getContrasenaPorId($conexion, $idSocio);
+            }
+        
+            // Procesar la foto, igual que lo tienes:
             if (isset($_FILES['fotoSocio']) && strlen($_FILES['fotoSocio']['name']) > 0) {
                 $foto = $_FILES['fotoSocio'];
                 $directorioDestino = 'assets/img/';
@@ -54,19 +64,19 @@
                     die("Error: No se pudo mover la foto a la carpeta especificada.");
                 }
             } else {
-                // Si no se subio una nueva foto, mantener la existente, enviaremos null
+                // Si no se subió una nueva foto, mantener la existente, enviaremos null
                 $rutaFoto = null;
             }
-            
-
+        
             $resultado = modificarSocioPorId($conexion, $idSocio, $nombre, $edad, $usuario, $password, $telefono, $rutaFoto);
-
+        
             if ($resultado) {
                 echo "<p>Datos del socio actualizados exitosamente.</p>";
             } else {
                 echo "<p>Error: No se pudieron actualizar los datos del socio. Verifica los datos ingresados.</p>";
             }
-        } 
+        }
+        
         
         elseif (isset($_POST['nombreSocio'], $_POST['edadSocio'], $_POST['usuarioSocio'], $_POST['passwordSocio'], $_POST['telefonoSocio'], $_FILES['fotoSocio'])) {
             // Crear nuevo socio
@@ -75,6 +85,9 @@
             $usuario = trim($_POST['usuarioSocio']);
             $password = trim($_POST['passwordSocio']);
             $telefono = trim($_POST['telefonoSocio']);
+
+            //codifico la contraseña usando password_hash
+            $password = password_hash($password, PASSWORD_DEFAULT);
 
             $foto = $_FILES['fotoSocio'];
             $directorioDestino = 'assets/img/';
