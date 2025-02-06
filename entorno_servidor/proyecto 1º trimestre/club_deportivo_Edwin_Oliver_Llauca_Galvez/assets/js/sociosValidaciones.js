@@ -20,7 +20,7 @@ usuario.addEventListener("input",
 () => validarUsuario()
 );
 password.addEventListener("input", 
-() => validarPassword()
+// () => validarPassword()
 );
 telefono.addEventListener("input", 
 () => validarTelefono()

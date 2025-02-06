@@ -3,6 +3,7 @@ session_start();
 require_once "conexion.php";
 require_once "utilidades.php";
 
+$conexion = conectar();
 
 /**
  * ------------------------ USO ESTE MISMO CODIGO PARA REGISTRAR O MODIFICAR----------------------
