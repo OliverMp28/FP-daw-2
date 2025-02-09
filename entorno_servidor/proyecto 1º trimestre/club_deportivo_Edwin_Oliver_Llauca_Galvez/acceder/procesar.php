@@ -63,7 +63,7 @@
 
                     echo "<p>Acceso correcto. Redirigiendo...</p>";
                     header("refresh:3;url=../index.php");
-                    exit;
+                    die();
                 } else {
                     echo "<p>Error: Usuario no encontrado o contraseña incorrecta. Redirigiendo en 4s...</p>";
                     header("refresh:4;url=index.php");
