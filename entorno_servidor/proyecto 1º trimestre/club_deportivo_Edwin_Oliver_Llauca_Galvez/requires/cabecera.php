@@ -41,7 +41,7 @@
 ?>
 
 
-<header class="header-principal">
+<header class="header-principal pb-0">
     <?php
         //compruebo en que nivel nos encontramos para saber si poner una ruta u otra
         // Incluye el menu según el nivel
@@ -51,35 +51,48 @@
             require_once "../requires/menu.php";
         }
     ?>
-    <div class="texto-cabecera text-center">
-        <?php
-            // Controla los textos del encabezado dependiendo del nivel, si es 0 es la pagina principal ,si es 1 son otras paginas que estan en subcarpetas
-            if ($nivel == 0) {
-                echo '<h1 class="display-4 fw-bold">Depor</h1>';
-                echo '<h2 class="h5 mt-2">Tu club deportivo.</h2>';
-            } 
-            else if ($nivel == 1) {
-                echo "<h1 class='display-6 fw-bold'>" . $titulo . "</h1>";
-            } 
-            else {
-                echo "<h1>Error</h1><p>'nivel' no tiene un valor valido o no esta definido</p>";
-            }
-        ?>
-    </div>
-    <div class="session-info text-center mt-2">
-        <?php
-        // Mostrar el enlace según el estado de la sesión:
-        // Si el usuario ha iniciado sesión, se muestra un mensaje de bienvenida y un enlace para cerrar sesión.
-        // De lo contrario, se muestra un enlace para acceder.
-        echo "LA SESION Y USUARIO: {$_SESSION['usuario']}";
-        if (isset($_SESSION['usuario'])) {
-            // Ajusta las rutas según el nivel (nivel 0: raíz; nivel 1: directorio interior)
-            $logout_path = ($nivel == 0) ? "acceder/cerrar_sesion.php" : "../acceder/cerrar_sesion.php";
-            echo "<p>Bienvenido, " . htmlspecialchars($_SESSION['usuario']) . " | <a href='" . $logout_path . "'>Cerrar sesión de " . htmlspecialchars($_SESSION['tipo_usuario']) . "</a></p>";
-        } else {
-            $login_path = ($nivel == 0) ? "acceder/index.php" : "../acceder/index.php";
-            echo "<p><a href='" . $login_path . "'>Acceder</a></p>";
-        }
-        ?>
+    
+    <div class="container-fluid py-3">
+        <div class="row align-items-center g-3">
+            <!-- Título a la izquierda -->
+            <div class="col-md-4">
+                <div class="texto-cabecera text-start bg-dark bg-opacity-50 p-2 rounded">
+                    <?php
+                        if ($nivel == 0) {
+                            echo '<h1 class="m-0 fw-bold text-white">Depor</h1>'; 
+                            echo '<h2 class="h6 m-0 text-white">Tu club deportivo.</h2>';
+                        } 
+                        else if ($nivel == 1) {
+                            echo "<h1 class='h4 m-0 fw-bold text-white'>" . $titulo . "</h1>";
+                        } 
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Información de sesión a la derecha -->
+            <div class="col-md-8">
+                <div class="session-info d-flex justify-content-end align-items-center gap-3">
+                    <?php
+                    if (isset($_SESSION['usuario'])) {
+                        $salir_path = ($nivel == 0) ? "acceder/cerrar_sesion.php" : "../acceder/cerrar_sesion.php";
+                        echo '
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-white">Bienvenido <strong>'.htmlspecialchars($_SESSION['usuario']).'</strong></span>
+                            <div class="vr text-white opacity-50"></div>
+                            <a href="'.$salir_path.'" class="btn btn-outline-light" title="Cerrar sesión">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar sesión de '.htmlspecialchars($_SESSION['tipo_usuario']).'
+                            </a>
+                        </div>';
+                    } else {
+                        $acceder_path = ($nivel == 0) ? "acceder/" : "../acceder/";
+                        echo '
+                        <a href="'.$acceder_path.'" class="btn btn-outline-light">
+                            <i class="bi bi-box-arrow-in-right"></i> Acceder
+                        </a>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
