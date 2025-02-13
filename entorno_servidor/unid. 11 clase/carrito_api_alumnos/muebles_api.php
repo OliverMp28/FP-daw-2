@@ -19,7 +19,7 @@ $metodo = $_SERVER["REQUEST_METHOD"];
 
 if($metodo == "GET"){
     $precio_limite = $_GET["price"] ?? null;
-    $busqueda_nombre = $_GET["title"] ?? null;
+    $busqueda_nombre = $_GET["tittle"] ?? null;
     $marca = $_GET["company"] ?? null;
 
     $condicion_filtro = "";
@@ -27,7 +27,7 @@ if($metodo == "GET"){
     $parametros = [];
 
     if(isset($busqueda_nombre)){
-        $condicion_filtro .= $condicion_filtro ? " title LIKE ? " : " AND title LIKE ? ";
+        $condicion_filtro .= $condicion_filtro ? " AND title LIKE ? " : " title LIKE ? ";
         $tipos .= "s";
         $parametros[] = "%$busqueda_nombre%";
     }

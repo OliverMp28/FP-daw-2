@@ -2,7 +2,7 @@
     require_once "../config/init.php";
 
     //aca llamo a los archivos para las funciones necesarias
-    require_once "../funciones/funcionesSocios.php";
+    // ...
 ?>
 <!DOCTYPE html>
 <html lang="en">
