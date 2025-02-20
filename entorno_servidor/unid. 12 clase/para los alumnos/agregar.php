@@ -30,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // if(true){
 
         // }
+
+
+
+        
     } else {
         $error = "Todos los campos son requeridos.";
     }

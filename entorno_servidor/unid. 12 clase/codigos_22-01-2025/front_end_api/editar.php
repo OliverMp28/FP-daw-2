@@ -6,7 +6,6 @@ $apiUrl = "http://localhost/FP%20daw%202/entorno_servidor/unid.%2012%20clase/cod
 function getAsignatura($id)
 {
     global $apiUrl;
-
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $apiUrl . "?id=" . $id);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

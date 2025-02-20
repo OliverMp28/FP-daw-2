@@ -1,0 +1,404 @@
+/* Estilos generales para la sección de productos */
+.seccion_productos {
+  padding: 2rem 0;
+}
+
+/* ============================
+   ESTILOS DEL CARRITO
+=============================== */
+/* Contenedor que cubre toda la pantalla */
+
+/* Overlay del carrito */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  
+  /* Evita el uso de display: none para permitir transiciones */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  
+  /* Flexbox para alinear el carrito a la derecha */
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+/* Cuando se muestra el carrito */
+.cart-overlay.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* El contenedor del carrito */
+.cart {
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  
+  /* Posición inicial fuera de la pantalla */
+  transform: translateX(100%);
+  animation: slideOut 0.3s ease-in-out forwards;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cuando el carrito está activo, animación de entrada */
+.cart-overlay.show .cart {
+  animation: slideIn 0.3s ease-in-out forwards;
+}
+
+/* Animación de entrada */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Animación de salida */
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+
+/* Botón para cerrar el carrito */
+.cart-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Espacio en el header para evitar que el botón lo cubra */
+.cart header {
+  padding: 2rem 1.5rem 1.5rem; /* Más padding arriba */
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+
+.cart header h3 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+/* Lista de items del carrito */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+.cart-item-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-item-name {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.cart-item-price {
+  color: #28a745;
+  font-weight: bold;
+}
+
+/* Botón para eliminar un item */
+.cart-item-remove-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  padding: 0;
+}
+
+/* Pie del carrito */
+.cart footer {
+  padding: 1.5rem;
+  border-top: 1px solid #eee;
+  background: gainsboro;
+}
+
+/* ============================
+   ESTILOS DE LOS PRODUCTOS
+=============================== */
+.products {
+  margin-top: 2rem;
+}
+
+.products-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.product {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-container {
+  position: relative;
+}
+
+/* Icono para agregar al carrito */
+.product-icons {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.product:hover .product-icons {
+  opacity: 1;
+}
+
+/* Botón del carrito en cada producto */
+.product-cart-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.product-cart-btn:hover {
+  background-color: #0056b3;
+}
+
+.product footer {
+  padding: 1rem;
+}
+
+.product-name {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-price {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.product-description {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.product-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.product-stock {
+  font-weight: bold;
+}
+
+.in-stock {
+  color: green;
+}
+
+.out-of-stock {
+  color: red;
+}
+
+/* ============================
+   ESTILOS DE LA ALERTA
+=============================== */
+.alerta {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  z-index: 1001;
+  display: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 0.9rem;
+}
+
+.alerta.show {
+  display: block;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.alerta.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alerta.danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+
+/* ============================
+   ESTILOS DEL MODAL
+=============================== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  max-width: 800px;
+  width: 90%;
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.main-img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.image-title {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.image-alt {
+  color: #666;
+}
+
+/* ============================
+   ESTILOS DE LOS BOTONES
+=============================== */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #bb2d3b;
+}
+
+/* ============================
+   AJUSTES PARA LOS ICONOS
+   (Bootstrap Icons)
+=============================== */
+.bi {
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+
+/**
+mensaje
+*/
+/* .success {
+  color: #155724;
+  display: block;
+} */
