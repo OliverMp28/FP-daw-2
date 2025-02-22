@@ -3,37 +3,37 @@
 // Procesar el formulario al enviarlo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $apiUrl = "http://localhost/FP%20daw%202/entorno_servidor/unid.%2011%20clase/academia/api.php"; // Cambia esta URL al endpoint correcto
+    $apiUrl = "http://localhost/FP%20daw%202/entorno_servidor/unid.%2012%20clase/codigos_22-01-2025/academia/api.php"; // Cambia esta URL al endpoint correcto
 
     if (isset($_POST['nombre_asignatura']) && isset($_POST['creditos'])) {
-        $nombre_asignatura = $_POST["nombre_asignatura"];
-        $creditos = (int) $_POST["creditos"];
+        $nombre_asignatura = $_POST['nombre_asignatura'];
+        $creditos =(int) $_POST['creditos'];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-            "nombre_asignatura" => $nombre_asignatura,
-            "creditos" => $creditos
+            'nombre_asignatura' => $nombre_asignatura,
+            'creditos' => $creditos
         ]));
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Content-Type: application/json"
+            'Content-Type: application/json',
         ]);
-
+        
         $respuesta = json_decode(curl_exec($ch), true);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
 
-        // if(true){
+        if($httpCode==200){
+            $mensaje="Insertada asignatura con éxito";
+        }else{
+            $error=$respuesta["error"];
+        }
 
-        // }
 
-
-
-        
     } else {
         $error = "Todos los campos son requeridos.";
     }

@@ -1,0 +1,19 @@
+no registrado:
+- no vera los productos
+
+socios:
+- vera los productos como en la unidad 6y 7 (consumir api solo con js)
+
+admin:
+- igual que el anterior pero peude gestioanr todos los productos esta gestión es como en la unid 11y12 con php + curl
+
+
+
+Uso de js y php:
+para socio: 
+	en la sección de productos se usara js para hacer un fetch y este llevara a un php que tendrá
+	un switch y si su case es get entonces solo hace el código que tenga los curl necesarios para consultarlos nada mas
+
+para admin:
+	en la sección productos hará lo  mismo que el socio pero tendrá un botón gestionar que hará todo el crud
+	pero para las consultas get hará lo mismo que el socio, al final todo ira en 1 solo archivo?...
