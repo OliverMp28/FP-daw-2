@@ -3,6 +3,11 @@ import  {datos} from "./asientos.js";
 // Número máximo de asientos permitidos
 const MAX_ASIENTOS = 8;
 
+/**
+ * Función que se encarga de cargar los eventos de los asientos
+ * y de asignarles un comportamiento al hacer click sobre ellos.
+ * Además, se encarga de resaltar los asientos al pasar el mouse sobre ellos.
+ */
 function cargarEventosAsientos() {
     const asientos = document.querySelectorAll('.asiento');
     asientos.forEach(asiento => {
@@ -13,6 +18,10 @@ function cargarEventosAsientos() {
     });
 }
 
+/**
+ * Función que se encarga de resaltar un asiento al pasar el mouse sobre él.
+ * @param {*} idAsiento id del asiento
+ */
 function resaltarAsiento(idAsiento) {
     if (datos[idAsiento].estado === "disponible") {
         document.querySelector(`[data-idAsiento="${idAsiento}"]`).classList.add('resaltado');
@@ -20,10 +29,18 @@ function resaltarAsiento(idAsiento) {
     }
 }
 
+/**
+ * Función que se encarga de quitar el resaltado de un asiento al dejar de pasar el mouse sobre él.
+ * @param {*} idAsiento 
+ */
 function quitarResaltadoAsiento(idAsiento) {
     document.querySelector(`[data-idAsiento="${idAsiento}"]`).classList.remove('resaltado');
 }
 
+/**
+ * Función que se encarga de seleccionar o deseleccionar un asiento al hacer click sobre él.
+ * @param {*} idAsiento  id del asiento
+ */
 function seleccionarAsiento(idAsiento) {
     let asientosSeleccionados = Object.values(datos).filter(asiento => asiento.estado === "seleccionado").length;
     let asientosReservados = Object.values(datos).filter(asiento => asiento.estado === "reservado").length;
@@ -48,6 +65,9 @@ function seleccionarAsiento(idAsiento) {
     actualizarPanelAsientos();
 }
 
+/**
+ * Función que se encarga de actualizar el panel de asientos seleccionados.
+ */
 function actualizarPanelAsientos() {
     let totalSeleccionados = 0;
     let precioTotal = 0;
@@ -96,6 +116,9 @@ function actualizarPanelAsientos() {
     }
 }
 
+/**
+ * Función que se encarga de confirmar la reserva de los asientos seleccionados.
+ */
 function confirmarReserva() {
     let historialContenido = '';
 
@@ -120,9 +143,15 @@ function confirmarReserva() {
     alert('Reserva confirmada');
 }
 
+/**
+ * Función que se encarga de inicializar la aplicación.
+ */
 function inicializar() {
     cargarEventosAsientos();
     document.getElementById("boton-reservar").addEventListener("click", confirmarReserva);
 }
 
+/**
+ * Inicializo la aplicación.
+ */
 inicializar();

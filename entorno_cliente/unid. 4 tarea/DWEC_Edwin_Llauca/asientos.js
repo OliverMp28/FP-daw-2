@@ -1,5 +1,8 @@
 //objeto datos el cual exporto
 
+/**
+ * Objeto que contiene la información de los asientos.
+ */
 const datos = {
     // Asientos Laterales Izquierda
     "AI01": {   fila: "A", 

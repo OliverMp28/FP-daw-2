@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import  {datos} from "./asientos.js";
+
+// Número máximo de asientos permitidos
+const MAX_ASIENTOS = 8;
+
+/**
+ * Función que se encarga de cargar los eventos de los asientos
+ * y de asignarles un comportamiento al hacer click sobre ellos.
+ * Además, se encarga de resaltar los asientos al pasar el mouse sobre ellos.
+ */
+function cargarEventosAsientos() {
+    const asientos = document.querySelectorAll('.asiento');
+    asientos.forEach(asiento => {
+        const idAsiento = asiento.dataset.idasiento; 
+        asiento.addEventListener('click', () => seleccionarAsiento(idAsiento));
+        asiento.addEventListener('mouseover', () => resaltarAsiento(idAsiento));
+        asiento.addEventListener('mouseleave', () => quitarResaltadoAsiento(idAsiento));
+    });
+}
+
+/**
+ * Función que se encarga de resaltar un asiento al pasar el mouse sobre él.
+ * @param {*} idAsiento id del asiento
+ */
+function resaltarAsiento(idAsiento) {
+    if (datos[idAsiento].estado === "disponible") {
+        document.querySelector(`[data-idAsiento="${idAsiento}"]`).classList.add('resaltado');
+        //document.querySelector(`[data-idAsiento="${idAsiento}"]`).style.backgroundColor = 'rgba(201, 198, 111, 0.64)';
+    }
+}
+
+/**
+ * Función que se encarga de quitar el resaltado de un asiento al dejar de pasar el mouse sobre él.
+ * @param {*} idAsiento 
+ */
+function quitarResaltadoAsiento(idAsiento) {
+    document.querySelector(`[data-idAsiento="${idAsiento}"]`).classList.remove('resaltado');
+}
+
+/**
+ * Función que se encarga de seleccionar o deseleccionar un asiento al hacer click sobre él.
+ * @param {*} idAsiento  id del asiento
+ */
+function seleccionarAsiento(idAsiento) {
+    let asientosSeleccionados = Object.values(datos).filter(asiento => asiento.estado === "seleccionado").length;
+    let asientosReservados = Object.values(datos).filter(asiento => asiento.estado === "reservado").length;
+    let totalAsientos = asientosSeleccionados + asientosReservados;
+
+    //verifico si se ha alcanzado el limite de asientos
+    if (datos[idAsiento].estado === "disponible") {
+        if (totalAsientos >= MAX_ASIENTOS) {
+            alert(`No puede seleccionar más de ${MAX_ASIENTOS} asientos. 
+            Esto es por seguridad y para evitar la reventa de entradas. 
+            Si usted es representante de un centro de estudios o tiene justificación para reservar varios asientos, por favor contáctenos.`);
+            return;
+        }
+
+        datos[idAsiento].estado = "seleccionado";
+        document.querySelector(`[data-idAsiento="${idAsiento}"]`).classList.add('seleccionado');
+    } else if (datos[idAsiento].estado === "seleccionado") {
+        datos[idAsiento].estado = "disponible";
+        document.querySelector(`[data-idAsiento="${idAsiento}"]`).classList.remove('seleccionado');
+    }
+
+    actualizarPanelAsientos();
+}
+
+/**
+ * Función que se encarga de actualizar el panel de asientos seleccionados.
+ */
+function actualizarPanelAsientos() {
+    let totalSeleccionados = 0;
+    let precioTotal = 0;
+    let tablaResumen = `
+        &lt;table>
+            &lt;thead>
+                &lt;tr>
+                    &lt;th>Fila&lt;/th>
+                    &lt;th>Asiento&lt;/th>
+                    &lt;th>Zona&lt;/th>
+                    &lt;th>Precio&lt;/th>
+                &lt;/tr>
+            &lt;/thead>
+            &lt;tbody>
+    `;
+
+    for (const id in datos) {
+        if (datos[id].estado === "seleccionado") {
+            totalSeleccionados++;
+            precioTotal += datos[id].precio;
+            tablaResumen += `
+                &lt;tr>
+                    &lt;td>${datos[id].fila}&lt;/td>
+                    &lt;td>${datos[id].numero}&lt;/td>
+                    &lt;td>${datos[id].zona}&lt;/td>
+                    &lt;td>$${datos[id].precio}&lt;/td>
+                &lt;/tr>
+            `;
+        }
+    }
+
+    tablaResumen += `
+            &lt;/tbody>
+        &lt;/table>
+        &lt;p>Total Asientos Seleccionados: ${totalSeleccionados}&lt;/p>
+        &lt;p>Precio Total: $${precioTotal}&lt;/p>
+    `;
+
+    if (totalSeleccionados === 0) {
+        document.querySelector('.resultados').innerHTML = `
+            &lt;p>Asientos Seleccionados: 0&lt;/p>
+            &lt;p>No hay asientos seleccionados actualmente.&lt;/p>
+        `;
+    } else {
+        document.querySelector('.resultados').innerHTML = tablaResumen;
+    }
+}
+
+/**
+ * Función que se encarga de confirmar la reserva de los asientos seleccionados.
+ */
+function confirmarReserva() {
+    let historialContenido = '';
+
+    for (const id in datos) {
+        if (datos[id].estado === "seleccionado") {
+            datos[id].estado = "reservado";
+
+            document.querySelector(`[data-idAsiento="${id}"]`).classList.remove('seleccionado');
+            document.querySelector(`[data-idAsiento="${id}"]`).style.backgroundColor = 'red';
+            document.querySelector(`[data-idAsiento="${id}"]`).style.cursor = 'not-allowed';
+
+            historialContenido += `
+                &lt;p>Asiento: ${datos[id].fila}${datos[id].numero}, Zona: ${datos[id].zona}, Precio: $${datos[id].precio}&lt;/p>
+            `;
+        }
+    }
+
+    const historialDiv = document.querySelector('.resumen-reservas');
+    historialDiv.innerHTML += historialContenido;
+
+   // actualizarPanelAsientos();
+    alert('Reserva confirmada');
+}
+
+/**
+ * Función que se encarga de inicializar la aplicación.
+ */
+function inicializar() {
+    cargarEventosAsientos();
+    document.getElementById("boton-reservar").addEventListener("click", confirmarReserva);
+}
+
+/**
+ * Inicializo la aplicación.
+ */
+inicializar();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#actualizarPanelAsientos">actualizarPanelAsientos</a></li><li><a href="global.html#cargarEventosAsientos">cargarEventosAsientos</a></li><li><a href="global.html#confirmarReserva">confirmarReserva</a></li><li><a href="global.html#datos">datos</a></li><li><a href="global.html#inicializar">inicializar</a></li><li><a href="global.html#quitarResaltadoAsiento">quitarResaltadoAsiento</a></li><li><a href="global.html#resaltarAsiento">resaltarAsiento</a></li><li><a href="global.html#seleccionarAsiento">seleccionarAsiento</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Feb 22 2025 14:18:22 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
