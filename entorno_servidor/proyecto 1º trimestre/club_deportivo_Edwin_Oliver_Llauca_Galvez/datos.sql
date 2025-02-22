@@ -140,15 +140,17 @@ CREATE TABLE `socio` (
   `password` varchar(255) NOT NULL,
   `telefono` varchar(15) DEFAULT NULL,
   `foto` varchar(100) DEFAULT NULL,
+  `tipo_usuario` varchar(20) NOT NULL,
   PRIMARY KEY (`id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO socio (nombre, edad, usuario, password, telefono, foto) VALUES
-('Carlos Mendoza', 28, 'cmendoza', 'hashed_password3', '5553334444', 'assets/img/carlos.jpg'),
-('Ana López', 32, 'alopez', 'hashed_password4', '5559876543', 'assets/img/ana.jpg'),
-('Luis Fernández', 26, 'lfernandez', 'hashed_password5', '5552345678', 'assets/img/luis.jpg'),
-('Maria Torres', 29, 'mtorres', 'hashed_password6', '5558765432', 'assets/img/maria.jpg'),
-('Juan Ruiz', 35, 'jruiz', 'hashed_password7', '5557654321', 'assets/img/juan.jpg');
+INSERT INTO socio (id, nombre, edad, usuario, password, telefono, foto, tipo_usuario) VALUES
+(1, 'Carlos Mendoza', 28, 'cmendoza', 'hashed_password3', '5553334444', 'assets/img/carlos.jpg', 'socio'),
+(2, 'Ana López', 32, 'alopez', 'hashed_password4', '5559876543', 'assets/img/ana.jpg', 'socio'),
+(3, 'Luis Fernández', 26, 'lfernandez', 'hashed_password5', '5552345678', 'assets/img/luis.jpg', 'socio'),
+(4, 'Maria Torres', 29, 'mtorres', 'hashed_password6', '5558765432', 'assets/img/maria.jpg', 'socio'),
+(5, 'Juan Ruiz', 35, 'jruiz', 'hashed_password7', '5557654321', 'assets/img/juan.jpg', 'socio'),
+(0, 'Administrador', 0, 'admin', '$2y$10$DANhZDxSpyvRgcE221Dvb.Ni7T4sXcMZhnbQU4ZTFgnGuY0961OHy', 'assets/img/1739127395_59d6f00f-0306-4c1d-89d2-a89535787e35.png', 'admin');
 
 
 -- --------------------------------------------------------

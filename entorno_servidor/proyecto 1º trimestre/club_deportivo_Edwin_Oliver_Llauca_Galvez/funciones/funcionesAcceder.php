@@ -2,7 +2,7 @@
     /**
      * Verifica las credenciales del usuario.
      *
-     * Recibe la conexión, el usuario, el tipo de usuario y la contraseña (en texto plano)
+     * Recibe la conexion, el usuario, el tipo de usuario y la contraseña (en texto plano)
      * Realiza una consulta preparada a la tabla "socio" para obtener los datos del usuario
      * Utiliza password_verify() para comparar la contraseña ingresada con el hash almacenado
      *

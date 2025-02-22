@@ -41,17 +41,49 @@
                 <div class="cart-items"></div>
 
                 <footer>
-                    <button class="cart-checkout btn btn-danger w-100 mb-2">
+                    <button class="btn-vaciar-carro btn btn-danger w-100 mb-2">
                         <i class="bi bi-trash"></i> Vaciar carro
                     </button>
-                    <button class="cart-checkout btn btn-success w-100">
+                    <button class="btn-tramitar-pedido btn btn-success w-100">
                         <i class="bi bi-bag-check"></i> Tramitar pedido
                     </button>
                 </footer>  
             </aside>
         </div>
 
-        
+        <!-- Contenedor de Filtros -->
+        <div class="filtro-container bg-light p-4 rounded-3 shadow-sm mb-4">
+            <form id="filtroForm" class="row g-3">
+                <div class="col-md-3 col-sm-6">
+                    <input type="text" id="filterNombre" class="form-control " placeholder="Nombre del producto">
+                </div>
+                
+                <div class="col-md-3 col-sm-6">
+                    <input type="number" id="filterPrecioMin" class="form-control" placeholder="Precio mínimo" step="0.01">
+                </div>
+                
+                <div class="col-md-3 col-sm-6">
+                    <input type="number" id="filterPrecioMax" class="form-control" placeholder="Precio máximo" step="0.01">
+                </div>
+                
+                <div class="col-md-2 col-sm-6">
+                    <select id="filterCategoria" class="form-select">
+                        <option value="">Todas las categorías</option>
+                        <option value="Ropa">Ropa</option>
+                        <option value="Suplementos">Suplementos</option>
+                        <option value="Accesorios">Accesorios</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-1 col-sm-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel me-2"></i>Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
         <!-- products -->
         <section class="products">
             <!-- filters -->
@@ -69,6 +101,16 @@
             <!-- alert -->
             <div class="alerta"></div>
         </section>
+
+        <div class="paginacion-contenedor d-flex justify-content-center align-items-center gap-3 p-3 bg-light rounded shadow-sm">
+            <button id="prevPage" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-medium" >
+                <i class="bi bi-chevron-left me-2"></i>Anterior
+            </button>
+            <span id="pageInfo" class="text-muted fw-medium px-3">Página 1</span>
+            <button id="nextPage" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-medium">
+                Siguiente<i class="bi bi-chevron-right ms-2"></i>
+            </button>
+        </div>
 
         <!-- modal -->
         <div class="modal">
