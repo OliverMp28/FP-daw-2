@@ -53,30 +53,31 @@
 
         <!-- Contenedor de Filtros -->
         <div class="filtro-container bg-light p-4 rounded-3 shadow-sm mb-4">
-            <form id="filtroForm" class="row g-3">
-                <div class="col-md-3 col-sm-6">
-                    <input type="text" id="filterNombre" class="form-control " placeholder="Nombre del producto">
+            <form id="filtroForm" class="row g-3 align-items-center">
+                <div class="col-lg-4 col-md-5 col-sm-6">
+                    <input type="text" id="filterNombre" class="form-control" placeholder="Nombre del producto">
                 </div>
                 
-                <div class="col-md-3 col-sm-6">
-                    <input type="number" id="filterPrecioMin" class="form-control" placeholder="Precio mínimo" step="0.01">
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <input type="number" id="filterPrecioMin" class="form-control" placeholder="Mínimo" step="0.1">
                 </div>
                 
-                <div class="col-md-3 col-sm-6">
-                    <input type="number" id="filterPrecioMax" class="form-control" placeholder="Precio máximo" step="0.01">
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <input type="number" id="filterPrecioMax" class="form-control" placeholder="Máximo" step="0.1">
                 </div>
                 
-                <div class="col-md-2 col-sm-6">
+                <div class="col-lg-2 col-md-4 col-sm-6">
                     <select id="filterCategoria" class="form-select">
-                        <option value="">Todas las categorías</option>
+                        <option value="">Todas</option>
                         <option value="Ropa">Ropa</option>
                         <option value="Suplementos">Suplementos</option>
                         <option value="Accesorios">Accesorios</option>
                     </select>
                 </div>
                 
-                <div class="col-md-1 col-sm-12 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary w-100">
+                <!-- Botón ajustado -->
+                <div class="col-lg-2 col-md-5 col-sm-12">
+                    <button type="submit" class="btn btn-primary w-100 text-nowrap">
                         <i class="bi bi-funnel me-2"></i>Filtrar
                     </button>
                 </div>
@@ -85,7 +86,7 @@
 
 
         <!-- products -->
-        <section class="products">
+        <section class="container py-4 products">
             <!-- filters -->
             <div class="filters d-flex justify-content-between align-items-center p-2">
                 <div class="toggle-container d-flex align-items-center gap-2">
@@ -112,18 +113,36 @@
             </button>
         </div>
 
-        <!-- modal -->
-        <div class="modal">
+        <!-- modal producto -->
+        <!-- <div class="modal-producto">
             <button class="close-btn">
-                <i class="bi bi-x-lg"></i> <!-- Ícono de cerrar -->
+                <i class="bi bi-x-lg"></i> 
             </button>
             <div class="modal-content">
-                <!-- content -->
                 <img src="" class="main-img" alt="" />
                 <h2 class="image-title">title</h2>
                 <h3 class="image-alt">pr</h3>
             </div>
-        </div>
+        </div> -->
+
+        <!-- Modal Reutilizable -->
+<div class="modal fade" id="generalModal" tabindex="-1" aria-labelledby="generalModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="generalModalLabel">Título del Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="generalModalBody">
+        <!-- Contenido dinámico se insertará aquí -->
+      </div>
+      <div class="modal-footer" id="generalModalFooter">
+        <!-- Botones dinámicos se insertarán aquí -->
+      </div>
+    </div>
+  </div>
+</div>
+
     </main>
 
 

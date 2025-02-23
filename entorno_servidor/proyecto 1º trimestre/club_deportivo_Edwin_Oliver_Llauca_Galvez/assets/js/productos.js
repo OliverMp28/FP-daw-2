@@ -21,7 +21,8 @@ const prevPageBtn = document.querySelector("#prevPage");
 const nextPageBtn = document.querySelector("#nextPage");
 const pageInfo = document.querySelector("#pageInfo");
 
-const URL_API = "../api/api.php";
+// const URL_API = "../api/api.php";
+const URL_PROCESAR = "procesar.php";
 
 let paginaActual = 1;
 let totalPaginas = 1;
@@ -33,7 +34,7 @@ let currentFilters = {};
 // Función para construir la query string con filtros y paginación
 function buildQueryParams(page) {
   const params = new URLSearchParams();
-  params.append("limit", "9");
+  params.append("limit", "2");
   params.append("page", page);
   if (currentFilters.nombre) {
     params.append("nombre", currentFilters.nombre);
@@ -51,30 +52,55 @@ function buildQueryParams(page) {
 }
 
 
-async function obtenerDatos(url_api) {
-  console.log(url_api);
-  const respuesta = await fetch(url_api);
-  console.log(respuesta);
+// async function obtenerDatos(url_api) {
+//   console.log(url_api);
+//   const respuesta = await fetch(url_api);
+//   console.log(respuesta);
 
-  if (respuesta.ok) {
+//   if (respuesta.ok) {
+//     const datos_json = await respuesta.json();
+//     lista_productos = datos_json.datos;
+//     totalPaginas = datos_json.paginacion.paginas;
+//     paginaActual = datos_json.paginacion.actual;
+
+//     // Limpiar contenedor antes de agregar nuevos productos
+//     contenedor.innerHTML = "";
+
+//     // Renderizar productos
+//     for (let producto of lista_productos) {
+//       contenedor.appendChild(crearProducto(producto));
+//     }
+
+//     // Actualizar paginación
+//     actualizarPaginacion();
+//   } else {
+//     let respuesta_error = await respuesta.json();
+//     mostrarMensaje(respuesta_error.error, "danger");
+//   }
+// }
+
+async function obtenerDatos(page) {
+  const url = `${URL_PROCESAR}?${buildQueryParams(page)}`;
+  console.log(url);
+
+  try {
+    const respuesta = await fetch(url);
+    
+    
     const datos_json = await respuesta.json();
+
+    if (!respuesta.ok) throw new Error(datos_json.error);
+
     lista_productos = datos_json.datos;
     totalPaginas = datos_json.paginacion.paginas;
     paginaActual = datos_json.paginacion.actual;
 
-    // Limpiar contenedor antes de agregar nuevos productos
     contenedor.innerHTML = "";
+    lista_productos.forEach(producto => contenedor.appendChild(crearProducto(producto)));
 
-    // Renderizar productos
-    for (let producto of lista_productos) {
-      contenedor.appendChild(crearProducto(producto));
-    }
-
-    // Actualizar paginación
     actualizarPaginacion();
-  } else {
-    let respuesta_error = await respuesta.json();
-    mostrarMensaje(respuesta_error.error, "danger");
+  } catch (error) {
+    mostrarMensaje("Error: " + error, "danger");
   }
 }
 
@@ -85,23 +111,31 @@ function actualizarPaginacion() {
 }
 
 // Manejadores de eventos para paginación
+// prevPageBtn.addEventListener("click", () => {
+//   if (paginaActual > 1) {
+//     const nuevaPagina = paginaActual - 1;
+//     obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
+//   }
+// });
+
+// nextPageBtn.addEventListener("click", () => {
+//   if (paginaActual < totalPaginas) {
+//     const nuevaPagina = paginaActual + 1;
+//     obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
+//   }
+// });
 prevPageBtn.addEventListener("click", () => {
-  if (paginaActual > 1) {
-    const nuevaPagina = paginaActual - 1;
-    obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
-  }
+  if (paginaActual > 1) obtenerDatos(paginaActual - 1);
 });
 
 nextPageBtn.addEventListener("click", () => {
-  if (paginaActual < totalPaginas) {
-    const nuevaPagina = paginaActual + 1;
-    obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
-  }
+  if (paginaActual < totalPaginas) obtenerDatos(paginaActual + 1);
 });
 
 
 // Manejador de evento para el formulario de filtros
 const filtroForm = document.querySelector("#filtroForm");
+
 filtroForm.addEventListener("submit", (e) => {
   e.preventDefault();
   // Actualizar currentFilters con los valores del formulario
@@ -111,14 +145,13 @@ filtroForm.addEventListener("submit", (e) => {
     precio_max: document.querySelector("#filterPrecioMax").value.trim(),
     categoria: document.querySelector("#filterCategoria").value
   };
-  // Reiniciar a la primera página con los filtros aplicados
-  obtenerDatos(`${URL_API}?${buildQueryParams(1)}`);
+  obtenerDatos(1);
 });
 
 
 //================== OBTENGO LOS DATOS =======================
-// Cargar la primera página de productos sin filtros ya que es para la primera carga
-obtenerDatos(`${URL_API}?${buildQueryParams(1)}`);
+// Cargar la primera pagina por defecto al cargar
+obtenerDatos(1);
 //============================================================
 
 
@@ -153,7 +186,7 @@ function crearProducto(producto) {
         </button>
       </div>
     </div>
-    <footer>
+    <footer style='cursor: pointer'>
       <h3 class="product-name">${producto.nombre}</h3>
       <p class="product-description">${producto.descripcion}</p>
       <div class="product-info">
@@ -168,6 +201,8 @@ function crearProducto(producto) {
     </footer>
   `;
 
+  let ver_mas = nuevo_producto.querySelector("footer");
+  ver_mas.addEventListener("click", () => mostrarProductoEnModal(producto));
 
   let boton_añadir = nuevo_producto.querySelector(".product-cart-btn");
   boton_añadir.addEventListener("click", () => {
@@ -263,16 +298,116 @@ function updateCartCount() {
 }
 
 btnVaciarCarro.addEventListener("click", () => {
-  // Vaciar el carrito, limpiar la lista y el DOM, actualizar el localStorage
-  lista_carrito = [];
-  localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-  carrito_productos.innerHTML = "";
-  updateCartCount();
-  mostrarMensaje("Carrito vaciado", "success");
+  showModal({
+    title: "Vaciar Carrito",
+    content: "¿Está seguro de que desea vaciar su carrito de compras?",
+    buttons: [
+      { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
+      {
+        text: "Aceptar",
+        className: "btn-primary",
+        onClick: () => {
+          lista_carrito = [];
+          localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+          carrito_productos.innerHTML = "";
+          updateCartCount();
+          mostrarMensaje("Carrito vaciado", "success");
+        }
+      }
+    ]
+  });
 });
 
 btnTramitarPedido.addEventListener("click", () => {
-  console.log("pedido tramitado");
-  mostrarMensaje("Pedido tramitado", "success");
+  showModal({
+    title: "Tramitar Pedido",
+    content: "¿Está seguro de que desea tramitar el pedido?",
+    buttons: [
+      { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
+      {
+        text: "Aceptar",
+        className: "btn-primary",
+        onClick: () => {
+          console.log("pedido tramitado");
+          mostrarMensaje("Pedido tramitado", "success");
+        }
+      }
+    ]
+  });
 });
+
+
+
+//================== MODAL ================================
+
+function showModal({ title, content, buttons = [] }) {
+  const modalTitle = document.getElementById("generalModalLabel");
+  const modalBody = document.getElementById("generalModalBody");
+  const modalFooter = document.getElementById("generalModalFooter");
+
+  modalTitle.textContent = title;
+
+  // Configurar el cuerpo del modal
+  modalBody.innerHTML = ""; // Limpiamos contenido anterior
+  if (typeof content === "string") {
+    modalBody.innerHTML = content;
+  } else {
+    modalBody.appendChild(content); // Si es un nodo HTML, lo agregamos
+  }
+
+  // Configurar los botones en el footer
+  modalFooter.innerHTML = ""; 
+  buttons.forEach(({ text, className, onClick }) => {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.className = `btn ${className}`;
+    button.addEventListener("click", () => {
+      onClick();
+      bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+    });
+    modalFooter.appendChild(button);
+  });
+
+  //Crear y mostrar el modal
+  const modalElement = document.getElementById("generalModal");
+  const modalInstance = new bootstrap.Modal(modalElement);
+  modalInstance.show();
+}
+
+
+function mostrarProductoEnModal(producto) {
+  const contenido = document.createElement("div");
+  contenido.innerHTML = `
+    <img src="${producto.imagen}" class="img-fluid mb-3" alt="${producto.nombre}">
+    <h3>${producto.nombre}</h3>
+    <p>${producto.descripcion}</p>
+    <p><strong>Precio:</strong> ${producto.precio} €</p>
+    <p><strong>Categoría:</strong> ${producto.categoria}</p>
+    <p><strong>Stock:</strong> ${producto.stock > 0 ? producto.stock + " disponibles" : "Agotado"}</p>
+  `;
+
+  showModal({
+    title: "Detalles del Producto",
+    content: contenido,
+    buttons: [
+      { text: "Cerrar", className: "btn-secondary", onClick: () => {} },
+      {
+        text: "Añadir al Carrito",
+        className: "btn-success",
+        onClick: () => {
+          if (producto.stock > 0) {
+            lista_carrito.push(producto);
+            const nuevo_elemento = crearItemCarrito(producto);
+            carrito_productos.appendChild(nuevo_elemento);
+            localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+            updateCartCount();
+            mostrarMensaje("Producto añadido al carrito", "success");
+          } else {
+            mostrarMensaje("Producto agotado", "danger");
+          }
+        }
+      }
+    ]
+  });
+}
 
