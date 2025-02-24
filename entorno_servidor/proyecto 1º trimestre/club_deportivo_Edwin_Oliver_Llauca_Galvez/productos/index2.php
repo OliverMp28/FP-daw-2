@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../assets/css/otros.css">
     <!-- <script defer type="module" src="../assets/js/productos.js"></script> -->
     <script defer type="module" src="../assets/js/productosAdmin.js"></script>
+    <script defer type="module" src="../assets/js/productosValidaciones.js"></script>
     <title>Productos</title>
    
 </head>
@@ -61,15 +62,55 @@
             </form>
         </div>
 
+        <!-- products -->
+        <!-- <section class="py-4 seccion_productos">
+            <div class="cart-overlay">
+                <aside class="cart">
+                    <button class="cart-close">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    <header>
+                        <h3 class="text-slanted">Añadido hasta ahora</h3>
+                    </header>
 
+                    <div class="cart-items"></div>
 
+                    <footer>
+                        <button class="btn-vaciar-carro btn btn-danger w-100 mb-2">
+                            <i class="bi bi-trash"></i> Vaciar carro
+                        </button>
+                        <button class="btn-tramitar-pedido btn btn-success w-100">
+                            <i class="bi bi-bag-check"></i> Tramitar pedido
+                        </button>
+                    </footer>  
+                </aside>
+            </div>
+
+            <div class="container  products">
+                <div class="filters d-flex justify-content-between align-items-center p-2">
+                    <div class="toggle-container d-flex align-items-center gap-2">
+                        <button class="toggle-cart btn btn-primary d-flex align-items-center">
+                            <i class="bi bi-cart-fill me-1"></i> Ver Carrito
+                        </button>
+                        <span class="cart-item-count badge bg-danger rounded-pill px-2">0</span>
+                    </div>
+                </div>
+
+                <div class="products-container"></div>
+                <div class="alerta"></div>
+            </div>
+
+        </section> -->
+        
+
+        <!-- products admin -->
         <section class="py-4 seccion_productos-admin">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                     <h2 class="mb-0 text-primary fw-bold">
                         <i class="bi bi-box-seam me-2"></i>Gestión de Productos
                     </h2>
-                    <button class="btn btn-primary btn-lg shadow-sm">
+                    <button id="crear_producto" class="btn btn-primary btn-lg shadow-sm">
                         <i class="bi bi-plus-circle me-2"></i>Nuevo Producto
                     </button>
                 </div>
@@ -89,8 +130,7 @@
                             </tr>
                         </thead>
                         <tbody class="tabla-cuerpo">
-                            <!-- Fila adicional de ejemplo -->
-                            <!-- <tr class="transition">
+                            <!-- Filas -->
                                 <td class="text-center fw-semibold text-muted">#15</td>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -129,11 +169,12 @@
                                         </button>
                                     </div>
                                 </td>
-                            </tr> -->
+                            </tr> 
                         </tbody>
                     </table>
                 </div>
             </div>
+            <div class="alerta"></div>
         </section>
 
         <div class="paginacion-contenedor d-flex justify-content-center align-items-center gap-3 p-3 bg-light rounded shadow-sm">

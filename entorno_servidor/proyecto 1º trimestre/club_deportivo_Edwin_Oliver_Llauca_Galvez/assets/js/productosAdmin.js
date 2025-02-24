@@ -1,21 +1,10 @@
 "use strict"
+import { initValidacionesProducto } from "./productosValidaciones.js";
+
 
 // let lista_carrito = []; // Lista con lo que se añade al carrito
 let lista_productos; // Lista completa de productos
 const alerta = document.querySelector(".alerta");
-
-// const carrito = document.querySelector(".cart-overlay");
-// const cerrar_carrito = document.querySelector(".cart-close");
-// const carrito_productos = document.querySelector(".cart-items");
-// const abrir_carrito = document.querySelector(".toggle-cart");
-// const cartItemCount = document.querySelector(".cart-item-count");
-
-// Funcionalidad para Vaciar carro y Tramitar pedido
-// const btnVaciarCarro = document.querySelector(".btn-vaciar-carro");
-// const btnTramitarPedido = document.querySelector(".btn-tramitar-pedido");
-
-
-// const contenedor = document.querySelector(".products-container");
 
 const contenedor = document.querySelector(".tabla-cuerpo");
 
@@ -39,7 +28,7 @@ let filtros = {};
 // Función para construir la query string con filtros y paginación
 function buildQueryParams(page, filtros = currentFilters) {
   const params = new URLSearchParams();
-  params.append("limit", "10");
+  params.append("limit", "20");
   params.append("page", page);
   if (filtros.nombre) {
     params.append("nombre", filtros.nombre);
@@ -56,33 +45,6 @@ function buildQueryParams(page, filtros = currentFilters) {
   return params.toString();
 }
 
-
-// async function obtenerDatos(url_api) {
-//   console.log(url_api);
-//   const respuesta = await fetch(url_api);
-//   console.log(respuesta);
-
-//   if (respuesta.ok) {
-//     const datos_json = await respuesta.json();
-//     lista_productos = datos_json.datos;
-//     totalPaginas = datos_json.paginacion.paginas;
-//     paginaActual = datos_json.paginacion.actual;
-
-//     // Limpiar contenedor antes de agregar nuevos productos
-//     contenedor.innerHTML = "";
-
-//     // Renderizar productos
-//     for (let producto of lista_productos) {
-//       contenedor.appendChild(crearProducto(producto));
-//     }
-
-//     // Actualizar paginación
-//     actualizarPaginacion();
-//   } else {
-//     let respuesta_error = await respuesta.json();
-//     mostrarMensaje(respuesta_error.error, "danger");
-//   }
-// }
 
 async function obtenerDatos(page, filtros = currentFilters) {
   const url = `${URL_PROCESAR}?${buildQueryParams(page, filtros)}`;
@@ -118,20 +80,6 @@ function actualizarPaginacion() {
   nextPageBtn.disabled = paginaActual === totalPaginas;
 }
 
-// Manejadores de eventos para paginación
-// prevPageBtn.addEventListener("click", () => {
-//   if (paginaActual > 1) {
-//     const nuevaPagina = paginaActual - 1;
-//     obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
-//   }
-// });
-
-// nextPageBtn.addEventListener("click", () => {
-//   if (paginaActual < totalPaginas) {
-//     const nuevaPagina = paginaActual + 1;
-//     obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
-//   }
-// });
 prevPageBtn.addEventListener("click", () => {
   if (paginaActual > 1) obtenerDatos(paginaActual - 1);
 });
@@ -222,53 +170,26 @@ function crearProducto(producto) {
     </td>
   `;
 
-  // Asignar funcionalidades básicas a los botones (sólo console.log)
+  // Asignar funcionalidades básicas a los botones
+  // Dentro de tu función crearProducto (para el admin):
   const btnEditar = fila.querySelector(".btn-outline-warning");
   const btnEliminar = fila.querySelector(".btn-outline-danger");
   const btnDetalles = fila.querySelector(".btn-outline-info");
+  const btnCrearProducto = document.getElementById("crear_producto");
 
   btnEditar.addEventListener("click", () => {
-    console.log("Editar producto", producto.id);
+    editarProductoModal(producto);
   });
   btnEliminar.addEventListener("click", () => {
-    console.log("Eliminar producto", producto.id);
+    eliminarProductoModal(producto);
   });
   btnDetalles.addEventListener("click", () => {
-    console.log("Ver detalles del producto", producto.id);
+    verDetallesProductoModal(producto);
   });
+  btnCrearProducto.addEventListener("click", crearProductoModal);
+
 
   return fila;
-}
-
-//FUNCION DEL DOM Y EVENTOS PARA EL CARRITO
-
-function crearItemCarrito(datos_item) {
-  const nuevo_item = document.createElement('article');
-
-  nuevo_item.classList.add('cart-item');
-  nuevo_item.setAttribute('data-id', datos_item.id);
-  nuevo_item.innerHTML = `
-    <img src="${datos_item.imagen}" class="cart-item-img" alt="${datos_item.nombre}" />
-    <div>
-      <h4 class="cart-item-name">${datos_item.nombre}</h4>
-      <p class="cart-item-price">${datos_item.precio} €</p>
-      <button class="cart-item-remove-btn" data-id="${datos_item.id}">
-        Eliminar <i class="bi bi-x-lg"></i> <!-- Ícono corregido -->
-      </button>
-    </div>`;
-
-  const eliminar=nuevo_item.querySelector(".cart-item-remove-btn");
-  eliminar.addEventListener("click", 
-  () => {
-    const posicion = lista_carrito.findIndex(item => item.id == datos_item.id);
-    lista_carrito.splice(posicion, 1);
-    localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-    nuevo_item.remove();
-    updateCartCount(); // Actualiza el contador tras eliminar
-  });
-  
-  
-  return nuevo_item;
 }
 
 
@@ -285,87 +206,15 @@ function mostrarMensaje(texto, clase) {
   }, 4000);
 }
 
-//CODIGO PARA CARGAR LO QUE HAYA EN EL CARRITO 
-// const carrito_local = "carrito";
-
-// lista_carrito = JSON.parse(localStorage.getItem(carrito_local) ?? "[]");
-
-// carrito_productos.innerHTML="";
-// lista_carrito.forEach((objeto) => {
-//   const producto = crearItemCarrito(objeto);
-//   carrito_productos.appendChild(producto);
-// });
-// updateCartCount();
-
-
-
-//CODIGO PARA EL FUNCIONAMIENTO DEL CARRITO
-
-// abrir_carrito.addEventListener("click",
-//   () => {
-//     carrito.classList.add("show");
-//   });
-
-
-// cerrar_carrito.addEventListener("click",
-//   () => {
-//     carrito.classList.remove("show");
-//   });
-
-// //esto se encargara de cerrar el carrito si se da click fuera
-// carrito.addEventListener("click", (e) => {
-//   if (e.target === carrito) {
-//     carrito.classList.remove("show");
-//   }
-// });
 
 function updateCartCount() {
   cartItemCount.textContent = lista_carrito.length;
 }
 
-// btnVaciarCarro.addEventListener("click", () => {
-//   showModal({
-//     title: "Vaciar Carrito",
-//     content: "¿Está seguro de que desea vaciar su carrito de compras?",
-//     buttons: [
-//       { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
-//       {
-//         text: "Aceptar",
-//         className: "btn-primary",
-//         onClick: () => {
-//           lista_carrito = [];
-//           localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-//           carrito_productos.innerHTML = "";
-//           updateCartCount();
-//           mostrarMensaje("Carrito vaciado", "success");
-//         }
-//       }
-//     ]
-//   });
-// });
-
-// btnTramitarPedido.addEventListener("click", () => {
-//   showModal({
-//     title: "Tramitar Pedido",
-//     content: "¿Está seguro de que desea tramitar el pedido?",
-//     buttons: [
-//       { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
-//       {
-//         text: "Aceptar",
-//         className: "btn-primary",
-//         onClick: () => {
-//           console.log("pedido tramitado");
-//           mostrarMensaje("Pedido tramitado", "success");
-//         }
-//       }
-//     ]
-//   });
-// });
-
 
 
 //================== MODAL ================================
-
+//esta funcion es para mostrar un modal, es adaptable al contenido, titulo y botones que se le pase
 function showModal({ title, content, buttons = [] }) {
   const modalTitle = document.getElementById("generalModalLabel");
   const modalBody = document.getElementById("generalModalBody");
@@ -399,40 +248,266 @@ function showModal({ title, content, buttons = [] }) {
   const modalInstance = new bootstrap.Modal(modalElement);
   modalInstance.show();
 }
+document.getElementById("generalModal").addEventListener('hidden.bs.modal', function () {
+  document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+});
 
 
-function mostrarProductoEnModal(producto) {
-  const contenido = document.createElement("div");
-  contenido.innerHTML = `
-    <img src="${producto.imagen}" class="img-fluid mb-3" alt="${producto.nombre}">
-    <h3>${producto.nombre}</h3>
-    <p>${producto.descripcion}</p>
-    <p><strong>Precio:</strong> ${producto.precio} €</p>
-    <p><strong>Categoría:</strong> ${producto.categoria}</p>
-    <p><strong>Stock:</strong> ${producto.stock > 0 ? producto.stock + " disponibles" : "Agotado"}</p>
+function crearProductoModal() {
+  const form = document.createElement("form");
+  form.id = "nuevoProductoForm";
+  // form.action = "procesar.php";
+  // form.method = "post";
+  form.enctype = "multipart/form-data";
+  form.className = "shadow p-4 rounded bg-white mx-auto";
+  form.style.maxWidth = "600px";
+
+  form.innerHTML = `
+    <h2 class="text-center mb-4">Inserte los datos del nuevo producto</h2>
+    <div class="mb-3">
+      <label for="nuevoNombre" class="form-label">Nombre:</label>
+      <input type="text" class="form-control" id="nuevoNombre" name="nombre" placeholder="Introduce el nombre del producto" required>
+      <span class="error"></span>
+    </div>
+    <div class="mb-3">
+      <label for="nuevoDescripcion" class="form-label">Descripción:</label>
+      <textarea class="form-control" id="nuevoDescripcion" name="descripcion" placeholder="Introduce la descripción" rows="3"></textarea>
+      <span class="error"></span>
+    </div>
+    <div class="mb-3">
+      <label for="nuevoPrecio" class="form-label">Precio (€):</label>
+      <input type="number" class="form-control" id="nuevoPrecio" name="precio" placeholder="Introduce el precio" min="0" step="0.01" required>
+      <span class="error"></span>
+    </div>
+    <div class="mb-3">
+      <label for="nuevoStock" class="form-label">Stock:</label>
+      <input type="number" class="form-control" id="nuevoStock" name="stock" placeholder="Introduce el stock" min="0" required>
+      <span class="error"></span>
+    </div>
+    <div class="mb-3">
+      <label for="nuevoCategoria" class="form-label">Categoría:</label>
+      <select class="form-select" id="nuevoCategoria" name="categoria" required>
+        <option value="Ropa">Ropa</option>
+        <option value="Suplementos">Suplementos</option>
+        <option value="Accesorios">Accesorios</option>
+      </select>
+      <span class="error"></span>
+    </div>
+    <div class="mb-3">
+      <label for="nuevoImagen" class="form-label">Imagen:</label>
+      <input type="file" class="form-control" id="nuevoImagen" name="imagen" accept=".webp, .jpeg, .png" required>
+      <span class="error"></span>
+      <div id="previewImagen" class="mt-2"></div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button type="button" id="cancelarNuevoProducto" class="btn btn-secondary">Cancelar</button>
+      <button type="submit" class="btn btn-success">Crear Producto</button>
+    </div>
+  `;
+
+  // Vista previa de la imagen seleccionada
+  form.querySelector("#nuevoImagen").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    const preview = form.querySelector("#previewImagen");
+    preview.innerHTML = "";
+    if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/webp")) {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.classList.add("img-fluid", "rounded-2", "mt-2");
+      img.style.width = "100px";
+      img.style.height = "100px";
+      img.style.objectFit = "cover";
+      preview.appendChild(img);
+    } else {
+      preview.innerHTML = '<p class="text-danger small">Formato no válido.</p>';
+    }
+  });
+
+  //boton para cancelar y cerrar el modal
+  form.querySelector("#cancelarNuevoProducto").addEventListener("click", function() {
+    bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+  });
+
+  showModal({
+    title: "Crear Nuevo Producto",
+    content: form,
+    buttons: [] //No se agregan botones extra en el footer, ya que el formulario incluye sus propios botones.
+  });
+
+  setTimeout(() => {
+    initValidacionesProducto();
+    initEnvioProducto();
+  }, 100);
+}
+
+function editarProductoModal(producto) {
+  const content = document.createElement("div");
+  content.innerHTML = `
+    <div class="mb-3">
+      <label for="editNombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="editNombre" value="${producto.nombre}">
+    </div>
+    <div class="mb-3">
+      <label for="editDescripcion" class="form-label">Descripción</label>
+      <textarea class="form-control" id="editDescripcion">${producto.descripcion ? producto.descripcion : ''}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="editPrecio" class="form-label">Precio</label>
+      <input type="number" class="form-control" id="editPrecio" value="${producto.precio}">
+    </div>
+    <div class="mb-3">
+      <label for="editStock" class="form-label">Stock</label>
+      <input type="number" class="form-control" id="editStock" value="${producto.stock}">
+    </div>
+    <div class="mb-3">
+      <label for="editCategoria" class="form-label">Categoría</label>
+      <select class="form-select" id="editCategoria">
+        <option value="Ropa" ${producto.categoria === 'Ropa' ? 'selected' : ''}>Ropa</option>
+        <option value="Suplementos" ${producto.categoria === 'Suplementos' ? 'selected' : ''}>Suplementos</option>
+        <option value="Accesorios" ${producto.categoria === 'Accesorios' ? 'selected' : ''}>Accesorios</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Imagen</label>
+      <div>
+        <img src="${producto.imagen}" class="img-fluid rounded-2" style="width: 100px; height: 100px; object-fit: cover;">
+      </div>
+      <small class="text-muted">La imagen no es editable</small>
+    </div>
   `;
 
   showModal({
-    title: "Detalles del Producto",
-    content: contenido,
+    title: "Editar Producto",
+    content: content,
     buttons: [
-      { text: "Cerrar", className: "btn-secondary", onClick: () => {} },
-      {
-        text: "Añadir al Carrito",
-        className: "btn-success",
+      { 
+        text: "Cancelar", 
+        className: "btn-secondary", 
+        onClick: () => { console.log("Edición cancelada"); } 
+      },
+      { 
+        text: "Guardar Cambios", 
+        className: "btn-primary", 
         onClick: () => {
-          if (producto.stock > 0) {
-            lista_carrito.push(producto);
-            const nuevo_elemento = crearItemCarrito(producto);
-            carrito_productos.appendChild(nuevo_elemento);
-            localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-            updateCartCount();
-            mostrarMensaje("Producto añadido al carrito", "success");
-          } else {
-            mostrarMensaje("Producto agotado", "danger");
-          }
-        }
+          const updatedProducto = {
+            id: producto.id,
+            nombre: content.querySelector("#editNombre").value,
+            descripcion: content.querySelector("#editDescripcion").value,
+            precio: content.querySelector("#editPrecio").value,
+            stock: content.querySelector("#editStock").value,
+            categoria: content.querySelector("#editCategoria").value,
+            imagen: producto.imagen,
+            fecha_creacion: producto.fecha_creacion
+          };
+          console.log("Producto actualizado:", updatedProducto);
+        } 
       }
     ]
   });
+}
+
+function eliminarProductoModal(producto) {
+  const content = document.createElement("div");
+  content.innerHTML = `<p>¿Estás seguro de que deseas eliminar el producto <strong>${producto.nombre}</strong>?</p>`;
+  
+  showModal({
+    title: "Eliminar Producto",
+    content: content,
+    buttons: [
+      { 
+        text: "Cancelar", 
+        className: "btn-secondary", 
+        onClick: () => { console.log("Eliminación cancelada"); } 
+      },
+      { 
+        text: "Eliminar", 
+        className: "btn-danger", 
+        onClick: () => { console.log("Producto eliminado:", producto.id); } 
+      }
+    ]
+  });
+}
+
+function verDetallesProductoModal(producto) {
+  const content = document.createElement("div");
+  content.innerHTML = `
+    <div class="mb-3">
+      <img src="${producto.imagen}" class="img-fluid mb-3" alt="${producto.nombre}">
+    </div>
+    <h3>${producto.nombre}</h3>
+    <p>${producto.descripcion ? producto.descripcion : ''}</p>
+    <p><strong>Precio:</strong> ${producto.precio} €</p>
+    <p><strong>Categoría:</strong> ${producto.categoria}</p>
+    <p><strong>Stock:</strong> ${producto.stock}</p>
+    <p><strong>Creación:</strong> ${producto.fecha_creacion.split(" ")[0]}</p>
+  `;
+  
+  showModal({
+    title: "Detalles del Producto",
+    content: content,
+    buttons: [
+      { 
+        text: "Editar", 
+        className: "btn-warning", 
+        onClick: () => { editarProductoModal(producto); } 
+      },
+      { 
+        text: "Eliminar", 
+        className: "btn-danger", 
+        onClick: () => { eliminarProductoModal(producto); } 
+      },
+      { 
+        text: "Cerrar", 
+        className: "btn-secondary", 
+        onClick: () => {} 
+      }
+    ]
+  });
+}
+
+
+
+
+//================== VALIDACIONES EN EL FETCH ============================
+function initEnvioProducto() {
+  const formProducto = document.getElementById("nuevoProductoForm");
+  if (!formProducto) return;
+
+  formProducto.addEventListener("submit", async function (evento) {
+    evento.preventDefault(); // Evita la recarga de la página
+
+
+    await enviarFormularioProducto(formProducto);
+  });
+}
+
+async function enviarFormularioProducto(formProducto) {
+  const formData = new FormData(formProducto);
+
+  try {
+    const respuesta = await fetch("procesar.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    const resultado = await respuesta.json();
+
+    if (respuesta.ok && resultado.id) {
+      // Limpia el formulario
+      formProducto.reset();
+      let botonSubmit = document.querySelector('#filtroForm button[type="submit"]');
+      botonSubmit.click();
+
+      // Cierra el modal si el producto se creó correctamente
+      bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+
+      mostrarMensaje("Producto creado correctamente", "success");
+    } else {
+      // Si el backend devuelve un error, mostramos el mensaje adecuado
+      mostrarMensaje(resultado.error?? "Hubo un error al crear el producto", "danger");
+    }
+  } catch (error) {
+    mostrarMensaje("Error en la conexión con el servidor", "danger");
+    console.error("Error al enviar el formulario:", error);
+  }
 }

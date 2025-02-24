@@ -130,25 +130,47 @@ switch ($method) {
         break;
     
     case 'POST':
-        // Validar la API key (se puede enviar vía POST o en encabezado, según tu diseño)
-        if (!isset($_POST['api_key']) || $_POST['api_key'] !== $apiKey) {
-            http_response_code(403);
-            echo json_encode(["error" => "API key inválida"]);
-            exit;
+        // Recoger los datos enviados por multipart/form-data
+        $postData = $_POST;
+        // Si se incluye la api_key en el formulario, se puede eliminar del array,
+        // ya que la API se encarga de su validación.
+        if (isset($postData['api_key'])) {
+            unset($postData['api_key']);
         }
         
-        // Obtener datos enviados por multipart/form-data (incluyendo archivos si es necesario)
-        $postData = $_POST;
-        // Aquí podrías procesar $_FILES y adjuntarlo a $postData usando curl_file_create()
+        // Procesar el archivo, por ejemplo, si el campo del formulario se llama "imagen"
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            $tmpName  = $_FILES['imagen']['tmp_name'];
+            $fileName = $_FILES['imagen']['name'];
+            $fileType = $_FILES['imagen']['type'];
+            // Crear un objeto curl_file para que cURL lo envíe correctamente
+            $postData['imagen'] = curl_file_create($tmpName, $fileType, $fileName);
+        }
         
-        $endpoint = "productos";
-        // Incluir la API key en los encabezados si se requiere en la llamada a la API
-        $headers = ["Authorization: Bearer " . $apiKey];
+        // Definir la URL de la API
+        $url = $apiBaseUrl;
         
-        // $apiResult = callApi($endpoint, 'POST', $headers, $postData);
+        // Incluir la API key en el header usando X-API-KEY
+        $headers = [
+            "X-API-KEY: " . $apiKey
+        ];
         
-        http_response_code($apiResult['code']);
-        echo $apiResult['response'];
+        // Inicializar cURL para hacer la petición POST a la API
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        curl_close($ch);
+        
+        // Devolver la respuesta obtenida de la API con el código HTTP correspondiente
+        http_response_code($httpCode);
+        echo $response;
         break;
     
     case 'PUT':
@@ -163,7 +185,7 @@ switch ($method) {
         $endpoint = "productos"; // O "productos/{id}" según el caso
         $headers = ["Authorization: Bearer " . $apiKey];
         
-        $apiResult = callApi($endpoint, 'PUT', $headers, $input);
+        // $apiResult = callApi($endpoint, 'PUT', $headers, $input);
         
         http_response_code($apiResult['code']);
         echo $apiResult['response'];
@@ -182,7 +204,7 @@ switch ($method) {
         $endpoint = "productos";
         $headers = ["Authorization: Bearer " . $apiKey];
         
-        $apiResult = callApi($endpoint, 'DELETE', $headers, $input);
+        // $apiResult = callApi($endpoint, 'DELETE', $headers, $input);
         
         http_response_code($apiResult['code']);
         echo $apiResult['response'];
