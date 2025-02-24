@@ -114,7 +114,6 @@ switch ($method) {
         curl_close($ch);
 
 
-
         // Devolver la respuesta obtenida de la API con el código HTTP correspondiente
         http_response_code($httpCode);
         echo $response;
@@ -146,7 +145,7 @@ switch ($method) {
         // Incluir la API key en los encabezados si se requiere en la llamada a la API
         $headers = ["Authorization: Bearer " . $apiKey];
         
-        $apiResult = callApi($endpoint, 'POST', $headers, $postData);
+        // $apiResult = callApi($endpoint, 'POST', $headers, $postData);
         
         http_response_code($apiResult['code']);
         echo $apiResult['response'];

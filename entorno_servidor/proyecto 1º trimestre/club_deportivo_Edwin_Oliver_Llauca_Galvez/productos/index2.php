@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="../assets/css/carrito.css">
 
     <link rel="stylesheet" href="../assets/css/otros.css">
-    <script defer type="module" src="../assets/js/productos.js"></script>
+    <!-- <script defer type="module" src="../assets/js/productos.js"></script> -->
+    <script defer type="module" src="../assets/js/productosAdmin.js"></script>
     <title>Productos</title>
    
 </head>
@@ -26,33 +27,9 @@
         require_once "../requires/cabecera.php"
     ?>
 
-    <main class="container py-4 seccion_productos">
-        <!-- cart -->
-        <div class="cart-overlay">
-            <aside class="cart">
-                <!-- Botón para cerrar el carrito -->
-                <button class="cart-close">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-                <header>
-                    <h3 class="text-slanted">Añadido hasta ahora</h3>
-                </header>
-                <!-- Cart items -->
-                <div class="cart-items"></div>
-
-                <footer>
-                    <button class="btn-vaciar-carro btn btn-danger w-100 mb-2">
-                        <i class="bi bi-trash"></i> Vaciar carro
-                    </button>
-                    <button class="btn-tramitar-pedido btn btn-success w-100">
-                        <i class="bi bi-bag-check"></i> Tramitar pedido
-                    </button>
-                </footer>  
-            </aside>
-        </div>
-
+    <main class="py-4">
         <!-- Contenedor de Filtros -->
-        <div class="filtro-container bg-light p-4 rounded-3 shadow-sm mb-4">
+        <div class="container filtro-container bg-light p-4 rounded-3 shadow-sm mb-4">
             <form id="filtroForm" class="row g-3 align-items-center">
                 <div class="col-lg-4 col-md-5 col-sm-6">
                     <input type="text" id="filterNombre" class="form-control" placeholder="Nombre del producto">
@@ -85,22 +62,78 @@
         </div>
 
 
-        <!-- products -->
-        <section class="container py-4 products">
-            <!-- filters -->
-            <div class="filters d-flex justify-content-between align-items-center p-2">
-                <div class="toggle-container d-flex align-items-center gap-2">
-                    <button class="toggle-cart btn btn-primary d-flex align-items-center">
-                        <i class="bi bi-cart-fill me-1"></i> Ver Carrito
+
+        <section class="py-4 seccion_productos-admin">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                    <h2 class="mb-0 text-primary fw-bold">
+                        <i class="bi bi-box-seam me-2"></i>Gestión de Productos
+                    </h2>
+                    <button class="btn btn-primary btn-lg shadow-sm">
+                        <i class="bi bi-plus-circle me-2"></i>Nuevo Producto
                     </button>
-                    <span class="cart-item-count badge bg-danger rounded-pill px-2">0</span>
+                </div>
+
+                <div class="table-responsive rounded-3 shadow">
+                    <table class="tabla-productos table table-hover align-middle mb-0">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th scope="col" class="text-center">ID</th>
+                                <th scope="col">Producto</th>
+                                <th scope="col" class="d-none d-lg-table-cell">Descripción</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col" class="text-center">Stock</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col" class="d-none d-xl-table-cell">Creación</th>
+                                <th scope="col" class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tabla-cuerpo">
+                            <!-- Fila adicional de ejemplo -->
+                            <!-- <tr class="transition">
+                                <td class="text-center fw-semibold text-muted">#15</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <img src="https://via.placeholder.com/50" 
+                                                alt="Producto" 
+                                                class="img-fluid rounded-2" 
+                                                style="width: 50px; height: 50px; object-fit: cover;">
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <span class="fw-semibold">Camiseta Deportiva</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="d-none d-lg-table-cell text-truncate" style="max-width: 250px;">
+                                    Camiseta técnica para entrenamiento
+                                </td>
+                                <td class="text-success fw-semibold">34.99€</td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger bg-opacity-25 text-danger">3</span>
+                                </td>
+                                <td>
+                                    <span class="">Ropa</span>
+                                </td>
+                                <td class="d-none d-xl-table-cell text-muted small">2025-02-15</td>
+                                <td class="text-center">
+                                    <div class="botones-acciones-producto d-flex gap-2 justify-content-center">
+                                        <button class="btn btn-sm btn-outline-warning">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <!-- products -->
-            <div class="products-container"></div>
-            <!-- alert -->
-            <div class="alerta"></div>
         </section>
 
         <div class="paginacion-contenedor d-flex justify-content-center align-items-center gap-3 p-3 bg-light rounded shadow-sm">
@@ -126,22 +159,22 @@
         </div> -->
 
         <!-- Modal Reutilizable -->
-<div class="modal fade" id="generalModal" tabindex="-1" aria-labelledby="generalModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="generalModalLabel">Título del Modal</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body" id="generalModalBody">
-        <!-- Contenido dinámico se insertará aquí -->
-      </div>
-      <div class="modal-footer" id="generalModalFooter">
-        <!-- Botones dinámicos se insertarán aquí -->
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="modal fade" id="generalModal" tabindex="-1" aria-labelledby="generalModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="generalModalLabel">Título del Modal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body" id="generalModalBody">
+                        <!--el contenido dinámico se insertará aquí -->
+                    </div>
+                    <div class="modal-footer" id="generalModalFooter">
+                        <!--los Botones dinámicos se insertarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </main>
 

@@ -1,20 +1,24 @@
 "use strict"
 
-let lista_carrito = []; // Lista con lo que se añade al carrito
+// let lista_carrito = []; // Lista con lo que se añade al carrito
 let lista_productos; // Lista completa de productos
 const alerta = document.querySelector(".alerta");
 
-const carrito = document.querySelector(".cart-overlay");
-const cerrar_carrito = document.querySelector(".cart-close");
-const carrito_productos = document.querySelector(".cart-items");
-const abrir_carrito = document.querySelector(".toggle-cart");
-const cartItemCount = document.querySelector(".cart-item-count");
+// const carrito = document.querySelector(".cart-overlay");
+// const cerrar_carrito = document.querySelector(".cart-close");
+// const carrito_productos = document.querySelector(".cart-items");
+// const abrir_carrito = document.querySelector(".toggle-cart");
+// const cartItemCount = document.querySelector(".cart-item-count");
+
 // Funcionalidad para Vaciar carro y Tramitar pedido
-const btnVaciarCarro = document.querySelector(".btn-vaciar-carro");
-const btnTramitarPedido = document.querySelector(".btn-tramitar-pedido");
+// const btnVaciarCarro = document.querySelector(".btn-vaciar-carro");
+// const btnTramitarPedido = document.querySelector(".btn-tramitar-pedido");
 
 
-const contenedor = document.querySelector(".products-container");
+// const contenedor = document.querySelector(".products-container");
+
+const contenedor = document.querySelector(".tabla-cuerpo");
+
 
 // Elementos de paginación
 const prevPageBtn = document.querySelector("#prevPage");
@@ -35,7 +39,7 @@ let filtros = {};
 // Función para construir la query string con filtros y paginación
 function buildQueryParams(page, filtros = currentFilters) {
   const params = new URLSearchParams();
-  params.append("limit", "2");
+  params.append("limit", "10");
   params.append("page", page);
   if (filtros.nombre) {
     params.append("nombre", filtros.nombre);
@@ -82,6 +86,7 @@ function buildQueryParams(page, filtros = currentFilters) {
 
 async function obtenerDatos(page, filtros = currentFilters) {
   const url = `${URL_PROCESAR}?${buildQueryParams(page, filtros)}`;
+  console.log(url);
 
   try {
     const respuesta = await fetch(url);
@@ -176,52 +181,63 @@ function crearProducto(producto) {
 //     "fecha_creacion": "2025-02-22 17:56:24"
 // }
 
-  let nuevo_producto = document.createElement("article");
-  nuevo_producto.classList.add("product"); // Asegura que tenga la clase adecuada
-  nuevo_producto.dataset.id = producto.id; // Agrega el ID del producto
-
-  nuevo_producto.innerHTML = `
-    <div class="product-container">
-      <img src="${producto.imagen}" class="product-img img" alt="${producto.nombre}">
-      <div class="product-icons">
-        <button class="product-cart-btn product-icon" title="Añadir al carrito">
-          <i class="bi bi-cart-plus-fill"></i> 
+  let fila = document.createElement("tr");
+  fila.classList.add("transition");
+  fila.dataset.id = producto.id;
+  fila.innerHTML = `
+    <td class="text-center fw-semibold text-muted">#${producto.id}</td>
+    <td>
+      <div class="d-flex align-items-center">
+        <div class="flex-shrink-0">
+          <img src="${producto.imagen}" alt="Producto" class="img-fluid rounded-2" style="width: 50px; height: 50px; object-fit: cover;">
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <span class="fw-semibold">${producto.nombre}</span>
+        </div>
+      </div>
+    </td>
+    <td class="d-none d-lg-table-cell text-truncate" style="max-width: 250px;">
+      ${producto.descripcion ? producto.descripcion : ''}
+    </td>
+    <td class="text-success fw-semibold">${producto.precio}€</td>
+    <td class="text-center">
+      <span class="badge ${producto.stock > 0 ? 'bg-success bg-opacity-25 text-success' : 'bg-danger bg-opacity-25 text-danger'}">${producto.stock}</span>
+    </td>
+    <td>
+      <span>${producto.categoria}</span>
+    </td>
+    <td class="d-none d-xl-table-cell text-muted small">${producto.fecha_creacion.split(" ")[0]}</td>
+    <td class="text-center">
+      <div class="botones-acciones-producto d-flex gap-2 justify-content-center">
+        <button class="btn btn-sm btn-outline-warning" title="Editar">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-danger" title="Eliminar">
+          <i class="bi bi-trash3"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-info" title="Detalles">
+          <i class="bi bi-eye"></i>
         </button>
       </div>
-    </div>
-    <footer style='cursor: pointer'>
-      <h3 class="product-name">${producto.nombre}</h3>
-      <p class="product-description">${producto.descripcion}</p>
-      <div class="product-info">
-        <span class="product-category">Categoría: <strong>${producto.categoria}</strong></span>
-        <span class="product-stock ${producto.stock > 0 ? "in-stock" : "out-of-stock"}">
-          ${producto.stock > 0 ? `Stock: ${producto.stock} disponibles` : "Agotado"}
-        </span>
-      </div>
-      <div class="product-footer">
-        <h4 class="product-price">${producto.precio} €</h4>
-      </div>
-    </footer>
+    </td>
   `;
 
-  let ver_mas = nuevo_producto.querySelector("footer");
-  ver_mas.addEventListener("click", () => mostrarProductoEnModal(producto));
+  // Asignar funcionalidades básicas a los botones (sólo console.log)
+  const btnEditar = fila.querySelector(".btn-outline-warning");
+  const btnEliminar = fila.querySelector(".btn-outline-danger");
+  const btnDetalles = fila.querySelector(".btn-outline-info");
 
-  let boton_añadir = nuevo_producto.querySelector(".product-cart-btn");
-  boton_añadir.addEventListener("click", () => {
-    if (producto.stock > 0) {
-      lista_carrito.push(producto);
-      const nuevo_elemento = crearItemCarrito(producto);
-      carrito_productos.appendChild(nuevo_elemento);
-      localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-      updateCartCount(); // Actualiza el contador
-      mostrarMensaje("Producto añadido al carrito", "success");
-    } else {
-      mostrarMensaje("Producto agotado", "danger");
-    }
+  btnEditar.addEventListener("click", () => {
+    console.log("Editar producto", producto.id);
+  });
+  btnEliminar.addEventListener("click", () => {
+    console.log("Eliminar producto", producto.id);
+  });
+  btnDetalles.addEventListener("click", () => {
+    console.log("Ver detalles del producto", producto.id);
   });
 
-  return nuevo_producto;
+  return fila;
 }
 
 //FUNCION DEL DOM Y EVENTOS PARA EL CARRITO
@@ -270,81 +286,81 @@ function mostrarMensaje(texto, clase) {
 }
 
 //CODIGO PARA CARGAR LO QUE HAYA EN EL CARRITO 
-const carrito_local = "carrito";
+// const carrito_local = "carrito";
 
-lista_carrito = JSON.parse(localStorage.getItem(carrito_local) ?? "[]");
+// lista_carrito = JSON.parse(localStorage.getItem(carrito_local) ?? "[]");
 
-carrito_productos.innerHTML="";
-lista_carrito.forEach((objeto) => {
-  const producto = crearItemCarrito(objeto);
-  carrito_productos.appendChild(producto);
-});
-updateCartCount();
+// carrito_productos.innerHTML="";
+// lista_carrito.forEach((objeto) => {
+//   const producto = crearItemCarrito(objeto);
+//   carrito_productos.appendChild(producto);
+// });
+// updateCartCount();
 
 
 
 //CODIGO PARA EL FUNCIONAMIENTO DEL CARRITO
 
-abrir_carrito.addEventListener("click",
-  () => {
-    carrito.classList.add("show");
-  });
+// abrir_carrito.addEventListener("click",
+//   () => {
+//     carrito.classList.add("show");
+//   });
 
 
-cerrar_carrito.addEventListener("click",
-  () => {
-    carrito.classList.remove("show");
-  });
+// cerrar_carrito.addEventListener("click",
+//   () => {
+//     carrito.classList.remove("show");
+//   });
 
-//esto se encargara de cerrar el carrito si se da click fuera
-carrito.addEventListener("click", (e) => {
-  if (e.target === carrito) {
-    carrito.classList.remove("show");
-  }
-});
+// //esto se encargara de cerrar el carrito si se da click fuera
+// carrito.addEventListener("click", (e) => {
+//   if (e.target === carrito) {
+//     carrito.classList.remove("show");
+//   }
+// });
 
 function updateCartCount() {
   cartItemCount.textContent = lista_carrito.length;
 }
 
-btnVaciarCarro.addEventListener("click", () => {
-  showModal({
-    title: "Vaciar Carrito",
-    content: "¿Está seguro de que desea vaciar su carrito de compras?",
-    buttons: [
-      { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
-      {
-        text: "Aceptar",
-        className: "btn-primary",
-        onClick: () => {
-          lista_carrito = [];
-          localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-          carrito_productos.innerHTML = "";
-          updateCartCount();
-          mostrarMensaje("Carrito vaciado", "success");
-        }
-      }
-    ]
-  });
-});
+// btnVaciarCarro.addEventListener("click", () => {
+//   showModal({
+//     title: "Vaciar Carrito",
+//     content: "¿Está seguro de que desea vaciar su carrito de compras?",
+//     buttons: [
+//       { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
+//       {
+//         text: "Aceptar",
+//         className: "btn-primary",
+//         onClick: () => {
+//           lista_carrito = [];
+//           localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+//           carrito_productos.innerHTML = "";
+//           updateCartCount();
+//           mostrarMensaje("Carrito vaciado", "success");
+//         }
+//       }
+//     ]
+//   });
+// });
 
-btnTramitarPedido.addEventListener("click", () => {
-  showModal({
-    title: "Tramitar Pedido",
-    content: "¿Está seguro de que desea tramitar el pedido?",
-    buttons: [
-      { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
-      {
-        text: "Aceptar",
-        className: "btn-primary",
-        onClick: () => {
-          console.log("pedido tramitado");
-          mostrarMensaje("Pedido tramitado", "success");
-        }
-      }
-    ]
-  });
-});
+// btnTramitarPedido.addEventListener("click", () => {
+//   showModal({
+//     title: "Tramitar Pedido",
+//     content: "¿Está seguro de que desea tramitar el pedido?",
+//     buttons: [
+//       { text: "Cancelar", className: "btn-secondary", onClick: () => {} },
+//       {
+//         text: "Aceptar",
+//         className: "btn-primary",
+//         onClick: () => {
+//           console.log("pedido tramitado");
+//           mostrarMensaje("Pedido tramitado", "success");
+//         }
+//       }
+//     ]
+//   });
+// });
 
 
 
@@ -420,4 +436,3 @@ function mostrarProductoEnModal(producto) {
     ]
   });
 }
-
