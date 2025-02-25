@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="../assets/css/carrito.css">
 
     <link rel="stylesheet" href="../assets/css/otros.css">
-    <!-- <script defer type="module" src="../assets/js/productos.js"></script> -->
-    <script defer type="module" src="../assets/js/productosAdmin.js"></script>
+    <script defer type="module" src="../assets/js/productos.js"></script>
+    <!-- <script defer type="module" src="../assets/js/productosAdmin.js"></script> -->
     <script defer type="module" src="../assets/js/productosValidaciones.js"></script>
     <title>Productos</title>
    
@@ -63,7 +63,7 @@
         </div>
 
         <!-- products -->
-        <!-- <section class="py-4 seccion_productos">
+        <section class="py-4 seccion_productos">
             <div class="cart-overlay">
                 <aside class="cart">
                     <button class="cart-close">
@@ -99,11 +99,11 @@
                 <div class="products-container"></div>
             </div>
 
-        </section> -->
+        </section>
         
 
         <!-- products admin -->
-        <section class="py-4 seccion_productos-admin">
+        <!-- <section class="py-4 seccion_productos-admin">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                     <h2 class="mb-0 text-primary fw-bold">
@@ -129,7 +129,6 @@
                             </tr>
                         </thead>
                         <tbody class="tabla-cuerpo">
-                            <!-- Filas -->
                                 <td class="text-center fw-semibold text-muted">#15</td>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -173,7 +172,7 @@
                     </table>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <div class="paginacion-contenedor d-flex justify-content-center align-items-center gap-3 p-3 bg-light rounded shadow-sm">
             <button id="prevPage" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-medium" >

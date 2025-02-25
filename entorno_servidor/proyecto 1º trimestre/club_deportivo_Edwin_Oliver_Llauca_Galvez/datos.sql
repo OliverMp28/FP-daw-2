@@ -214,6 +214,21 @@ INSERT INTO `productos` (`nombre`, `descripcion`, `precio`, `stock`, `categoria`
 
 
 -- --------------------------------------------------------
+-- Estructura de tabla pedidos
+-- --
+CREATE TABLE `pedidos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `socio_id` INT(11) NOT NULL,
+  `producto_id` INT(11) NOT NULL,
+  `cantidad` INT(11) NOT NULL,
+  `fecha` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`socio_id`) REFERENCES `socio`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`producto_id`) REFERENCES `productos`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
 
 --
 -- Índices para tablas volcadas

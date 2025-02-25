@@ -207,11 +207,6 @@ function mostrarMensaje(texto, clase) {
 }
 
 
-function updateCartCount() {
-  cartItemCount.textContent = lista_carrito.length;
-}
-
-
 
 //================== MODAL ================================
 //esta funcion es para mostrar un modal, es adaptable al contenido, titulo y botones que se le pase
