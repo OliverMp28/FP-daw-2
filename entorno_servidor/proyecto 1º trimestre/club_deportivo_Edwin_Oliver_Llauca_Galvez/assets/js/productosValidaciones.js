@@ -1,9 +1,8 @@
 "use strict";
 
-// Función que inicializa las validaciones para el formulario de nuevo producto
 export function initValidacionesProducto() {
   const formProducto = document.getElementById("nuevoProductoForm");
-  if (!formProducto) return; // Si el formulario no existe, salir
+  if (!formProducto) return; 
   console.log("Iniciando validaciones de productos");
 
   const nombreProducto = formProducto.querySelector("#nuevoNombre");
@@ -12,14 +11,14 @@ export function initValidacionesProducto() {
   const categoriaProducto = formProducto.querySelector("#nuevoCategoria");
   const imagenProducto = formProducto.querySelector("#nuevoImagen");
 
-  // Asignar validaciones en tiempo real
+  //Asignar validaciones en tiempo real
   nombreProducto.addEventListener("input", validarNombreProducto);
   precioProducto.addEventListener("input", validarPrecioProducto);
   stockProducto.addEventListener("input", validarStockProducto);
   categoriaProducto.addEventListener("input", validarCategoriaProducto);
   imagenProducto.addEventListener("change", validarImagenProducto);
 
-  // Validación al enviar el formulario
+  //Validación al enviar el formulario
   formProducto.addEventListener("submit", (evento) => {
     let validaciones = [
       validarNombreProducto,
@@ -42,7 +41,7 @@ const validarNombreProducto = () => {
   const nombreProducto = document.getElementById("nuevoNombre");
   const valor = nombreProducto.value.trim();
   const span_error = nombreProducto.nextElementSibling;
-  const reglaRegular = /^[a-zA-Z0-9\s]+$/; // Letras, números y espacios
+  const reglaRegular = /^[a-zA-Z0-9\s]+$/;
 
   if (!reglaRegular.test(valor)) {
     span_error.style.display = "inline";
@@ -112,11 +111,11 @@ const validarImagenProducto = () => {
   const imagenProducto = document.getElementById("nuevoImagen");
   const span_error = imagenProducto.nextElementSibling;
   const tiposPermitidos = ["image/jpeg", "image/png"];
-  const tamañoMaximo = 5000000; // 5 MB
+  const tamañoMaximo = 5000000; //5MB
 
   if (imagenProducto.files.length === 0) {
     span_error.style.display = "inline";
-    span_error.innerText = "Es obligatorio adjuntar una imagen.";
+    span_error.innerText = "Es obligatorio adjuntar una imagen";
     return false;
   }
 

@@ -26,7 +26,7 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 
 //uso esto solo para el put ya que esto no admite el envio de archivos y necesito poder pasar
 //datos de tipo archivo para que el post pueda admitir la subida de imagenes
-if($metodo=="PUT" || $metodo=="DELETE"){
+if($metodo=="PUT"){
     $entrada=json_decode(file_get_contents("php://input"),true);
 }
 
@@ -164,13 +164,13 @@ switch ($metodo) {
 
     case 'DELETE':
         // Validar que se envíe el campo id y que sea numérico
-        if (!isset($entrada['id']) || !is_numeric($entrada['id'])) {
+        if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             http_response_code(400);
             echo json_encode(["error" => "Se requiere un ID de producto valido"]);
             die();
         }
 
-        $resultado = eliminarProducto($conn, $entrada['id']);
+        $resultado = eliminarProducto($conn, $_GET['id']);
 
         http_response_code($resultado["http"]);
         echo json_encode($resultado["respuesta"]);

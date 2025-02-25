@@ -174,41 +174,72 @@ switch ($method) {
         break;
     
     case 'PUT':
-        // Para PUT se espera recibir JSON en el cuerpo de la solicitud
         $input = json_decode(file_get_contents('php://input'), true);
-        if (!isset($input['api_key']) || $input['api_key'] !== $apiKey) {
-            http_response_code(403);
-            echo json_encode(["error" => "API key inválida"]);
-            exit;
-        }
         
-        $endpoint = "productos"; // O "productos/{id}" según el caso
-        $headers = ["Authorization: Bearer " . $apiKey];
+        $url = $apiBaseUrl;
         
-        // $apiResult = callApi($endpoint, 'PUT', $headers, $input);
+        // Preparar los encabezados, incluyendo el Content-Type y la API key en X-API-KEY
+        $headers = [
+            "Content-Type: application/json",
+            "X-API-KEY: " . $apiKey
+        ];
         
-        http_response_code($apiResult['code']);
-        echo $apiResult['response'];
+        // Inicializar cURL para realizar la petición PUT a la API
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        //Enviando contenido en formato JSON, codificando los datos recibidos
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($input));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        curl_close($ch);
+        
+        http_response_code($httpCode);
+        echo $response;
         break;
+        
     
     case 'DELETE':
-        // Para DELETE se espera JSON en el cuerpo
         $input = json_decode(file_get_contents('php://input'), true);
-        if (!isset($input['api_key']) || $input['api_key'] !== $apiKey) {
-            http_response_code(403);
-            echo json_encode(["error" => "API key inválida"]);
+        
+        // Validar que se haya enviado el id del producto
+        if (!isset($input['id'])) {
+            http_response_code(400);
+            echo json_encode(["error" => "No se proporcionó el ID del producto"]);
             exit;
         }
         
-        // Definir el endpoint adecuado. Por ejemplo, si se requiere eliminar un producto por id, podrías usar "productos/{id}"
-        $endpoint = "productos";
-        $headers = ["Authorization: Bearer " . $apiKey];
+        $id = (int) $input['id'];
         
-        // $apiResult = callApi($endpoint, 'DELETE', $headers, $input);
+        // Construir la URL para la petición a la API (por GET)
+        $url = $apiBaseUrl . "?id=" . $id;
         
-        http_response_code($apiResult['code']);
-        echo $apiResult['response'];
+        // Preparar los encabezados. Se incluye el header X-API-KEY como requiere la API.
+        $headers = [
+            "Content-Type: application/json",
+            "X-API-KEY: " . $apiKey
+        ];
+        
+        // Inicializar cURL para realizar la petición DELETE a la API
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        
+        //Ejecutamos
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        http_response_code($httpCode);
+        echo $response;
         break;
+        
     
     default:
         http_response_code(405);

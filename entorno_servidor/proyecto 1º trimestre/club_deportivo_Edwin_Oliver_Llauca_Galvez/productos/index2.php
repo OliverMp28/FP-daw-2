@@ -97,7 +97,6 @@
                 </div>
 
                 <div class="products-container"></div>
-                <div class="alerta"></div>
             </div>
 
         </section> -->
@@ -174,7 +173,6 @@
                     </table>
                 </div>
             </div>
-            <div class="alerta"></div>
         </section>
 
         <div class="paginacion-contenedor d-flex justify-content-center align-items-center gap-3 p-3 bg-light rounded shadow-sm">
@@ -186,6 +184,9 @@
                 Siguiente<i class="bi bi-chevron-right ms-2"></i>
             </button>
         </div>
+
+        <!-- mensages de alerta -->
+        <div class="alerta"></div>
 
         <!-- modal producto -->
         <!-- <div class="modal-producto">

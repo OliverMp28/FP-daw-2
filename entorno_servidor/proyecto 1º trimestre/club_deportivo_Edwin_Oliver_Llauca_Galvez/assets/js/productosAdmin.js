@@ -203,7 +203,7 @@ function mostrarMensaje(texto, clase) {
     alerta.innerText = "";
     alerta.classList.remove(clase);
     alerta.classList.remove("show");
-  }, 4000);
+  }, 5000);
 }
 
 
@@ -236,9 +236,22 @@ function showModal({ title, content, buttons = [] }) {
     const button = document.createElement("button");
     button.textContent = text;
     button.className = `btn ${className}`;
+
     button.addEventListener("click", () => {
-      onClick();
-      bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+      console.log("Botón presionado:", text);
+      const modalElement = document.getElementById("generalModal");
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+      //ocultamos el modal y esperamos a que se cierre completamente
+      modalInstance.hide();
+
+  
+      modalElement.addEventListener("hidden.bs.modal", function handler() {
+        //quito el listener para evitar mltiples ejecuciones
+        modalElement.removeEventListener("hidden.bs.modal", handler);
+        // Ejecutamos la acción (que puede abrir otro modal)
+        onClick();
+      }, { once: true });
     });
     modalFooter.appendChild(button);
   });
@@ -248,9 +261,9 @@ function showModal({ title, content, buttons = [] }) {
   const modalInstance = new bootstrap.Modal(modalElement);
   modalInstance.show();
 }
-document.getElementById("generalModal").addEventListener('hidden.bs.modal', function () {
-  document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-});
+// document.getElementById("generalModal").addEventListener('hidden.bs.modal', function () {
+//   document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+// });
 
 
 function crearProductoModal() {
@@ -323,10 +336,6 @@ function crearProductoModal() {
     }
   });
 
-  //boton para cancelar y cerrar el modal
-  form.querySelector("#cancelarNuevoProducto").addEventListener("click", function() {
-    bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
-  });
 
   showModal({
     title: "Crear Nuevo Producto",
@@ -334,38 +343,125 @@ function crearProductoModal() {
     buttons: [] //No se agregan botones extra en el footer, ya que el formulario incluye sus propios botones.
   });
 
-  setTimeout(() => {
+  //con esto me aseguro de que el modal esté abierto y cargado para llamar a estas funciones
+  const modalElement = document.getElementById("generalModal");
+  modalElement.addEventListener("shown.bs.modal", () => {
+      //evento del boton para cancelar y cerrar el modal
+    form.querySelector("#cancelarNuevoProducto").addEventListener("click", function() {
+      bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+    });
+
     initValidacionesProducto();
     initEnvioProducto();
-  }, 100);
+  }, { once: true });
+
 }
 
+// function editarProductoModal(producto) {
+//   const content = document.createElement("div");
+//   content.innerHTML = `
+//     <div class="mb-3">
+//       <label for="editNombre" class="form-label">Nombre</label>
+//       <input type="text" class="form-control" id="editNombre" value="${producto.nombre}">
+//     </div>
+//     <div class="mb-3">
+//       <label for="editDescripcion" class="form-label">Descripción</label>
+//       <textarea class="form-control" id="editDescripcion">${producto.descripcion ? producto.descripcion : ''}</textarea>
+//     </div>
+//     <div class="mb-3">
+//       <label for="editPrecio" class="form-label">Precio</label>
+//       <input type="number" class="form-control" id="editPrecio" value="${producto.precio}">
+//     </div>
+//     <div class="mb-3">
+//       <label for="editStock" class="form-label">Stock</label>
+//       <input type="number" class="form-control" id="editStock" value="${producto.stock}">
+//     </div>
+//     <div class="mb-3">
+//       <label for="editCategoria" class="form-label">Categoría</label>
+//       <select class="form-select" id="editCategoria">
+//         <option value="Ropa" ${producto.categoria === 'Ropa' ? 'selected' : ''}>Ropa</option>
+//         <option value="Suplementos" ${producto.categoria === 'Suplementos' ? 'selected' : ''}>Suplementos</option>
+//         <option value="Accesorios" ${producto.categoria === 'Accesorios' ? 'selected' : ''}>Accesorios</option>
+//       </select>
+//     </div>
+//     <div class="mb-3">
+//       <label class="form-label">Imagen</label>
+//       <div>
+//         <img src="${producto.imagen}" class="img-fluid rounded-2" style="width: 100px; height: 100px; object-fit: cover;">
+//       </div>
+//       <small class="text-muted">La imagen no es editable</small>
+//     </div>
+//   `;
+
+//   showModal({
+//     title: "Editar Producto",
+//     content: content,
+//     buttons: [
+//       { 
+//         text: "Cancelar", 
+//         className: "btn-secondary", 
+//         onClick: () => { 
+//           console.log("Edición cancelada"); 
+//         } 
+//       },
+//       { 
+//         text: "Guardar Cambios", 
+//         className: "btn-primary", 
+//         onClick: () => {
+//           const updatedProducto = {
+//             id: producto.id,
+//             nombre: content.querySelector("#editNombre").value,
+//             descripcion: content.querySelector("#editDescripcion").value,
+//             precio: content.querySelector("#editPrecio").value,
+//             stock: content.querySelector("#editStock").value,
+//             categoria: content.querySelector("#editCategoria").value,
+//             imagen: producto.imagen,
+//             fecha_creacion: producto.fecha_creacion
+//           };
+//           console.log("Producto actualizado:", updatedProducto);
+//         } 
+//       }
+//     ]
+//   });
+// }
+
 function editarProductoModal(producto) {
-  const content = document.createElement("div");
-  content.innerHTML = `
+  // Crear el formulario de edición
+  const form = document.createElement("form");
+  form.id = "editarProductoForm";
+  form.className = "shadow p-4 rounded bg-white mx-auto";
+  form.style.maxWidth = "600px";
+
+  form.innerHTML = `
+    <h2 class="text-center mb-4">Editar Producto</h2>
     <div class="mb-3">
-      <label for="editNombre" class="form-label">Nombre</label>
-      <input type="text" class="form-control" id="editNombre" value="${producto.nombre}">
+      <label for="editNombre" class="form-label">Nombre:</label>
+      <input type="text" class="form-control" id="editNombre" name="nombre" value="${producto.nombre}" required>
+      <span class="error"></span>
     </div>
     <div class="mb-3">
-      <label for="editDescripcion" class="form-label">Descripción</label>
-      <textarea class="form-control" id="editDescripcion">${producto.descripcion ? producto.descripcion : ''}</textarea>
+      <label for="editDescripcion" class="form-label">Descripción:</label>
+      <textarea class="form-control" id="editDescripcion" name="descripcion" rows="3">${producto.descripcion ? producto.descripcion : ''}</textarea>
+      <span class="error"></span>
     </div>
     <div class="mb-3">
-      <label for="editPrecio" class="form-label">Precio</label>
-      <input type="number" class="form-control" id="editPrecio" value="${producto.precio}">
+      <label for="editPrecio" class="form-label">Precio (€):</label>
+      <input type="number" class="form-control" id="editPrecio" name="precio" value="${producto.precio}" min="0" step="0.01" required>
+      <span class="error"></span>
     </div>
     <div class="mb-3">
-      <label for="editStock" class="form-label">Stock</label>
-      <input type="number" class="form-control" id="editStock" value="${producto.stock}">
+      <label for="editStock" class="form-label">Stock:</label>
+      <input type="number" class="form-control" id="editStock" name="stock" value="${producto.stock}" min="0" required>
+      <span class="error"></span>
     </div>
     <div class="mb-3">
-      <label for="editCategoria" class="form-label">Categoría</label>
-      <select class="form-select" id="editCategoria">
+      <label for="editCategoria" class="form-label">Categoría:</label>
+      <select class="form-select" id="editCategoria" name="categoria" required>
         <option value="Ropa" ${producto.categoria === 'Ropa' ? 'selected' : ''}>Ropa</option>
         <option value="Suplementos" ${producto.categoria === 'Suplementos' ? 'selected' : ''}>Suplementos</option>
         <option value="Accesorios" ${producto.categoria === 'Accesorios' ? 'selected' : ''}>Accesorios</option>
       </select>
+      <span class="error"></span>
     </div>
     <div class="mb-3">
       <label class="form-label">Imagen</label>
@@ -374,36 +470,31 @@ function editarProductoModal(producto) {
       </div>
       <small class="text-muted">La imagen no es editable</small>
     </div>
+    <div class="d-flex justify-content-between">
+      <button type="button" id="cancelarEditarProducto" class="btn btn-secondary">Cancelar</button>
+      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
   `;
 
+  // Mostrar el modal reutilizable con el formulario de edición
   showModal({
     title: "Editar Producto",
-    content: content,
-    buttons: [
-      { 
-        text: "Cancelar", 
-        className: "btn-secondary", 
-        onClick: () => { console.log("Edición cancelada"); } 
-      },
-      { 
-        text: "Guardar Cambios", 
-        className: "btn-primary", 
-        onClick: () => {
-          const updatedProducto = {
-            id: producto.id,
-            nombre: content.querySelector("#editNombre").value,
-            descripcion: content.querySelector("#editDescripcion").value,
-            precio: content.querySelector("#editPrecio").value,
-            stock: content.querySelector("#editStock").value,
-            categoria: content.querySelector("#editCategoria").value,
-            imagen: producto.imagen,
-            fecha_creacion: producto.fecha_creacion
-          };
-          console.log("Producto actualizado:", updatedProducto);
-        } 
-      }
-    ]
+    content: form,
+    buttons: [] // No agregamos botones extra, el formulario ya los incluye.
   });
+
+  const modalElement = document.getElementById("generalModal");
+  modalElement.addEventListener("shown.bs.modal", () => {
+    // Evento para el botn "Cancelar"
+    form.querySelector("#cancelarEditarProducto").addEventListener("click", () => {
+      bootstrap.Modal.getInstance(modalElement).hide();
+    });
+
+    form.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      await enviarFormularioEditarProducto(form, producto.id);
+    });
+  }, { once: true });
 }
 
 function eliminarProductoModal(producto) {
@@ -417,12 +508,16 @@ function eliminarProductoModal(producto) {
       { 
         text: "Cancelar", 
         className: "btn-secondary", 
-        onClick: () => { console.log("Eliminación cancelada"); } 
+        onClick: () => { 
+          console.log("Eliminación cancelada"); 
+        } 
       },
       { 
         text: "Eliminar", 
         className: "btn-danger", 
-        onClick: () => { console.log("Producto eliminado:", producto.id); } 
+        onClick: () => { 
+          enviarFormularioEliminarProducto(producto.id);
+        }
       }
     ]
   });
@@ -481,6 +576,7 @@ function initEnvioProducto() {
   });
 }
 
+
 async function enviarFormularioProducto(formProducto) {
   const formData = new FormData(formProducto);
 
@@ -495,10 +591,11 @@ async function enviarFormularioProducto(formProducto) {
     if (respuesta.ok && resultado.id) {
       // Limpia el formulario
       formProducto.reset();
+
+      //aqui ejecuto un click al boton del formulario ya que al crear un producto se debe actualizar el listado(si se esta viendo los productos filtrados tambien)
       let botonSubmit = document.querySelector('#filtroForm button[type="submit"]');
       botonSubmit.click();
 
-      // Cierra el modal si el producto se creó correctamente
       bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
 
       mostrarMensaje("Producto creado correctamente", "success");
@@ -509,5 +606,76 @@ async function enviarFormularioProducto(formProducto) {
   } catch (error) {
     mostrarMensaje("Error en la conexión con el servidor", "danger");
     console.error("Error al enviar el formulario:", error);
+  }
+}
+
+
+async function enviarFormularioEditarProducto(form, productoId) {
+  const data = {
+    id: productoId,
+    nombre: form.querySelector("#editNombre").value,
+    descripcion: form.querySelector("#editDescripcion").value,
+    precio: parseFloat(form.querySelector("#editPrecio").value),
+    stock: parseInt(form.querySelector("#editStock").value, 10),
+    categoria: form.querySelector("#editCategoria").value
+  };
+  console.log("Datos a enviar:", data);
+
+  try {
+    const respuesta = await fetch("procesar.php", {
+      method: "PUT", // Utilizamos PUT para editar
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const resultado = await respuesta.json();
+    console.log("Respuesta del servidor:", resultado);
+
+    if (respuesta.ok && resultado.datos && resultado.datos.id) {
+      // Actualizamos el listado
+      const botonSubmit = document.querySelector('#filtroForm button[type="submit"]');
+      if (botonSubmit) botonSubmit.click();
+
+      //Cerramos el modal y mostramos el mensaje de éxito
+      bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+      mostrarMensaje("Producto actualizado correctamente", "success");
+    } else {
+      mostrarMensaje(resultado.error ?? "Hubo un error al actualizar el producto", "danger");
+    }
+  } catch (error) {
+    mostrarMensaje("Error en la conexión con el servidor", "danger");
+    console.error("Error al enviar el formulario de edición:", error);
+  }
+}
+
+
+async function enviarFormularioEliminarProducto(productoId) {
+  try {
+    const respuesta = await fetch("procesar.php", {
+      method: "DELETE", 
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id: productoId })
+    });
+
+    const resultado = await respuesta.json();
+    console.log("Respuesta del servidor:", resultado);
+
+    if (respuesta.ok && resultado.mensaje) {
+      const botonSubmit = document.querySelector('#filtroForm button[type="submit"]');
+      if (botonSubmit) botonSubmit.click();
+
+      // Cerramos el modal y mostramos el mensaje de éxito
+      bootstrap.Modal.getInstance(document.getElementById("generalModal")).hide();
+      mostrarMensaje(resultado.mensaje, "success");
+    } else {
+      mostrarMensaje(resultado.error ?? "Hubo un error al eliminar el producto", "danger");
+    }
+  } catch (error) {
+    mostrarMensaje("Error en la conexión con el servidor", "danger");
+    console.error("Error al eliminar el producto:", error);
   }
 }
