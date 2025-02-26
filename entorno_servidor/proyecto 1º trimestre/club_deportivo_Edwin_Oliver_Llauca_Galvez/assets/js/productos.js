@@ -208,51 +208,61 @@ function crearProducto(producto) {
   ver_mas.addEventListener("click", () => mostrarProductoEnModal(producto));
 
   let boton_añadir = nuevo_producto.querySelector(".product-cart-btn");
-  boton_añadir.addEventListener("click", () => {
-    if (producto.stock > 0) {
-      lista_carrito.push(producto);
-      const nuevo_elemento = crearItemCarrito(producto);
-      carrito_productos.appendChild(nuevo_elemento);
-      localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-      updateCartCount(); // Actualiza el contador
-      mostrarMensaje("Producto añadido al carrito", "success");
-    } else {
-      mostrarMensaje("Producto agotado", "danger");
-    }
-  });
+  boton_añadir.addEventListener("click", () => agregarProductoAlCarrito(producto));
 
   return nuevo_producto;
 }
 
+//funci para agregar un producto al carrito con control de stock
+function agregarProductoAlCarrito(producto) {
+  //se cuenta cuantas veces el producto esta en el carrito
+  let cantidadEnCarrito = lista_carrito.filter(item => item.id === producto.id).length;
+
+  if (cantidadEnCarrito >= producto.stock) {
+    mostrarMensaje("No puedes agregar más de este producto, stock agotado.", "danger");
+    return;
+  }
+
+  // Agregar producto al carrito
+  lista_carrito.push(producto);
+  carrito_productos.appendChild(crearItemCarrito(producto));
+  localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+  actualizarCartCount();
+  mostrarMensaje("Producto añadido al carrito", "success");
+}
+
+
 //FUNCION DEL DOM Y EVENTOS PARA EL CARRITO
 
 function crearItemCarrito(datos_item) {
-  const nuevo_item = document.createElement('article');
+  const nuevo_item = document.createElement("article");
+  nuevo_item.classList.add("cart-item");
+  nuevo_item.setAttribute("data-id", datos_item.id);
 
-  nuevo_item.classList.add('cart-item');
-  nuevo_item.setAttribute('data-id', datos_item.id);
   nuevo_item.innerHTML = `
     <img src="${datos_item.imagen}" class="cart-item-img" alt="${datos_item.nombre}" />
     <div>
       <h4 class="cart-item-name">${datos_item.nombre}</h4>
       <p class="cart-item-price">${datos_item.precio} €</p>
       <button class="cart-item-remove-btn" data-id="${datos_item.id}">
-        Eliminar <i class="bi bi-x-lg"></i> <!-- Ícono corregido -->
+        Eliminar <i class="bi bi-x-lg"></i>
       </button>
-    </div>`;
+    </div>
+  `;
 
-  const eliminar=nuevo_item.querySelector(".cart-item-remove-btn");
-  eliminar.addEventListener("click", 
-  () => {
-    const posicion = lista_carrito.findIndex(item => item.id == datos_item.id);
-    lista_carrito.splice(posicion, 1);
-    localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-    nuevo_item.remove();
-    updateCartCount(); // Actualiza el contador tras eliminar
-  });
-  
-  
+  const btnEliminar = nuevo_item.querySelector(".cart-item-remove-btn");
+  btnEliminar.addEventListener("click", () => eliminarProductoDelCarrito(datos_item, nuevo_item));
+
   return nuevo_item;
+}
+function eliminarProductoDelCarrito(producto, elementoCarrito) {
+  const index = lista_carrito.findIndex(item => item.id === producto.id);
+  if (index !== -1) {
+    lista_carrito.splice(index, 1);
+    localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+    elementoCarrito.remove();
+    actualizarCartCount();
+  }
 }
 
 
@@ -279,7 +289,7 @@ lista_carrito.forEach((objeto) => {
   const producto = crearItemCarrito(objeto);
   carrito_productos.appendChild(producto);
 });
-updateCartCount();
+actualizarCartCount();
 
 
 
@@ -303,7 +313,7 @@ carrito.addEventListener("click", (e) => {
   }
 });
 
-function updateCartCount() {
+function actualizarCartCount() {
   cartItemCount.textContent = lista_carrito.length;
 }
 
@@ -320,7 +330,7 @@ btnVaciarCarro.addEventListener("click", () => {
           lista_carrito = [];
           localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
           carrito_productos.innerHTML = "";
-          updateCartCount();
+          actualizarCartCount();
           mostrarMensaje("Carrito vaciado", "success");
         }
       }
@@ -337,14 +347,95 @@ btnTramitarPedido.addEventListener("click", () => {
       {
         text: "Aceptar",
         className: "btn-primary",
-        onClick: () => {
-          console.log("pedido tramitado");
-          mostrarMensaje("Pedido tramitado", "success");
+        onClick: async () => {
+          // Agrupamos los productos del carrito para obtener la cantidad de cada uno
+          const productosAgrupadosDelCarrito = agruparProductosDelCarrito();
+          let errorAlActualizar = false;
+
+          // Iteramos por cada producto único en el carrito
+          for (const idProducto in productosAgrupadosDelCarrito) {
+            const { producto, cantidadEnCarrito } = productosAgrupadosDelCarrito[idProducto];
+            // Calculamos el nuevo stock: stock actual menos la cantidad pedida
+            const nuevoStock = producto.stock - cantidadEnCarrito;
+            try {
+              const resultadoActualizacion = await actualizarStockProducto(producto.id, nuevoStock);
+
+              if (!resultadoActualizacion.datos || resultadoActualizacion.error) {
+                mostrarMensaje(
+                  resultadoActualizacion.error || `Error al actualizar el producto con ID ${producto.id}`,
+                  "danger"
+                );
+                errorAlActualizar = true;
+              } else {
+                console.log("Producto actualizado:", resultadoActualizacion);
+              }
+            } catch (error) {
+              mostrarMensaje("Error en la conexión con el servidor", "danger");
+              console.error("Error al actualizar producto:", error);
+              errorAlActualizar = true;
+            }
+          }
+
+          // Si todas las actualizaciones fueron exitosas, vaciamos el carrito y mostramos el mensaje
+          if (!errorAlActualizar) {
+            console.log("Pedido tramitado");
+            mostrarMensaje("Pedido tramitado", "success");
+            lista_carrito = [];
+            localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+
+            let botonSubmit = document.querySelector('#filtroForm button[type="submit"]');
+            botonSubmit.click();
+
+            carrito_productos.innerHTML = "";
+            actualizarCartCount();
+          }
         }
       }
     ]
   });
 });
+
+// Función que envía la actualización de stock de un producto al backend
+async function actualizarStockProducto(productoId, nuevoStock) {
+  const datosAEnviar = {
+    id: productoId,
+    stock: nuevoStock
+  };
+
+  try {
+    const respuesta = await fetch("procesar.php", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(datosAEnviar)
+    });
+    return await respuesta.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Función que agrupa los productos del carrito para saber cuantas unidades se han pedido de cada producto
+ * 
+ */
+function agruparProductosDelCarrito() {
+  const productosAgrupados = {};
+
+  for (const producto of lista_carrito) {
+    if (!productosAgrupados[producto.id]) {
+      productosAgrupados[producto.id] = {
+        producto: producto,
+        cantidadEnCarrito: 0
+      };
+    }
+    productosAgrupados[producto.id].cantidadEnCarrito++;
+  }
+
+  return productosAgrupados;
+}
+
 
 
 
@@ -410,7 +501,7 @@ function mostrarProductoEnModal(producto) {
             const nuevo_elemento = crearItemCarrito(producto);
             carrito_productos.appendChild(nuevo_elemento);
             localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
-            updateCartCount();
+            actualizarCartCount();
             mostrarMensaje("Producto añadido al carrito", "success");
           } else {
             mostrarMensaje("Producto agotado", "danger");
