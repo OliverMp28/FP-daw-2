@@ -16,7 +16,7 @@
         // Para el socio/cliente: se permiten solo ciertas secciones
         if ($SOCIO) {
             // Secciones permitidas para socios (además de las públicas):
-            $secciones_permitidas_socio = ['Inicio', 'Datos personales', 'Citas', 'Testimonios', 'Noticias', 'Servicios'];
+            $secciones_permitidas_socio = ['Inicio', 'Datos personales', 'Citas', 'Testimonios', 'Noticias', 'Servicios', 'Fitness', 'Productos'];
             if ($nivel == 1) {
                 if (!isset($titulo) || !in_array($titulo, $secciones_permitidas_socio)) {
                     echo "<div class='alert alert-danger'>Acceso denegado: No tienes permisos para ver esta sección.</div>";

@@ -234,6 +234,7 @@
                             foreach ($citasPorMes as $cita) {
                                 $citasPorFecha[$cita['dia']] = $cita['total'];
                             }
+                            // die(var_export($citasPorFecha));
 
                             //este while se ejecuta siempre que el dia que se analice sea menor al total de dias de ese mes
                             while ($dia <= $totalDias) {
@@ -243,9 +244,15 @@
                                         // Construir la fecha en formato YYYY-MM-DD
                                         //este campo $diaFormateado simplemente es para tener los dias como: "01" en lugar de "1"
                                         $diaFormateado = $dia < 10 ? "0$dia" : $dia;
-                                        $fechaActual = "$anio-$mes-$diaFormateado";
+                                        $mesFormateado = $mes < 10 ? "0$mes" : $mes;
+                                        $fechaActual = "$anio-$mesFormateado-$diaFormateado";
 
-                                        $cantidadCitas = isset($citasPorFecha[$fechaActual]) ? $citasPorFecha[$fechaActual] : 0;
+                                        // array ( '2025-02-24' => 1, '2025-02-26' => 1, '2025-02-28' => 1, )
+                                        // die (" $fechaActual ");
+
+                                        //  die(var_export(isset($citasPorFecha[$fechaActual]) ? $citasPorFecha[$fechaActual] : 0));
+
+                                        $cantidadCitas = !empty($citasPorFecha[$fechaActual]) ? $citasPorFecha[$fechaActual] : 0;
 
                                         // Clases y contenido dinamico
                                         $claseDia = $cantidadCitas > 0 ? 'bg-secondary text-white has-citas position-relative' : 'position-relative';

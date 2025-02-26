@@ -36,15 +36,30 @@
     * @param $conexion: la conexion a la base de datos
     */
     function getCitasPorMes($conexion, $mes, $anio) {
+        global $SOCIO , $ADMIN;
+
         $fechaInicio = "$anio-$mes-01";
         $fechaFin = date("Y-m-t", strtotime($fechaInicio)); // Último día del mes
-        
-        $sentencia = "SELECT DATE(fecha) AS dia, COUNT(*) AS total
+
+        if($ADMIN){
+            $sentencia = "SELECT DATE(fecha) AS dia, COUNT(*) AS total
                       FROM citas
                       WHERE fecha BETWEEN ? AND ?
                       GROUP BY DATE(fecha)";
+        }else{
+            $sentencia = "SELECT DATE(fecha) AS dia, COUNT(*) AS total
+                      FROM citas
+                      WHERE fecha BETWEEN ? AND ?
+                        AND socio = ?
+                      GROUP BY DATE(fecha)";
+        }
+
         $consulta = $conexion->prepare($sentencia);
-        $consulta->bind_param('ss', $fechaInicio, $fechaFin);
+        if($ADMIN){
+            $consulta->bind_param('ss', $fechaInicio, $fechaFin);
+        }else{
+            $consulta->bind_param('ssi', $fechaInicio, $fechaFin, $_SESSION['id']);
+        }
     
         if ($consulta->execute() === false) {
             die("Error en la ejecución de la consulta: " . $consulta->error);
@@ -78,14 +93,30 @@
     * @param $conexion: la conexion a la base de datos
     */
     function getCitasPorMesConDetalles($conexion, $fechaInicio, $fechaFin) {
-        $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+        global $SOCIO , $ADMIN;
+        if($ADMIN){
+            $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+                    FROM citas c
+                    JOIN socio s ON c.socio = s.id
+                    JOIN servicio serv ON c.servicio = serv.id
+                    WHERE c.fecha BETWEEN ? AND ?
+                    ORDER BY c.fecha, c.hora";
+        }else{
+            $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
                       FROM citas c
                       JOIN socio s ON c.socio = s.id
                       JOIN servicio serv ON c.servicio = serv.id
                       WHERE c.fecha BETWEEN ? AND ?
+                        AND c.socio = ?
                       ORDER BY c.fecha, c.hora";
+        }
+        
         $consulta = $conexion->prepare($sentencia);
-        $consulta->bind_param('ss', $fechaInicio, $fechaFin);
+        if($ADMIN){
+            $consulta->bind_param('ss', $fechaInicio, $fechaFin);
+        }else{
+            $consulta->bind_param('ssi', $fechaInicio, $fechaFin, $_SESSION['id']);
+        }
         
         if ($consulta->execute() === false) {
             die("Error en la ejecución de la consulta: " . $consulta->error);
@@ -114,13 +145,30 @@
     * @param $conexion: la conexion a la base de datos
     */
     function getCitasPorDiaConDetalles($conexion, $fecha) {
-        $sentencia = "SELECT c. id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+        global $SOCIO , $ADMIN;
+
+        if($ADMIN){
+            $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
                       FROM citas c
                       JOIN socio s ON c.socio = s.id
                       JOIN servicio serv ON c.servicio = serv.id
                       WHERE DATE(c.fecha) = ?";
+        }else{
+            $sentencia = "SELECT c.id, c.fecha, c.hora, s.nombre, s.telefono, serv.descripcion
+                      FROM citas c
+                      JOIN socio s ON c.socio = s.id
+                      JOIN servicio serv ON c.servicio = serv.id
+                      WHERE DATE(c.fecha) = ? AND c.socio = ?";
+        }
+
+
         $consulta = $conexion->prepare($sentencia);
-        $consulta->bind_param('s', $fecha);
+
+        if($ADMIN){
+            $consulta->bind_param('s', $fecha);
+        }else{
+            $consulta->bind_param('si', $fecha, $_SESSION['id']);
+        }
     
         if ($consulta->execute() === false) {
             die("Error en la ejecución de la consulta: " . $consulta->error);

@@ -27,7 +27,9 @@
 
     <main>
     <section class="container py-4 seccion_socios">
-        <a href="index.php" class="btn btn-primary mb-4">Volver a la pagina de socios</a>
+        <?php if ($ADMIN) { ?>
+            <a href="index.php" class="btn btn-primary mb-4">Volver a la pagina de socios</a>
+        <?php } ?>
 
 
 
@@ -75,11 +77,13 @@
                                 <label for="nombreSocio" class="form-label text-muted"><strong>Nombre:</strong></label>
                                 <input
                                     type="text"
-                                    class="form-control  border-0 bg-light rounded"
+                                    class="form-control  border-0 bg-secondary rounded"
                                     id="nombreSocio"
                                     name="nombreSocio"
                                     value="' . $socio['nombre'] . '"
                                     placeholder="Introduce el nombre del socio"
+                                    title="' . ($SOCIO? "No se puede editar el usuario" : "") . '"
+                                    ' . ($SOCIO? 'readonly' : "") . '
                                 />
                                 <span class="error"></span>
                             </div>
@@ -103,11 +107,13 @@
                                 <label for="usuarioSocio" class="form-label text-muted"><strong>Usuario:</strong></label>
                                 <input
                                     type="text"
-                                    class="form-control  border-0 bg-light rounded"
+                                    class="form-control  border-0 bg-secondary rounded "
                                     id="usuarioSocio"
                                     name="usuarioSocio"
                                     value="' . $socio['usuario'] . '"
                                     placeholder="Introduce el nombre de usuario"
+                                    title="' . ($SOCIO? "No se puede editar el usuario" : "") . '"
+                                    ' . ($SOCIO? 'readonly' : "") . '
                                 />
                                 <span class="error"></span>
                             </div>
