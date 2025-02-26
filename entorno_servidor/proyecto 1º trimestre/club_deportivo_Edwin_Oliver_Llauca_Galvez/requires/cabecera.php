@@ -1,42 +1,30 @@
 <?php
-    $pagina_actual = basename($_SERVER['PHP_SELF']);
     $privilegios = true;
-
-    // $paginas_permitidas_anonimo = ["index.php", "testimonios.php", "servicios.php", "acceder.php"];
 
     // Si el usuario no ha iniciado sesion
     if (!isset($_SESSION['usuario'])) {
-        //Para el nivel 0 (pagina de inicio) permitimos el acceso
-        if ($nivel == 0) {
-            $privilegios = true;
-        } 
-        // En paginas de nivel 1, solo se permitirán las secciones públicas:
-        // (por ejemplo, "Testimonios", "Servicios" o la propia página de "Acceder")
-        else if ($nivel == 1) {
-            $allowed_sections = ['Testimonios', 'Servicios', 'Acceder', 'Inicio'];  
+        $secciones_permitidas = ['Testimonios', 'Servicios', 'Acceder', 'Inicio']; 
 
-            if (!isset($titulo) || !in_array($titulo, $allowed_sections)) {
-                echo "<div class='alert alert-danger'>Debes iniciar sesión para acceder a esta sección.</div>";
-                $privilegios = false;
-            }
+        // En paginas de nivel 1, solo se permitirán las secciones publicas:
+        // (por ejemplo, "Testimonios", "Servicios" o la propia página de "Acceder")
+        if (!in_array($titulo, $secciones_permitidas)) {
+            echo "<div class='alert alert-danger'>Debes iniciar sesión para acceder a esta sección.</div>";
+            $privilegios = false;
         }
     } 
     else {
-        // Para el administrador: acceso completo (excepto su propia info, que se maneja en la sección de perfil)
-        if ($_SESSION['tipo_usuario'] == 'admin') {
-            $privilegios = true;
-        } 
         // Para el socio/cliente: se permiten solo ciertas secciones
-        else {
+        if ($SOCIO) {
             // Secciones permitidas para socios (además de las públicas):
-            $allowed_sections_socio = ['Inicio', 'Datos personales', 'Citas', 'Testimonios', 'Noticias', 'Servicios'];
+            $secciones_permitidas_socio = ['Inicio', 'Datos personales', 'Citas', 'Testimonios', 'Noticias', 'Servicios'];
             if ($nivel == 1) {
-                if (!isset($titulo) || !in_array($titulo, $allowed_sections_socio)) {
+                if (!isset($titulo) || !in_array($titulo, $secciones_permitidas_socio)) {
                     echo "<div class='alert alert-danger'>Acceso denegado: No tienes permisos para ver esta sección.</div>";
                     $privilegios = false;
                 }
             }
-        }
+        } 
+
     }
 ?>
 

@@ -26,7 +26,9 @@
 
     <main>
     <section class="container py-4 seccion_testimonios">
-        <a href="agregar.php" class="btn btn-primary mb-4">Crear una nuevo testimonio</a>
+        <?php if ($ADMIN) { ?>
+            <a href="agregar.php" class="btn btn-primary mb-4">Crear una nuevo testimonio</a>
+        <?php } ?>
 
         <?php
             //Determinar el orden para los testimonios
@@ -57,38 +59,6 @@
                     echo '<p class="mb-1">' . $testimonio['contenido'] . '</p>';
                     echo '<p class="text-muted"><em>Publicado el: ' . $testimonio['fecha'] . '</em></p>';
                     echo '</div>';
-                }
-                ?>
-            </div>
-        </div>
-
-        <div class="contenedor_testimonios_acordeon my-4">
-            <h2 class="text-center mb-4">Testimonios (Acordeón)</h2>
-            <div class="accordion accordion-flush mx-auto" id="accordionTestimonios">
-                <?php
-                //aqui por defecto obtengo los testimonios en orden 1 Orden descendente (de mas reciente a mas antiguo).
-                $testimoniosAcordeon = getTestimoniosOrdenados($conexion, 1);
-
-                foreach ($testimoniosAcordeon as $index => $testimonio) {
-                    /*Aqui genero un ID unico para cada elemento y encabezado, con heading y collapse
-                    * pues en bootstrap es necesario que sean diferentes para que el funcionamiento del acordeon no falle
-                    */
-                    $collapseId = 'collapse' . ($index + 1);
-                    $headingId = 'heading' . ($index + 1);  
-                    ?>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="<?php echo $headingId; ?>">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo $collapseId; ?>" aria-expanded="false" aria-controls="<?php echo $collapseId; ?>">
-                                <?php echo $testimonio['autor'] . ' - Publicado el: ' . $testimonio['fecha']; ?>
-                            </button>
-                        </h2>
-                        <div id="<?php echo $collapseId; ?>" class="accordion-collapse collapse" aria-labelledby="<?php echo $headingId; ?>" data-bs-parent="#accordionTestimonios">
-                            <div class="accordion-body">
-                                <strong>Contenido:</strong> <?php echo $testimonio['contenido']; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
                 }
                 ?>
             </div>

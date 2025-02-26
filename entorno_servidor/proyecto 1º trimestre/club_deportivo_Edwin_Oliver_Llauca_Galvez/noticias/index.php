@@ -26,7 +26,9 @@
     <main>
         <section class="container py-4 seccion_noticias">
 
-            <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva noticia</a>
+            <?php if ($ADMIN) { ?>
+                <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva noticia</a>
+            <?php } ?>
 
             <?php
                 $xNoticiasPorPagina = 4;

@@ -26,7 +26,9 @@
 
     <main>
     <section class="container py-4 seccion_servicios">
-        <a href="agregar.php" class="btn btn-primary mb-4">Crear un nuevo Servicio</a>
+        <?php if ($ADMIN) { ?>
+            <a href="agregar.php" class="btn btn-primary mb-4">Crear un nuevo Servicio</a>
+        <?php } ?>
 
         <!-- <h1 class="text-center mb-4">Listado de Servicios</h1> -->
 
@@ -55,8 +57,6 @@
             <h2 class="text-center mb-4">Servicios (en Acordeon)</h2>
 
             <div class="accordion" id="serviciosAccordion">
-
-
                 <?php
                 $terminoBusqueda = isset($_GET['buscar']) ? $_GET['buscar'] : null;
      
@@ -91,10 +91,12 @@
                                     <p><strong>Duración:</strong> <?php echo $servicio['duracion']?> minutos</p>
                                     <p><strong>Precio:</strong> $<?php echo $servicio['precio']?></p>
                                 
-                                    <!-- Botón para ver más detalles del servicio -->
-                                    <div class="text-end mt-3">
-                                        <a href="editar.php?id=<?php echo $servicio['id']?>" class="btn btn-primary btn-sm">Ver más detalles</a>
-                                    </div>
+                                    <!-- Botón para que el ADMIN pueda ver más detalles del servicio o editar -->
+                                    <?php if ($ADMIN) { ?>
+                                        <div class="text-end mt-3">
+                                            <a href="editar.php?id=<?php echo $servicio['id']?>" class="btn btn-primary btn-sm">Ver más detalles/editar</a>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -104,27 +106,6 @@
                 }
 
             ?>
-            <!-- Servicio 1
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading1">
-                    <button
-                        class="accordion-button"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse1"
-                        aria-expanded="true"
-                        aria-controls="collapse1">
-                        Servicio: Entrenamiento Personalizado
-                    </button>
-                </h2>
-                <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#serviciosAccordion">
-                    <div class="accordion-body">
-                        <p><strong>Descripción:</strong> Entrenamiento diseñado para alcanzar tus objetivos físicos.</p>
-                        <p><strong>Duración:</strong> 60 minutos</p>
-                        <p><strong>Precio:</strong> $40</p>
-                    </div>
-                </div>
-            </div> -->
 
             </div>
         </div>

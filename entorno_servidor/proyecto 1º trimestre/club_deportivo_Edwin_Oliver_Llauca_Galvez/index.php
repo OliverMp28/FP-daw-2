@@ -24,6 +24,7 @@
 <body>
     <?php
         $nivel = 0;
+        $titulo = "Inicio";
         require_once "./requires/cabecera.php";
     ?>
 
@@ -31,7 +32,10 @@
         <section class="seccion_ultimas_noticias">
             <h2>Ultimas noticias</h2>
             
-            <a class="boton_estilizado" href="./noticias/index.php">Ver todas las noticias</a>
+            <?php if ($ADMIN || $SOCIO) { ?>
+                <a class="boton_estilizado" href="./noticias/index.php">Ver todas las noticias</a>
+            <?php } ?>
+
             <div class="contenedor_noticias">
                 <?php
                     $ultimasNoticias = obtenerUltimasNoticias($conexion);
@@ -121,46 +125,50 @@
                 </div>
             </div> -->
 
-            <div class="container contenedor_testimonios_carrusel mt-5">
-                <div id="testimoniosCarrusel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        <?php
-                        $listaTestimoniosAl = getTestimoniosAleatorios($conexion, 0);
+            <!-- Carrusel de testimonios NO LO ESTOY MOSTRANDO-->
+            <?php if (!true) { ?>
+                <div class="container contenedor_testimonios_carrusel mt-5">
+                    <div id="testimoniosCarrusel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <?php
+                            $listaTestimoniosAl = getTestimoniosAleatorios($conexion, 0);
 
-                        //este bucle es para los botones indicativos del carrusel, coloca "active" al primero
-                        foreach ($listaTestimoniosAl as $index => $testimonioAl) {
-                            $activeClass = ($index === 0) ? 'active' : ''; 
-                            echo '<button type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide-to="' . $index . '" class="' . $activeClass . '" aria-label="Testimonio ' . ($index + 1) . '"></button>';
-                        }
-                        ?>
+                            //este bucle es para los botones indicativos del carrusel, coloca "active" al primero
+                            foreach ($listaTestimoniosAl as $index => $testimonioAl) {
+                                $activeClass = ($index === 0) ? 'active' : ''; 
+                                echo '<button type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide-to="' . $index . '" class="' . $activeClass . '" aria-label="Testimonio ' . ($index + 1) . '"></button>';
+                            }
+                            ?>
+                        </div>
+
+                        <div class="carousel-inner">
+                            <?php
+                            foreach ($listaTestimoniosAl as $index => $testimonioAl) {
+                                $activeClass = ($index === 0) ? 'active' : ''; // La clase active solo para el primer item
+                                echo '<div class="carousel-item ' . $activeClass . '">';
+                                echo '<div class="testimonio">';
+                                echo '<i class="bi bi-chat-quote-fill"></i>';
+                                echo '<h3>' . $testimonioAl['autor'] . '</h3>'; // Evita inyección de código
+                                echo '<p>' . $testimonioAl['contenido'] . '</p>'; // Evita inyección de código
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                            ?>
+                        </div>
+
+                        <!-- Controles de navegación -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
                     </div>
-
-                    <div class="carousel-inner">
-                        <?php
-                        foreach ($listaTestimoniosAl as $index => $testimonioAl) {
-                            $activeClass = ($index === 0) ? 'active' : ''; // La clase active solo para el primer item
-                            echo '<div class="carousel-item ' . $activeClass . '">';
-                            echo '<div class="testimonio">';
-                            echo '<i class="bi bi-chat-quote-fill"></i>';
-                            echo '<h3>' . $testimonioAl['autor'] . '</h3>'; // Evita inyección de código
-                            echo '<p>' . $testimonioAl['contenido'] . '</p>'; // Evita inyección de código
-                            echo '</div>';
-                            echo '</div>';
-                        }
-                        ?>
-                    </div>
-
-                    <!-- Controles de navegación -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#testimoniosCarrusel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
                 </div>
-            </div>
+            <?php } ?>
+            
 
 
 

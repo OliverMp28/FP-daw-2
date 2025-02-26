@@ -68,6 +68,10 @@
 
             if(count($socios) > 0){
                 foreach ($socios as $socio) {
+                    //comprobamos si el socio es el administrador (id = 0)
+                    if ($socio['id'] == 0) {
+                        continue; //si es asi saltamos al siguiente para que no se muestre el admin
+                    }
                     echo '
                     <div class="col">
                         <div class="card h-100 shadow">
