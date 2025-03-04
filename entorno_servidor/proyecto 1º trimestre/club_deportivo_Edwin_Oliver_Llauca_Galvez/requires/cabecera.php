@@ -9,6 +9,7 @@
         // (por ejemplo, "Testimonios", "Servicios" o la propia página de "Acceder")
         if (!in_array($titulo, $secciones_permitidas)) {
             echo "<div class='alert alert-danger'>Debes iniciar sesión para acceder a esta sección.</div>";
+            header("Location: ../index.php");
             $privilegios = false;
         }
     } 
@@ -20,6 +21,7 @@
             if ($nivel == 1) {
                 if (!isset($titulo) || !in_array($titulo, $secciones_permitidas_socio)) {
                     echo "<div class='alert alert-danger'>Acceso denegado: No tienes permisos para ver esta sección.</div>";
+                    header("Location: ../index.php");
                     $privilegios = false;
                 }
             }

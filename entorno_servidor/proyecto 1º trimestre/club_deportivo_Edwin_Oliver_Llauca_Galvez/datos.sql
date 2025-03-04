@@ -150,7 +150,7 @@ INSERT INTO socio (id, nombre, edad, usuario, password, telefono, foto, tipo_usu
 (3, 'Luis Fernández', 26, 'lfernandez', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765434', 'assets/img/luis.jpg', 'socio'),
 (4, 'Maria Torres', 29, 'mtorres', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765433', 'assets/img/maria.jpg', 'socio'),
 (5, 'Juan Ruiz', 35, 'jruiz', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765432', 'assets/img/juan.jpg', 'socio'),
-(0, 'Administrador', 0, 'admin', '$2y$10$DANhZDxSpyvRgcE221Dvb.Ni7T4sXcMZhnbQU4ZTFgnGuY0961OHy', 'assets/img/1739127395_59d6f00f-0306-4c1d-89d2-a89535787e35.png', 'admin');
+(0, 'Administrador', 0, 'admin', '$2y$10$DANhZDxSpyvRgcE221Dvb.Ni7T4sXcMZhnbQU4ZTFgnGuY0961OHy', '', 'assets/img/1739127395_59d6f00f-0306-4c1d-89d2-a89535787e35.png', 'admin');
 
 
 -- --------------------------------------------------------
