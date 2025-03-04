@@ -1,21 +1,14 @@
 <?php
-    require_once "../config/config.php";
-    require_once "../config/funciones.php";
-
-    $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
-    if (!$conexion) { 
-        echo "Error en la conexión"; 
-        die();
-    } 
- 
-    // $consulta->close();
-    // $conexion->close();
+    require_once "../config/init.php";
 
 
     //aca llamo a los archivos para las funciones necesarias
     require_once "../funciones/funcionesAcceder.php";
 
-
+    if (isset($_SESSION['id'])) {
+        header("Location: ../index.php");
+        exit();
+    }
 
 
     /**
@@ -39,6 +32,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
+    <script defer type="module" src="../assets/js/utilidades.js"></script>
+    <script defer type="module" src="../assets/js/acceder.js"></script>
     <link rel="stylesheet" href="../assets/css/otros.css">
     <title>Acceder</title>
 
@@ -66,7 +61,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-5 contenedor-formulario">
                     <h2 class="text-center mb-4">Iniciar Sesión</h2>
-                    <form action="procesar.php" method="post">
+                    <form id="form-acceder" action="procesar.php" method="post">
                         <!-- Campo de usuario -->
                         <div class="mb-3">
                             <label for="usuario" class="form-label">
@@ -86,27 +81,22 @@
                             <label for="tipo_usuario" class="form-label">
                                 <i class="bi bi-person-badge-fill"></i> Tipo de Usuario
                             </label>
-                            <select class="form-select" id="tipo_usuario" name="tipo_usuario" required>
+                                <select class="form-select" id="tipo_usuario" name="tipo_usuario" required>
                                 <option value="">Selecciona tu tipo de usuario</option>
                                 <option value="admin">Administrador</option>
                                 <option value="socio">Socio/Cliente</option>
                             </select>
                         </div>
-                        <!-- Botón para iniciar sesión -->
+                        <!-- boton -->
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
-                                Acceder
-                            </button>
+                            <button type="submit" class="btn btn-primary">Acceder</button>
                         </div>
                     </form>
-
-                        <!-- <div class="mt-3 text-center">
-                            <a href="#">¿Olvidaste tu contraseña?</a>
-                        </div> -->
                 </div>
             </div>
         </section>
     </main>
+
 
     <?php
         include('../requires/footer.php');

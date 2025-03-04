@@ -8,20 +8,21 @@
 
         <?php
             // Define el prefijo de ruta en función del nivel
+            //esto es por que con esto se evita el problema de las rutas
             $prefijo = ($nivel === 0) ? "" : "../";
         ?>
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <?php if (!isset($_SESSION['usuario'])): ?>
-                    <!-- Menú para usuario anónimo (solo secciones públicas) -->
+                    <!--menu para usuario anónimo (solo secciones públicas) -->
                     <li class="nav-item"><a href="<?= $prefijo ?>index.php" class="nav-link">Inicio</a></li>
                     <li class="nav-item"><a href="<?= $prefijo ?>testimonios/" class="nav-link">Testimonios</a></li>
                     <li class="nav-item"><a href="<?= $prefijo ?>servicios/" class="nav-link">Servicios</a></li>
                     <li class="nav-item"><a href="<?= $prefijo ?>acceder/" class="nav-link">Acceder</a></li>
                 <?php else: ?>
                     <?php if ($SOCIO): ?>
-                        <!-- Para socios: sustituimos "Socios" por "Datos personales" -->
+                        <!--para socios: sustituimos "Socios" por "Datos personales" -->
                         <li class="nav-item"><a href="<?= $prefijo ?>index.php" class="nav-link">Inicio</a></li>
                         <li class="nav-item">
                             <a href="<?= $prefijo ?>socios/perfil.php?id=<?= $_SESSION['id'] ?>" class="nav-link">
@@ -35,7 +36,7 @@
                         <li class="nav-item"><a href="<?= $prefijo ?>noticias/" class="nav-link">Noticias</a></li>
                         <li class="nav-item"><a href="<?= $prefijo ?>servicios/" class="nav-link">Servicios</a></li>
                     <?php elseif ($ADMIN): ?>
-                        <!-- Para administradores se mantiene el menú completo -->
+                        <!--para adminiss se mantiene el menu completo -->
                         <li class="nav-item"><a href="<?= $prefijo ?>index.php" class="nav-link">Inicio</a></li>
                         <li class="nav-item"><a href="<?= $prefijo ?>socios/" class="nav-link">Socios</a></li>
                         <li class="nav-item"><a href="<?= $prefijo ?>fitness/" class="nav-link">Fitness</a></li>

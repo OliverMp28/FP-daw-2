@@ -92,56 +92,85 @@ section{
     text-align: center;
 }
 
-.seccion_ultimas_noticias button{
+.boton_estilizado {
     background-color: #239427;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-top: 20px;
-    display: block;
-    margin-left: auto;
-    margin-bottom: 20px;
+    display: inline-block; /* Cambiado a inline-block */
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: auto; /* Ancho automático */
+    max-width: 100%; /* Responsive */
+}
+@media (max-width: 768px) {
+    .boton_estilizado {
+        padding: 10px 20px;
+        font-size: 0.9em;
+        width: 100%; /* Ocupa todo el ancho en móviles */
+        margin: 20px 0; /* Margen superior e inferior */
+    }
 }
 
-.contenedor_noticias{
+.contenedor_noticias {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-
+    gap: 25px;
+    padding: 20px 0;
 }
-.contenedor_noticias .noticia{
+
+.contenedor_noticias .noticia {
     background-color: white;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
-.noticia img{
+.noticia-imagen {
     width: 100%;
-    height: auto;
+    height: 180px;
+    object-fit: cover;
     border-radius: 5px;
+    margin-bottom: 15px;
 }
-.noticia h3{
+
+.noticia h3 {
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 10px;
     text-align: center;
+    color: #333;
 }
 
-.noticia p{
+.noticia p {
     text-align: justify;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-size: 0.9em;
+    color: #555;
+    line-height: 1.5;
 }
-.noticia a{
+
+.noticia-enlace {
     color: #157018;
     text-decoration: none;
     display: block;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.noticia-enlace i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
 }
 
 
@@ -352,37 +381,6 @@ section{
 
 
 
-
-
-
-
-
-
-/*SECCION CONTACTO*/
-.seccion_contacto{
-    background-color: rgb(17, 17, 17);
-    /* padding-inline: 100px; */
-    color: white;
-}
-
-.seccion_contacto h2{
-    color: white;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.seccion_contacto p{
-    text-align: justify;
-    margin-bottom: 20px;
-    color: white;
-    line-height: 1.5;
-    padding: 10px;
-    border-radius: 5px;
-    width: 80%;
-    margin: 0 auto;
-    text-align: center;
-}
 
 
 /*FOOTER*/

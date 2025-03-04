@@ -1,15 +1,18 @@
 "use strict"
 import { initValidacionesProducto } from "./productosValidaciones.js";
+import { mostrarMensaje } from "./utilidades.js";
 
 
 // let lista_carrito = []; // Lista con lo que se añade al carrito
 let lista_productos; // Lista completa de productos
 const alerta = document.querySelector(".alerta");
 
+const btnCrearProducto = document.getElementById("crear_producto");
+
 const contenedor = document.querySelector(".tabla-cuerpo");
 
 
-// Elementos de paginación
+// Elementos de paginaci
 const prevPageBtn = document.querySelector("#prevPage");
 const nextPageBtn = document.querySelector("#nextPage");
 const pageInfo = document.querySelector("#pageInfo");
@@ -24,9 +27,10 @@ let totalPaginas = 1;
 let currentFilters = {};
 let filtros = {};
 
+btnCrearProducto.addEventListener("click", crearProductoModal);
 
 // Función para construir la query string con filtros y paginación
-function buildQueryParams(page, filtros = currentFilters) {
+function construirParametrosUrl(page, filtros = currentFilters) {
   const params = new URLSearchParams();
   params.append("limit", "20");
   params.append("page", page);
@@ -47,7 +51,7 @@ function buildQueryParams(page, filtros = currentFilters) {
 
 
 async function obtenerDatos(page, filtros = currentFilters) {
-  const url = `${URL_PROCESAR}?${buildQueryParams(page, filtros)}`;
+  const url = `${URL_PROCESAR}?${construirParametrosUrl(page, filtros)}`;
   console.log(url);
 
   try {
@@ -175,7 +179,7 @@ function crearProducto(producto) {
   const btnEditar = fila.querySelector(".btn-outline-warning");
   const btnEliminar = fila.querySelector(".btn-outline-danger");
   const btnDetalles = fila.querySelector(".btn-outline-info");
-  const btnCrearProducto = document.getElementById("crear_producto");
+  
 
   btnEditar.addEventListener("click", () => {
     editarProductoModal(producto);
@@ -186,24 +190,10 @@ function crearProducto(producto) {
   btnDetalles.addEventListener("click", () => {
     verDetallesProductoModal(producto);
   });
-  btnCrearProducto.addEventListener("click", crearProductoModal);
+  
 
 
   return fila;
-}
-
-
-function mostrarMensaje(texto, clase) {
-  alerta.innerHTML = `<h3>${texto}</h3>`;
-
-  alerta.classList.add("show");
-  alerta.classList.add(clase);
-  // remove alert
-  setTimeout(() => {
-    alerta.innerText = "";
-    alerta.classList.remove(clase);
-    alerta.classList.remove("show");
-  }, 5000);
 }
 
 

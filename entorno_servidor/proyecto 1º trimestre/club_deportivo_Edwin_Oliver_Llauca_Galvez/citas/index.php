@@ -68,7 +68,9 @@
 
     <main>
     <section class="container py-4 seccion_servicios">
-        <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva Cita</a>
+        <?php if ($ADMIN) { ?>
+            <a href="agregar.php" class="btn btn-primary mb-4">Crear una nueva Cita</a>
+        <?php } ?>
 
         <!-- Este miniformulario sera usado para la busqueda de citas por nombre del socio, por la fecha o por el servicio contratado. -->
         <form method="GET" action="" class="mb-4">
@@ -309,14 +311,23 @@
 
                                     <div class="text-end mt-3">
                                         <?php
-                                        $estadoCita = comprobarEstadoDeCita($conexion, $cita['id']);
-                                        if($estadoCita == 0){
-                                            echo "<a href='index.php?mes=$mes&anio=$anio&cancelar={$cita['id']}' class='btn btn-warning btn-sm'>Cancelar Cita</a>";
-                                        }elseif($estadoCita == 1){
-                                            echo "<p class='text-muted'>La cita es hoy o ya paso, no se puede cancelar ni borrar</p>";
-                                        }else{//aqui es que estaria en estado = 2, que significa cita cancelada, se habilita el boton eliminar
-                                            echo "<a href='index.php?mes=$mes&anio=$anio&borrar={$cita['id']}' class='btn btn-danger btn-sm'>Eliminar Cita</a>";
+                                        $estadoCita = comprobarEstadoDeCita($conexion, $cita['id']);  
+
+                                        if($ADMIN){
+                                            if($estadoCita == 0){
+                                                echo "<a href='index.php?mes=$mes&anio=$anio&cancelar={$cita['id']}' class='btn btn-warning btn-sm'>Cancelar Cita</a>";
+                                            }elseif($estadoCita == 1){
+                                                echo "<p class='text-muted'>La cita es hoy o ya paso, no se puede cancelar ni borrar</p>";
+                                            }else{//aqui es que estaria en estado = 2, que significa cita cancelada, se habilita el boton eliminar
+                                                echo "<a href='index.php?mes=$mes&anio=$anio&borrar={$cita['id']}' class='btn btn-danger btn-sm'>Eliminar Cita</a>";
+                                            }
                                         }
+                                        if($SOCIO){
+                                            if($estadoCita == 1){
+                                                echo "<p class='text-muted'>La cita es hoy o ya paso</p>";
+                                            }
+                                        }
+                                        
                                         ?>
                                     </div>
                             

@@ -1,4 +1,6 @@
 "use strict"
+import { mostrarMensaje } from "./utilidades.js";
+
 
 let lista_carrito = []; // Lista con lo que se añade al carrito
 let lista_productos; // Lista completa de productos
@@ -33,9 +35,9 @@ let filtros = {};
 
 
 // Función para construir la query string con filtros y paginación
-function buildQueryParams(page, filtros = currentFilters) {
+function construirParametrosUrl(page, filtros = currentFilters) {
   const params = new URLSearchParams();
-  params.append("limit", "2");
+  params.append("limit", "5");
   params.append("page", page);
   if (filtros.nombre) {
     params.append("nombre", filtros.nombre);
@@ -81,7 +83,7 @@ function buildQueryParams(page, filtros = currentFilters) {
 // }
 
 async function obtenerDatos(page, filtros = currentFilters) {
-  const url = `${URL_PROCESAR}?${buildQueryParams(page, filtros)}`;
+  const url = `${URL_PROCESAR}?${construirParametrosUrl(page, filtros)}`;
 
   try {
     const respuesta = await fetch(url);
@@ -117,14 +119,14 @@ function actualizarPaginacion() {
 // prevPageBtn.addEventListener("click", () => {
 //   if (paginaActual > 1) {
 //     const nuevaPagina = paginaActual - 1;
-//     obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
+//     obtenerDatos(`${URL_API}?${construirParametrosUrl(nuevaPagina)}`);
 //   }
 // });
 
 // nextPageBtn.addEventListener("click", () => {
 //   if (paginaActual < totalPaginas) {
 //     const nuevaPagina = paginaActual + 1;
-//     obtenerDatos(`${URL_API}?${buildQueryParams(nuevaPagina)}`);
+//     obtenerDatos(`${URL_API}?${construirParametrosUrl(nuevaPagina)}`);
 //   }
 // });
 prevPageBtn.addEventListener("click", () => {
@@ -191,7 +193,7 @@ function crearProducto(producto) {
     </div>
     <footer style='cursor: pointer'>
       <h3 class="product-name">${producto.nombre}</h3>
-      <p class="product-description">${producto.descripcion}</p>
+      <p class="product-description text-limited">${producto.descripcion}</p>
       <div class="product-info">
         <span class="product-category">Categoría: <strong>${producto.categoria}</strong></span>
         <span class="product-stock ${producto.stock > 0 ? "in-stock" : "out-of-stock"}">
@@ -266,18 +268,6 @@ function eliminarProductoDelCarrito(producto, elementoCarrito) {
 }
 
 
-function mostrarMensaje(texto, clase) {
-  alerta.innerHTML = `<h3>${texto}</h3>`;
-
-  alerta.classList.add("show");
-  alerta.classList.add(clase);
-  // remove alert
-  setTimeout(() => {
-    alerta.innerText = "";
-    alerta.classList.remove(clase);
-    alerta.classList.remove("show");
-  }, 4000);
-}
 
 //CODIGO PARA CARGAR LO QUE HAYA EN EL CARRITO 
 const carrito_local = "carrito";

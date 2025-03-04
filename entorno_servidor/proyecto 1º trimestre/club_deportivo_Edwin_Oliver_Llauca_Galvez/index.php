@@ -41,17 +41,21 @@
                     $ultimasNoticias = obtenerUltimasNoticias($conexion);
                     if($ultimasNoticias){
                         foreach($ultimasNoticias as $noticia){
-                            echo '<div class="noticia">';
-                            echo '<img src="'.$noticia['imagen'].'" alt="'.$noticia['titulo'].'">';
+                            echo '<div class="noticia transition">';
+                            echo '<img src="'.$noticia['imagen'].'" 
+                                alt="'.$noticia['titulo'].'" 
+                                class="noticia-imagen">';
                             echo '<h3>'.$noticia['titulo'].'</h3>';
                             echo '<p>'.substr($noticia['contenido'], 0, 100).'...</p>';
-                            echo '<a href="noticias/ver.php?id=' . $noticia['id'] . '">Leer más...</a>';
+                            echo '<a href="noticias/ver.php?id='.$noticia['id'].'" 
+                                class="noticia-enlace">
+                                    Leer más <i class="bi bi-arrow-right"></i>
+                                </a>';
                             echo '</div>';
                         }
-                    }else{
-                        echo "No hay noticias disponibles";
+                    } else {
+                        echo '<p class="text-center py-4 text-muted">No hay noticias disponibles</p>';
                     }
-
                 ?>
             </div>
         </section>
@@ -176,7 +180,7 @@
 
         </section>
 
-        <section class="seccion_servicios">
+        <!-- <section class="seccion_servicios">
             <h2>Nuestros servicios</h2>
                 <div class="contenedor_servicios">
                     <div class="servicio">
@@ -203,87 +207,25 @@
                         <img src="./assets/img/ejemplo1.jpg" alt="Servicio 3">
                     </div>
                 </div>
-        </section>
-
-        <section class="seccion_unirse">
-            <!--esta seccion sera como una llamada a la accion, no sera un formulario, 
-                será una llamada a la accion para que si no eres socio que te unas ya que tendras beneficios,
-                esto en el futuro tal vez va a redirigir a otra pagina apra registrarse como usuario, como mencioné antes, solo sera una llamada a la accion-->
-            <h2>Unirse al bar casino "La ruina"</h2>
-            <p>Si no eres socio, pero te gustaría participar de nuestro bar casino, te invitamos a unirte. Esto te permitirá obtener beneficios como:</p>
-            <ul>
-                <li>Acceso a juegos exclusivos</li>
-                <li>Descuentos en nuestros productos y servicios</li>
-                <li>Recibir noticias de nuestro bar casino</li>
-                <li>También podrás participar en nuestros eventos y actividades</li>
-            </ul>
-            <a href="#">Unirse al bar casino "La ruina"</a>
-        </section>
-
-        <!-- <section class="seccion_testimonios">
-            <h2>Testimonios</h2>
-            <div class="contenedor_testimonios">
-                <div class="testimonio">
-                    <img src="./assets/img/ejemplo1.jpg" alt="Testimonio 1">
-                    <h3>Nombre del cliente</h3>
-                    <div class="estrellas"> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ipsum vel dui scelerisque ultricies.</p>
-                </div>
-                <div class="testimonio">
-                    <img src="./assets/img/ejemplo1.jpg" alt="Testimonio 2">
-                    <h3>Nombre del cliente</h3>
-                    <div class="estrellas"> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ipsum vel dui scelerisque ultricies.</p>
-                </div>
-                <div class="testimonio">
-                    <img src="./assets/img/ejemplo1.jpg" alt="Testimonio 3">
-                    <h3>Nombre del cliente</h3>
-                    <div class="estrellas"> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ipsum vel dui scelerisque ultricies.</p>
-                </div>
-                <div class="testimonio">
-                    <img src="./assets/img/ejemplo1.jpg" alt="Testimonio 4">
-                    <h3>Nombre del cliente</h3>
-                    <div class="estrellas"> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                        <span class="estrella">&#9733;</span> 
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel ipsum vel dui scelerisque ultricies.</p>
-                </div>
-            </div>
         </section> -->
 
-        <section class="seccion_contacto">
-            <h2>Contacto</h2>
-            <p>
-                <strong>Casino "La Ruina"</strong><br>
-                Calle 123, 456, CABA<br>
-                Teléfono: 1234567890<br>
-                Email:  <a href="mailto:contacto@clubdemesa.com">contacto@clubdemesa.com</a><br>
-                Horario de atención: Lunes a viernes de 10:00 a 22:00 hs.
-            </p>
+        <section class="seccion_contacto py-5 bg-light text-center">
+            <div class="container">
+                <h2 class="text-primary mb-4">Contacto</h2>
+                <p class="lead">Tienes dudas o consultas? Contáctanos y con gusto te ayudaremos.</p>
+                <div class="card  p-4 border-0">
+                    <h4 class="text-dark"><strong>Club Deportivo Depor</strong></h4>
+                    <p class="mb-1"><i class="bi bi-geo-alt-fill text-primary"></i> Dirección: Dirección: Calle asequia del zute, Granada, España</p>
+                    <p class="mb-1"><i class="bi bi-telephone-fill text-primary"></i> Teléfono: +34 999999999</p>
+                    <p class="mb-1">
+                        <i class="bi bi-envelope-fill text-primary"></i>  
+                        Email: <a href="mailto:contacto@deporclub.com" class="text-decoration-none">contacto@clubdeportivo.com</a>
+                    </p>
+                    <p><i class="bi bi-clock-fill text-primary"></i> Horario: Lunes a viernes de 9:00 a 20:00 hs</p>
+                </div>
+            </div>
         </section>
+
 
         <!-- <aside>
             <h3>secciones</h3>

@@ -61,11 +61,11 @@
             <div class="col-md-8">
                 <div class="session-info d-flex justify-content-end align-items-center gap-3">
                     <?php
-                    if (isset($_SESSION['usuario'])) {
+                    if (isset($_SESSION['nombre'])) {
                         $salir_path = ($nivel == 0) ? "acceder/cerrar_sesion.php" : "../acceder/cerrar_sesion.php";
                         echo '
                         <div class="d-flex align-items-center gap-2">
-                            <span class="text-white">Bienvenido <strong>'.htmlspecialchars($_SESSION['usuario']).'</strong></span>
+                            <span class="text-white">Bienvenido <strong>'.htmlspecialchars($_SESSION['nombre']).'</strong></span>
                             <div class="vr text-white opacity-50"></div>
                             <a href="'.$salir_path.'" class="btn btn-outline-light" title="Cerrar sesión">
                                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión de '.htmlspecialchars($_SESSION['tipo_usuario']).'

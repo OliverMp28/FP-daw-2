@@ -1,15 +1,5 @@
 <?php
-    require_once "../config/config.php";
-    require_once "../config/funciones.php";
-
-    $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
-    if (!$conexion) { 
-        echo "Error en la conexión"; 
-        die();
-    } 
- 
-    // $consulta->close();
-    // $conexion->close();
+    require_once "../config/init.php";
 
 
     //aca llamo a los archivos para las funciones necesarias
@@ -39,24 +29,47 @@
     <main class="container mt-5 mb-5">
         <a href="index.php" class="btn btn-primary mb-3">Volver a la pagina de todos los Testimonios</a>
 
-        <?php
-            //Obtengo los socios para el formulario (id y nombre)
-            $socios = getSociosDesplegable($conexion);
-        ?>
+        
 
         <form id="miFormulario" action="procesar.php" method="post" class="shadow p-4 rounded bg-white mx-auto" style="max-width: 600px;">
             <h2 class="text-center mb-4">Danos tu Testimonio :D</h2>
 
             <div class="mb-3">
                 <label for="autorTestimonio" class="form-label">Autor:</label>
-                <select class="form-select" id="autorTestimonio" name="autorTestimonio">
-                    <option value="0" selected class="text-muted">Seleccionar autor...</option>
-                    <?php                        
-                        foreach ($socios as $socio) {
-                            echo '<option value="' . $socio['id'] . '">' . $socio['nombre'] . '</option>';
-                        }
+                <!-- si es admin, muestra el select con los socios -->
+                <?php if ($ADMIN) { ?>
+                    <?php
+                        //Obtengo los socios para el formulario (id y nombre)
+                        $socios = getSociosDesplegable($conexion);
                     ?>
-                </select>
+                    <select class="form-select" id="autorTestimonio" name="autorTestimonio">
+                        <option value="0" selected class="text-muted">Seleccionar autor...</option>
+                        <?php                        
+                            foreach ($socios as $socio) {
+                                echo '<option value="' . $socio['id'] . '">' . $socio['nombre'] . '</option>';
+                            }
+                        ?>
+                    </select>
+                <?php } ?>
+
+                <!-- si es socio, muestra un div con el usuario del socio y un input hiden con el id del socio -->
+                <?php if ($SOCIO) { ?>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="<?= $_SESSION['nombre'] ?>"
+                            disabled
+                        />
+                        <input
+                            type="hidden"
+                            id="autorTestimonio"
+                            name="autorTestimonio"
+                            value="<?= $_SESSION['id'] ?>"
+                        />
+                    </div>
+                <?php } ?>
+                
                 <span class="error"></span>
             </div>
 
@@ -75,40 +88,6 @@
         </form>
 
         <br>
-
-
-
-        <form id="miFormulario" action="procesar.php" method="post" class="shadow p-4 rounded bg-white mx-auto" style="max-width: 600px;">
-            <h2 class="text-center mb-4">Danos tu Testimonio :D</h2>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="autorTestimonio" class="form-label">Autor:</label>
-                    <select class="form-select" id="autorTestimonio" name="autorTestimonio">
-                    <option value="0" selected class="text-muted">Seleccionar autor...</option>
-                    <?php                        
-                        foreach ($socios as $socio) {
-                            echo '<option value="' . $socio['id'] . '">' . $socio['nombre'] . '</option>';
-                        }
-                    ?>
-                </select>
-                    <span class="error"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="contenidoTestimonio" class="form-label">Contenido:</label>
-                    <textarea
-                        class="form-control"
-                        id="contenidoTestimonio"
-                        name="contenidoTestimonio"
-                        placeholder="contenido del testimonio"
-                    ></textarea>
-                    <span class="error"></span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-success w-100 mt-3">Enviar</button>
-        </form>
 
 
     </main>

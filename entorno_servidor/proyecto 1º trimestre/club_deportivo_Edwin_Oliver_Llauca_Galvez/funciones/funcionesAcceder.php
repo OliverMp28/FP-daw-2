@@ -10,7 +10,7 @@
      * @param string $tipo_usuario Tipo de usuario ingresado.
      */
     function verificarCredenciales($conexion, $usuario, $tipo_usuario, $password) {
-        $sentencia = "SELECT id, usuario, password FROM socio WHERE usuario = ? AND tipo_usuario = ?";
+        $sentencia = "SELECT id, usuario, nombre, password FROM socio WHERE usuario = ? AND tipo_usuario = ?";
         
         $consulta = $conexion->prepare($sentencia);
         if (!$consulta) {

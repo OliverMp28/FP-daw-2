@@ -104,7 +104,7 @@ Este evento estará liderado por el Dr. Luis Martínez, especialista en alimenta
 Durante la conferencia, aprenderás sobre cómo optimizar tu dieta para alcanzar tus metas deportivas, la importancia de la hidratación, y los mejores suplementos para tu tipo de entrenamiento. 
 Además, podrás hacer preguntas y recibir consejos personalizados al final de la charla. 
 No te pierdas esta oportunidad única para mejorar tu rendimiento a través de la nutrición.', 
-'assets/img/noticia2.jpg', '2024-11-28');
+'assets/img/noticia6.jpg', '2024-11-28');
 -- --------------------------------------------------------
 
 --
@@ -145,11 +145,11 @@ CREATE TABLE `socio` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO socio (id, nombre, edad, usuario, password, telefono, foto, tipo_usuario) VALUES
-(1, 'Carlos Mendoza', 28, 'cmendoza', 'hashed_password3', '5553334444', 'assets/img/carlos.jpg', 'socio'),
-(2, 'Ana López', 32, 'alopez', 'hashed_password4', '5559876543', 'assets/img/ana.jpg', 'socio'),
-(3, 'Luis Fernández', 26, 'lfernandez', 'hashed_password5', '5552345678', 'assets/img/luis.jpg', 'socio'),
-(4, 'Maria Torres', 29, 'mtorres', 'hashed_password6', '5558765432', 'assets/img/maria.jpg', 'socio'),
-(5, 'Juan Ruiz', 35, 'jruiz', 'hashed_password7', '5557654321', 'assets/img/juan.jpg', 'socio'),
+(1, 'Carlos Mendoza', 28, 'cmendoza', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765436', 'assets/img/carlos.jpg', 'socio'),
+(2, 'Ana López', 32, 'alopez', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765435', 'assets/img/ana.jpg', 'socio'),
+(3, 'Luis Fernández', 26, 'lfernandez', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765434', 'assets/img/luis.jpg', 'socio'),
+(4, 'Maria Torres', 29, 'mtorres', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765433', 'assets/img/maria.jpg', 'socio'),
+(5, 'Juan Ruiz', 35, 'jruiz', '$2y$10$CekrqojWXis5C2yWAOIlwOkI/pXGH2ShusuCcUxEHABkRrbWVuDiG', '+34555765432', 'assets/img/juan.jpg', 'socio'),
 (0, 'Administrador', 0, 'admin', '$2y$10$DANhZDxSpyvRgcE221Dvb.Ni7T4sXcMZhnbQU4ZTFgnGuY0961OHy', 'assets/img/1739127395_59d6f00f-0306-4c1d-89d2-a89535787e35.png', 'admin');
 
 
@@ -205,27 +205,28 @@ CREATE TABLE `productos` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `productos` (`nombre`, `descripcion`, `precio`, `stock`, `categoria`, `imagen`) VALUES
-('Camiseta Deportiva', 'Camiseta transpirable para entrenamiento', 19.99, 50, 'Ropa', 'uploads/productos/camiseta1.jpg'),
-('Mancuernas 10kg', 'Par de mancuernas recubiertas de neopreno', 35.99, 30, 'Equipamiento', 'uploads/productos/mancuernas10kg.jpg'),
-('Esterilla de Yoga', 'Esterilla antideslizante para yoga y pilates', 25.50, 20, 'Accesorios', 'uploads/productos/esterilla.jpg'),
-('Zapatillas Running', 'Zapatillas ligeras para correr', 59.99, 40, 'Calzado', 'uploads/productos/zapatillas.jpg'),
-('Botella de Agua 1L', 'Botella reutilizable libre de BPA', 12.99, 100, 'Accesorios', 'uploads/productos/botella1l.jpg');
+INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `stock`, `categoria`, `imagen`, `fecha_creacion`) VALUES
+(32, '5pcs Bandas de Resistencia TPE Bandas de Ejercicio', 'Público objetivo: Universal\r\ntipo de producto: tirar de la cuerda\r\nTipo de deporte: Ejercicios de estiramiento\r\nNivel de tensión: medio\r\nMaterial de tela: TPE\r\nFestival: Día de San Valentín, Pascua de Resurrección, Dia de la mujer, Día de la Madre\r\nColor: color mezclado', 2.89, 4, 'Accesorios', '/img/1740608967_producto1.jpg', '2025-02-26 22:29:27'),
+(33, '1pc Escalera de entrenamiento de agilidad', 'Rango de edad aplicable: 14+\r\nMaterial principal: PP (polipropileno)\r\nColor: Oscuro, Amarillo\r\nNúmero de productos: 1\r\nID del artículo: EW16642\r\nOrigen: Zhejiang,China', 4.00, 8, 'Accesorios', '/img/1740609113_producto2.jpg', '2025-02-26 22:31:53'),
+(34, 'Complejo Multivitaminico Completo', 'Más de 30 vitaminas y minerales, además de extractos de frutas y vegetales, combinados en un único suplemento para cubrir las necesidades diarias de un estilo de vida activo.\r\n\r\nNuestro complejo multivitamínico en polvo es el suplemento multivitaminas definitivo para estilos de vida activos. Los más de 30 ingredientes activos de cada suplemento contribuyen al funcionamiento normal del metabolismo de la energía*, del sistema inmunitario** y de la síntesis de aminoácidos***, complementando tu dieta con un perfil nutricional completo.\r\n\r\nNuestro complejo multivitamínico en polvo ha sido formulado por nutricionistas deportivos de élite para proporcionarte una dosis esencial de vitaminas y minerales. Contiene todos los básicos, como calcio, magnesio, zinc, vitamina C, vitamina D.\r\n\r\n*La vitamina C contribuye al metabolismo normal de la energía.\r\n\r\n**La vitamina D contribuye al funcionamiento normal del sistema inmunitario.\r\n\r\n***El magnesio contribuye a la síntesis normal de las proteínas.', 14.00, 10, 'Suplementos', '/img/1740609220_producto3.jpg', '2025-02-26 22:33:40'),
+(35, 'Impact Whey Protein', 'Proteína de lactosuero de alta calidad, analizada para detectar impurezas y a un precio asequible; no es de extrañar que sea nuestro lactosuero más vendido desde hace más de 20 años.\r\n\r\nElaborada por nutricionistas que prestan suma atención hasta el último detalle, cada cacito aporta hasta 23 g de proteínas*, lo que favorece el desarrollo, el mantenimiento y la recuperación muscular1. Tanto si se trata de rendimiento como de bienestar o de mantener un estilo de vida equilibrado, es la nutrición diaria que necesitas para alcanzar todos tus objetivos. ', 12.00, 25, 'Suplementos', '/img/1740609494_producto4.jpg', '2025-02-26 22:38:14'),
+(36, 'Camiseta sin mangas elastica y transpirable', 'Material: Poliéster\r\nEstampado: Imprimir\r\nEscarpado: semitransparente\r\nTela: Ligero estiramiento\r\nEstilo de cuello: Cuello redondo\r\nTipo: Regular\r\nTemporada: Verano\r\nInstrucciones de cuidado: Lavar a máquina o limpieza en seco profesional\r\nEstilo: Deportivo\r\nTipo de corte: Regular\r\n', 8.00, 20, 'Ropa', '/img/1740609601_producto5.jpg', '2025-02-26 22:40:01');
+
 
 
 -- --------------------------------------------------------
 -- Estructura de tabla pedidos
 -- --
-CREATE TABLE `pedidos` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `socio_id` INT(11) NOT NULL,
-  `producto_id` INT(11) NOT NULL,
-  `cantidad` INT(11) NOT NULL,
-  `fecha` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`socio_id`) REFERENCES `socio`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`producto_id`) REFERENCES `productos`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- CREATE TABLE `pedidos` (
+--   `id` INT(11) NOT NULL AUTO_INCREMENT,
+--   `socio_id` INT(11) NOT NULL,
+--   `producto_id` INT(11) NOT NULL,
+--   `cantidad` INT(11) NOT NULL,
+--   `fecha` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`id`),
+--   FOREIGN KEY (`socio_id`) REFERENCES `socio`(`id`) ON DELETE CASCADE,
+--   FOREIGN KEY (`producto_id`) REFERENCES `productos`(`id`) ON DELETE CASCADE
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 

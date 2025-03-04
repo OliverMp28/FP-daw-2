@@ -16,9 +16,12 @@
 
     <link rel="stylesheet" href="../assets/css/otros.css">
 
+    
+
+    <script defer type="module" src="../assets/js/utilidades.js"></script>
     <!-- Se usa el js dependiendo del tipo de usuario debido a las acciones que tiene cada uno -->
     <?php if ($ADMIN) { ?>
-        <script defer type="module" src="../assets/js/productosAdmin.js"></script>
+        <script defer type="module" src="../assets/js/productosAdmin.js"> </script>
     <?php } ?>
     <?php if ($SOCIO) { ?>
         <script defer type="module" src="../assets/js/productos.js"></script>
@@ -125,7 +128,7 @@
                         </button>
                     </div>
 
-                    <div class="table-responsive rounded-3 shadow">
+                    <div class="table-responsive rounded-3 table-bordered">
                         <table class="tabla-productos table table-hover align-middle mb-0">
                             <thead class="bg-primary text-white">
                                 <tr>
@@ -141,45 +144,6 @@
                             </thead>
                             <tbody class="tabla-cuerpo">
                                 <!-- Filas -->
-                                    <td class="text-center fw-semibold text-muted">#15</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0">
-                                                <img src="https://via.placeholder.com/50" 
-                                                    alt="Producto" 
-                                                    class="img-fluid rounded-2" 
-                                                    style="width: 50px; height: 50px; object-fit: cover;">
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <span class="fw-semibold">Camiseta Deportiva</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="d-none d-lg-table-cell text-truncate" style="max-width: 250px;">
-                                        Camiseta técnica para entrenamiento
-                                    </td>
-                                    <td class="text-success fw-semibold">34.99€</td>
-                                    <td class="text-center">
-                                        <span class="badge bg-danger bg-opacity-25 text-danger">3</span>
-                                    </td>
-                                    <td>
-                                        <span class="">Ropa</span>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell text-muted small">2025-02-15</td>
-                                    <td class="text-center">
-                                        <div class="botones-acciones-producto d-flex gap-2 justify-content-center">
-                                            <button class="btn btn-sm btn-outline-warning">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-trash3"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-info">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr> 
                             </tbody>
                         </table>
                     </div>
@@ -199,7 +163,7 @@
         </div>
 
         <!-- mensages de alerta -->
-        <div class="alerta"></div>
+        <!-- <div class="alerta"></div> -->
 
         <!-- modal producto -->
         <!-- <div class="modal-producto">

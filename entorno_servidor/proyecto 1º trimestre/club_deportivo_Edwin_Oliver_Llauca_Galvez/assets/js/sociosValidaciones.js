@@ -1,4 +1,5 @@
 "use strict";
+import { mostrarMensaje } from "./utilidades.js";
 
 let formulario = document.getElementById("formularioSocio");
 let nombre = document.getElementById("nombreSocio");
@@ -8,54 +9,61 @@ let password = document.getElementById("passwordSocio");
 let telefono = document.getElementById("telefonoSocio");
 let foto = document.getElementById("fotoSocio");
 
-
-nombre.addEventListener("input", 
-    () => validarNombre()
-);
-
-edad.addEventListener("input", 
-    () => validarEdad()
-);
-usuario.addEventListener("input", 
-() => validarUsuario()
-);
-password.addEventListener("input", 
-// () => validarPassword()
-);
-telefono.addEventListener("input", 
-() => validarTelefono()
-);
-foto.addEventListener("change", 
-() => validarFoto()
-);
+nombre.addEventListener("input", () => validarNombre());
+edad.addEventListener("input", () => validarEdad());
+usuario.addEventListener("input", () => validarUsuario());
+// password.addEventListener("input", () => validarPassword());
+telefono.addEventListener("input", () => validarTelefono());
+foto.addEventListener("change", () => validarFoto());
 
 
-
-
-formulario.addEventListener("submit", (evento) => {
+formulario.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+  
     let validaciones = [
-        validarNombre,
-        validarEdad,
-        validarUsuario,
-        validarPassword,
-        validarTelefono,
-        validarFoto,
+      validarNombre,
+      validarEdad,
+      validarUsuario,
+      validarTelefono,
     ];
-
+  
     for (let validar of validaciones) {
-        if (!validar()) {
-            evento.preventDefault(); 
-            break;
-        }
+      if (!validar()) {
+        console.log("error");
+        return;
+      }
     }
-});
+  
+    const formData = new FormData(formulario);
+  
+    try {
+      const response = await fetch("procesar.php", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+  
+      const data = await response.json();
+      mostrarMensaje(data.message, data.type);
+  
+      if (data.type === "success") {
+        setTimeout(() => location.reload(), 2000);
+      }
+    } catch (error) {
+      mostrarMensaje("Error en la conexión con el servidor", "error");
+      console.error(error);
+    }
+  });
 
 
 
 const validarNombre = () => {
     let valor = nombre.value.trim();
     let span_error = nombre.nextElementSibling;
-    const reglaRegular = /^[a-zA-Z\s]+$/;
+    const reglaRegular = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
     if (!reglaRegular.test(valor)) {
         span_error.style.display = "inline";
@@ -142,6 +150,7 @@ const validarFoto = () => {
         if (!tipos_admitidos.includes(fichero.type)) {
             span_error.style.display = "inline";
             span_error.innerText = "La foto debe estar en formato JPEG.";
+            console.log("nooooooooooooooo");
             return false;
         }
         if (fichero.size > tamaño_maximo) {

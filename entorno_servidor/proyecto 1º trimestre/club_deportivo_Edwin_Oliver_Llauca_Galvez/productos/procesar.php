@@ -11,77 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 
-
 // Configuración de la API externa
 $apiBaseUrl = "http://localhost/FP%20daw%202/entorno_servidor/proyecto%201%c2%ba%20trimestre/club_deportivo_Edwin_Oliver_Llauca_Galvez/api/api.php"; // URL base de la API
-$apiKey = "gR0WVlcNgkLLcveUs45txlxxbfiPKSwun2VIGmE9gXNiEaqAtgAhdOuo2ehy1xyR"; // Tu API key para métodos POST, PUT y DELETE
+$apiKey = "gR0WVlcNgkLLcveUs45txlxxbfiPKSwun2VIGmE9gXNiEaqAtgAhdOuo2ehy1xyR"; // esta API key es para metodos POST, PUT y DELETE
 
-/**
- * Función para realizar llamadas a la API externa usando cURL.
- * 
- * @param string $endpoint   Endpoint relativo de la API.
- * @param string $method     Método HTTP: GET, POST, PUT, DELETE.
- * @param array  $headers    Encabezados HTTP adicionales.
- * @param mixed  $data       Datos a enviar (array para GET/POST, JSON para PUT/DELETE).
- * @return array             Arreglo con 'response' (contenido) y 'code' (código HTTP).
- */
-function callApi($endpoint, $method = 'GET', $headers = [], $data = null) {
-    global $apiBaseUrl;
-    $url = rtrim($apiBaseUrl, '/') . '/' . ltrim($endpoint, '/');
-    $ch = curl_init();
-
-    // Si el método es GET y hay datos, se agregan como query string
-    if ($method === 'GET' && !empty($data)) {
-        $url .= '?' . http_build_query($data);
-    }
-    
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    
-    // Configurar opciones según el método
-    switch ($method) {
-        case 'GET':
-            // No es necesario configurar nada adicional
-            break;
-        case 'POST':
-            curl_setopt($ch, CURLOPT_POST, true);
-            // En POST usamos multipart/form-data (ideal para enviar archivos)
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            break;
-        case 'PUT':
-        case 'DELETE':
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-            if (!empty($data)) {
-                $jsonData = json_encode($data);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-                // Asegurarse de enviar el header de JSON
-                $headers[] = "Content-Type: application/json";
-            }
-            break;
-        default:
-            // Si se usa un método no soportado
-            break;
-    }
-    
-    // Agregar encabezados si existen
-    if (!empty($headers)) {
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    }
-    
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    
-    if (curl_errno($ch)) {
-        $error_msg = curl_error($ch);
-        curl_close($ch);
-        http_response_code(500);
-        echo json_encode(["error" => "cURL error: $error_msg"]);
-        exit;
-    }
-    
-    curl_close($ch);
-    return ["response" => $response, "code" => $httpCode];
-}
 
 
 // Obtener el método HTTP de la solicitud

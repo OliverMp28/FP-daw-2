@@ -1,12 +1,5 @@
 <?php
-    require_once "../config/config.php";
-    require_once "../config/funciones.php";
-
-    $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
-    if (!$conexion) { 
-        echo "Error en la conexión"; 
-        die();
-    } 
+    require_once "../config/init.php";
  
     // $consulta->close();
     // $conexion->close();
